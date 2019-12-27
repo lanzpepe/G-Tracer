@@ -67,7 +67,7 @@ class UsersTableSeeder extends Seeder
             'last_name' => "Gimenez",
             'first_name' => "Kent",
             'middle_name' => "Aranas",
-            'suffix' => null,
+            'suffix' => "Jr.",
             'birth_date' => "December 26, 1998",
             'gender' => "Male",
             'image_uri' => "http://pbs.twimg.com/profile_images/1038011376071979008/v8YWmSrN_normal.jpg"

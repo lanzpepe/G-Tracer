@@ -1,103 +1,75 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layout.main')
 
-        <title>Laravel</title>
+@section('title')
+    {{ __('Welcome to G-Tracer') }}
+@endsection
 
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
-        <script src="{{ asset('js/app.js') }}"></script>
-
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
+@section('content')
+<div class="ui large top fixed hidden borderless menu">
+    <div class="ui container">
+        <div class="header item">
+            <img src="https://fomantic-ui.com/examples/assets/images/logo.png" alt="Brand Logo" class="logo">
+        </div>
+        <div class="right item">
+            <button class="ui yellow button btn-login" data-target="{{ route('login') }}">
+                @if (Route::has('login'))
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        <i class="home icon"></i>
+                        <small>{{ __('HOME') }}</small>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
+                        <i class="sign in alternate icon"></i>
+                        <small>{{ __('LOG IN') }}</small>
                     @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
+                @endif
+            </button>
+        </div>
+    </div>
+</div>
+<div class="ui inverted vertical masthead center aligned segment" style="background-image: url('{{ asset('img/bg3.jpg') }}')">
+    <div class="ui container">
+        <div class="ui large secondary inverted menu">
+            <div class="header item">
+                <img src="https://fomantic-ui.com/examples/assets/images/logo.png" alt="Brand Logo" class="logo">
+            </div>
+            <div class="right item">
+                <button class="ui yellow button btn-login" data-target="{{ route('login') }}">
+                    @if (Route::has('login'))
+                        @auth
+                            <i class="home icon"></i>
+                            <small>{{ __('HOME') }}</small>
+                        @else
+                            <i class="sign in alternate icon"></i>
+                            <small>{{ __('LOG IN') }}</small>
+                        @endauth
+                    @endif
+                </button>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+    <div class="ui text container">
+        <h1 class="ui inverted header">
+            {{ __('Graduate Tracer System') }}
+        </h1>
+        <h2>A Web and Mobile Application using Crowdsourcing and Social Media Listening</h2>
+    </div>
+</div>
+<div class="ui vertical stripe segment">
+    <div class="ui middle aligned stackable grid container">
+        <div class="row">
+            <div class="eight wide column">
+                <h3 class="ui header">
+                    What does it means to you?
+                </h3>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo, odit? Neque, consequuntur! Placeat, facere vitae! Aut quaerat veritatis nemo quo repudiandae aspernatur accusamus soluta odio, modi nihil totam. Distinctio, delectus!</p>
+                <h3 class="ui header">
+                    What does it means to you?
+                </h3>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus, maxime. Exercitationem iste repellendus cumque voluptates, quidem neque, commodi aliquam impedit porro fuga earum et tempora, dolorum amet corporis sunt magnam.</p>
+            </div>
+            <div class="six wide right floated column">
+                <img src="{{ asset('img/default_avatar_m.png') }}" alt="" class="ui large bordered rounded image">
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

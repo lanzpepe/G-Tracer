@@ -49,9 +49,8 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof InvalidArgumentException)
             return response()->json([
-                'response_code' => 401,
                 'message' => "Unauthorized"
-            ]);
+            ], 401);
 
         return parent::render($request, $exception);
     }

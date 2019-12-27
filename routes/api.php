@@ -18,7 +18,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware('auth:api')->group(function () {
         Route::get('graduates', 'Api\GraduateController@getAllGraduates');
         Route::get('graduates/{id}', 'Api\GraduateController@getGraduate');
-        Route::post('graduates/{id}/save', 'Api\GraduateController@saveGraduates');
+        Route::post('graduates/{id}/add', 'Api\GraduateController@addGraduate');
         Route::post('graduates/{id}/response', 'Api\GraduateController@addResponseToGraduate');
 
         Route::get('users', 'Api\UserController@getAllUsers');

@@ -14,7 +14,7 @@ class CreateTokensTable extends Migration
     public function up()
     {
         Schema::create('tokens', function (Blueprint $table) {
-            $table->increments('student_id');
+            $table->string('user_id')->primary();
             $table->string('token');
             $table->timestamps();
         });

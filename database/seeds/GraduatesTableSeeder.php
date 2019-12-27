@@ -19,7 +19,7 @@ class GraduatesTableSeeder extends Seeder
                 'last_name' => "Tayong",
                 'first_name' => "Zachervin",
                 'middle_name' => "L",
-                'suffix' => null,
+                'suffix' => "II",
                 'gender' => "Male",
                 'degree' => "BS Information Technology",
                 'major' => null,

@@ -58,8 +58,8 @@ class SocialAuthController extends Controller
                 'contact_number' => $request->contactNumber, 'email' => $request->email
             ]);
 
-            $user->createEducation([
-                'id' => Str::random(), 'degree' => $request->degree,
+            $user->createAcademic([
+                'academic_id' => Str::random(), 'degree' => $request->degree,
                 'major' => $request->major, 'department' => $request->department,
                 'school' => $request->school, 'school_year' => $request->schoolYear,
                 'batch' => $request->batch
@@ -79,7 +79,6 @@ class SocialAuthController extends Controller
         ]);
 
         $user->createEmployment([
-            'employment_id' => Str::random(),
             'company_id' => $company->company_id, 'position' => $request->position,
             'date_employed' => $request->dateHired
         ]);

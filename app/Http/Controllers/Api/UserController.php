@@ -14,7 +14,7 @@ class UserController extends Controller
     {
         $users = User::with([
             'contacts', 'academic', 'employments', 'employments.company',
-            'socialAccount', 'likedGraduates.graduate', 'responses'
+            'socialAccount', 'addedGraduates'
         ])->get();
 
         return response()->json(compact('users'));
@@ -25,7 +25,7 @@ class UserController extends Controller
         $account = SocialAccount::find($accountId)->user;
         $user = User::with([
             'contacts', 'academic', 'employments', 'employments.company',
-            'socialAccount', 'likedGraduates.graduate', 'responses'
+            'socialAccount', 'addedGraduates'
         ])->where('user_id', $account->user_id)->firstOrFail();
 
         return response()->json(compact('user'));
@@ -34,7 +34,7 @@ class UserController extends Controller
     // if user is a college graduate, match graduates based on related information
     public function getAllGraduatesExceptId($userId)
     {
-        $user = User::findOrFail($userId);
+        $user = User::find($userId);
         // get the graduates based on school, department, year and batch
         $graduates = Graduate::where('last_name', '<>', $user->last_name)
             ->where('first_name', '<>', $user->first_name)
@@ -46,9 +46,9 @@ class UserController extends Controller
             ->where(function ($query) use ($user) { // query school year and batch
                 $query->where('school_year', $user->academic->school_year)
                     ->orWhere('batch', $user->academic->batch); })
-            // remove graduates that are already saved from the swipe card
-            ->leftJoin('liked_graduates', 'graduates.graduate_id', '=', 'liked_graduates.graduate_id')
-            ->whereNull('liked_graduates.user_id')->orWhere('liked_graduates.user_id', '<>', $user->user_id)
+            // remove graduates that are already added
+            ->leftJoin('added_graduates', 'graduates.graduate_id', '=', 'added_graduates.graduate_id')
+            ->whereNull('added_graduates.user_id')->orWhere('added_graduates.user_id', '<>', $user->user_id)
             ->select('graduates.*')->get();
 
         return response()->json(compact('graduates'));

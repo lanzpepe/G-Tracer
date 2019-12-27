@@ -1,23 +1,33 @@
-@extends('layouts.app')
+@extends('layout.main')
+
+@section('title')
+    Dashboard
+@endsection
+
+@section('header')
+    <i class="home icon"></i>
+    @yield('title')
+@endsection
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    You are logged in!
-                </div>
+@include('layout.nav')
+<main role="main">
+    <div class="ui container">
+        <div class="ui raised middle aligned grid container segment">
+            <div class="left floated eight wide column">
+                <h3 class="ui left floated teal header">
+                    @yield('header')
+                </h3>
+            </div>
+            <div class="right floated eight wide column">
+                @yield('button')
             </div>
         </div>
+        @yield('alert')
+        <div class="ui raised middle aligned grid container segment">
+            @yield('main')
+        </div>
+        @yield('modal')
     </div>
-</div>
+</main>
 @endsection

@@ -19,11 +19,6 @@ class CreateResponsesTable extends Migration
             $table->string('company_address');
             $table->string('company_position', 128);
             $table->string('remarks')->nullable();
-            $table->string('graduate_id');
-            $table->string('user_id');
-            $table->unique(['user_id', 'graduate_id']);
-            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
-            $table->foreign('graduate_id')->references('graduate_id')->on('graduates')->onDelete('cascade');
             $table->timestamps();
         });
     }

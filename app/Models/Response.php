@@ -10,8 +10,9 @@ class Response extends Model
     protected $primaryKey = 'response_id';
     public $incrementing = false;
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class, 'response_id');
+        return $this->belongsToMany(User::class, 'added_graduates', 'response_id',
+            'user_id')->withTimestamps();
     }
 }

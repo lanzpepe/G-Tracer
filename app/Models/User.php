@@ -14,6 +14,11 @@ class User extends Authenticatable
     protected $guarded = [];
     public $incrementing = false;
 
+    public function admins()
+    {
+        return $this->hasMany(Admin::class, 'user_id');
+    }
+
     public function contacts()
     {
         return $this->hasMany(Contact::class, 'user_id')->latest();
@@ -34,14 +39,16 @@ class User extends Authenticatable
         return $this->hasOne(SocialAccount::class, 'user_id');
     }
 
-    public function likedGraduates()
+    public function addedGraduates()
     {
-        return $this->hasMany(LikedGraduate::class, 'user_id')->latest();
+        return $this->belongsToMany(Graduate::class, 'added_graduates', 'user_id',
+            'graduate_id')->withTimestamps();
     }
 
     public function responses()
     {
-        return $this->hasMany(Response::class, 'user_id')->latest();
+        return $this->belongsToMany(Response::class, 'added_graduates', 'user_id',
+            'graduate_id', 'response_id')->withTimestamps();
     }
 
     public function createContact($contact)
@@ -62,15 +69,5 @@ class User extends Authenticatable
     public function createSocialAccount($socialAccount)
     {
         return $this->socialAccount()->create($socialAccount);
-    }
-
-    public function createLikedGraduate($graduate)
-    {
-        return $this->likedGraduates()->create($graduate);
-    }
-
-    public function createResponse($response)
-    {
-        return $this->responses()->create($response);
     }
 }
