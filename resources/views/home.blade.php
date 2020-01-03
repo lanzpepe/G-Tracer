@@ -1,21 +1,18 @@
 @extends('layout.main')
 
-@section('title')
-    Dashboard
-@endsection
+@section('title', 'Dashboard')
 
 @section('header')
-    <i class="home icon"></i>
-    @yield('title')
+    <i class="ui home teal icon"></i> @yield('title')
 @endsection
 
 @section('content')
 @include('layout.nav')
 <main role="main">
     <div class="ui container">
-        <div class="ui raised middle aligned grid container segment">
+        <div class="ui raised middle aligned grid segment">
             <div class="left floated eight wide column">
-                <h3 class="ui left floated teal header">
+                <h3 class="ui left floated header">
                     @yield('header')
                 </h3>
             </div>
@@ -23,9 +20,46 @@
                 @yield('button')
             </div>
         </div>
-        @yield('alert')
-        <div class="ui raised middle aligned grid container segment">
-            @yield('main')
+        @if ($errors->any())
+        <div class="ui red notify toast">
+            <div class="content">
+                <div class="ui header">
+                    <i class="exclamation circle icon"></i>{{ __('Message') }}
+                </div>
+                <ul class="list">
+                    @foreach ($errors->all() as $message)
+                        <li>{{ $message }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        @elseif ($message = Session::get('success'))
+        <div class="ui green notify toast">
+            <div class="content">
+                <div class="ui header">
+                    <i class="check circle outline icon"></i>{{ __('Message') }}
+                </div>
+                <ul class="list">
+                    <li>{{ $message }}</li>
+                </ul>
+            </div>
+        </div>
+        @endif
+        <div class="ui raised middle aligned segment">
+            @if (Request::is('import'))
+                <div class="ui placeholder segment">
+                    <div class="ui icon header">
+                        <i class="ui file alternate outline teal icon"></i>
+                        {{ __('Click the \'Import Data\' button to display it here.') }}
+                    </div>
+                </div>
+            @elseif (Request::is('dept'))
+                @include('department.dept')
+            @elseif (Request::is('admin'))
+                @include('administrator.admin')
+            @else
+                @yield('main')
+            @endif
         </div>
         @yield('modal')
     </div>

@@ -1,48 +1,39 @@
 @extends('department.import')
 
-@section('js_code')
-<script type="text/javascript">
-    $(function(){var a='{{ $schoolYear }}';var b='{{ $batch }}';if(a!=='')$('#schoolYear').val(a);
-    if(b!=='')$('#batch').val(b);$('#schoolYear').change();$('#batch').change()});
-</script>
+@section('button')
+<button type="submit" class="ui right floated teal submit button" form="uploadForm">
+    <i class="file upload icon"></i> {{ __('Upload Data') }}
+</button>
 @endsection
 
 @section('field_list')
-<div class="card">
-    <div class="card-body">
-        <form action="{{ route('import_process') }}" method="POST" class="form-horizontal">
+<table class="ui unstackable selectable celled teal table">
+    <thead>
+        <tr class="center aligned">
+            <th>{{ __('Last Name') }}</th>
+            <th>{{ __('First Name') }}</th>
+            <th>{{ __('M.I') }}</th>
+            <th>{{ __('Gender') }}</th>
+            <th>{{ __('Degree') }}</th>
+            <th>{{ __('Major') }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <form action="{{ route('import_process') }}" class="ui form" method="POST" id="uploadForm">
             @csrf
-            <table class="table">
-                <thead class="thead-light">
-                    <tr>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Middle Name</th>
-                        <th scope="col">Suffix</th>
-                        <th scope="col">Gender</th>
-                        <th scope="col">Degree</th>
-                        <th scope="col">Major</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($csvData as $row)
-                        <tr>
-                            @foreach ($row as $key => $value)
-                                <td>{{ $value }}</td>
-                            @endforeach
-                        </tr>
+            @foreach ($csvData as $row)
+                <tr class="center aligned">
+                    @foreach ($row as $key => $value)
+                        <td>{{ $value }}</td>
                     @endforeach
-                </tbody>
-            </table>
-            <input name="data" value="{{ encrypt($csvFile->id) }}" hidden>
-            <input name="school" value="{{ $admin->schools->first()->name }}" hidden>
-            <input name="dept" value="{{ $admin->departments->first()->name }}" hidden>
-            <input name="sy" value="{{ $schoolYear }}" hidden>
-            <input name="batch" value="{{ $batch }}" hidden>
-            <button type="submit" role="button" class="btn btn-success">
-                {{ __('Import Data') }}
-            </button>
+                </tr>
+            @endforeach
+            <input type="hidden" name="data" value="{{ encrypt($csvFile->id) }}">
+            <input type="hidden" name="school" value="{{ $admin->schools->first()->name }}">
+            <input type="hidden" name="dept" value="{{ $admin->departments->first()->name }}">
+            <input type="hidden" name="sy" value="{{ $schoolYear }}">
+            <input type="hidden" name="batch" value="{{ $batch }}">
         </form>
-    </div>
-</div>
+    </tbody>
+</table>
 @endsection

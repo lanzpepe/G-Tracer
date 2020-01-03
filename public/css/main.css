@@ -6,19 +6,6 @@ body {
     display: none;
 }
 
-.ui.grid {
-    height: 100%;
-    margin: 1em;
-}
-
-.image {
-    margin-top: -100px;
-}
-
-.column {
-    max-width: 450px;
-}
-
 .masthead.segment {
     min-height: 100%;
     padding: 1em 0em;
@@ -73,6 +60,22 @@ body {
     margin-right: 1.5em !important;
 }
 
-.input-text, .course .search, .major .search, .job .search {
-    text-transform: uppercase;
+.login.container {
+    padding: 3em;
+}
+
+main {
+    padding-top: 5.5rem;
+}
+
+.profile.image {
+    width: 12em;
+}
+
+.ui.button > input {
+    display: none;
+}
+
+.ui.button label {
+    cursor: pointer;
 }

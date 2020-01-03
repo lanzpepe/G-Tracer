@@ -1,8 +1,6 @@
 @extends('layout.main')
 
-@section('title')
-    {{ __('Welcome to G-Tracer') }}
-@endsection
+@section('title', 'Welcome to G-Tracer')
 
 @section('content')
 <div class="ui large top fixed hidden borderless menu">
@@ -25,7 +23,7 @@
         </div>
     </div>
 </div>
-<div class="ui inverted vertical masthead center aligned segment" style="background-image: url('{{ asset('img/bg3.jpg') }}')">
+<div class="ui inverted vertical center aligned masthead segment" style="background-image: url('{{ asset('img/bg3.jpg') }}')">
     <div class="ui container">
         <div class="ui large secondary inverted menu">
             <div class="header item">
@@ -67,7 +65,7 @@
                 <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus, maxime. Exercitationem iste repellendus cumque voluptates, quidem neque, commodi aliquam impedit porro fuga earum et tempora, dolorum amet corporis sunt magnam.</p>
             </div>
             <div class="six wide right floated column">
-                <img src="{{ asset('img/default_avatar_m.png') }}" alt="" class="ui large bordered rounded image">
+                <img src="{{ asset('storage/defaults/default_avatar_m.png') }}" alt="" class="ui large bordered rounded image">
             </div>
         </div>
     </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Department;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreImportRequest;
 use App\Models\CsvFile;
 use App\Models\Graduate;
 use App\Models\AcademicYear;
@@ -20,18 +21,20 @@ class ImportController extends Controller
     {
         CsvFile::truncate();
         $admin = DepartmentController::department();
-        $schoolYears = AcademicYear::all()->sortByDesc('school_year');
-        $batches = Batch::all()->sortBy('name');
+        $schoolYears = AcademicYear::orderByDesc('school_year')->get();
+        $batches = Batch::orderBy('name')->get();
 
         return view('department.import', compact('admin', 'schoolYears', 'batches'));
     }
 
-    public function parseImport(Request $request)
+    public function parseImport(StoreImportRequest $request)
     {
-        $schoolYear = $request->sy;
-        $batch = $request->batch;
-        $schoolYears = AcademicYear::all()->sortByDesc('school_year');
-        $batches = Batch::all()->sortBy('name');
+        $data = $request->validated();
+
+        $schoolYear = DepartmentController::formatString($data['sy']);
+        $batch = DepartmentController::formatString($data['batch']);
+        $schoolYears = AcademicYear::orderByDesc('school_year')->get();
+        $batches = Batch::orderBy('name')->get();
         $admin = DepartmentController::department();
 
         if ($request->hasFile('file')) {
@@ -60,20 +63,20 @@ class ImportController extends Controller
             $csvData = json_decode($csvFile->data, true);
 
             foreach ($csvData as $data) {
-                Graduate::create([
+                Graduate::updateOrCreate([
+                    'last_name' => DepartmentController::formatString($data['Last Name']),
+                    'first_name' => DepartmentController::formatString($data['First Name']),
+                    'middle_name' => substr(DepartmentController::formatString($data['M.I.']), 0, 1)
+                ], [
                     'graduate_id' => Str::random(),
-                    'last_name' => $data['Last Name'],
-                    'first_name' => $data['First Name'],
-                    'middle_name' => $data['Middle Initial'],
-                    'suffix' => $data['Suffix'],
-                    'gender' => $data['Gender'],
-                    'degree' => $data['Degree'],
-                    'major' => $data['Major'],
-                    'department' => $request->dept,
-                    'school' => $request->school,
+                    'gender' => DepartmentController::formatString($data['Gender']),
+                    'degree' => DepartmentController::formatString($data['Degree']),
+                    'major' => DepartmentController::formatString($data['Major']),
+                    'department' => DepartmentController::formatString($request->dept),
+                    'school' => DepartmentController::formatString($request->school),
                     'school_year' => $request->sy,
-                    'batch' => $request->batch,
-                    'image_uri' => 'default'
+                    'batch' => DepartmentController::formatString($request->batch),
+                    'image_uri' => null
                 ]);
             }
 

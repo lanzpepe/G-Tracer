@@ -13,7 +13,7 @@ class SchoolController extends Controller
     public function schools(Request $request)
     {
         $admin = AdminController::admin();
-        $schools = School::orderBy('name')->paginate(10);
+        $schools = School::orderBy('name')->paginate(15);
         $page = $request->page;
 
         return view('administrator.school', compact('admin', 'schools', 'page'));
@@ -21,19 +21,14 @@ class SchoolController extends Controller
 
     public function addSchool(StoreSchoolRequest $request)
     {
-        $validated = $request->validated();
+        $data = $request->validated();
 
-        if ($validated) {
-            $school = new School();
-            $school->id = Str::random();
-            $school->name = strtoupper($request->school);
-            $school->save();
+        $school = new School();
+        $school->id = Str::random();
+        $school->name = AdminController::formatString($data['school']);
+        $school->save();
 
-            return back()->with('success', "School added successfully.");
-        }
-        else {
-            return back()->withInput()->withErrors($validated);
-        }
+        return back()->with('success', "School added successfully.");
     }
 
     public function markSchool($schoolName)

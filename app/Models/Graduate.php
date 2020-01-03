@@ -10,6 +10,14 @@ class Graduate extends Model
     protected $primaryKey = 'graduate_id';
     public $incrementing = false;
 
+    public function image()
+    {
+        $defaultImage = $this->gender == 'Male' ? 'defaults/default_avatar_m.png' : 'defaults/default_avatar_f.png';
+        $path = $this->image_uri ?? $defaultImage;
+
+        return 'storage/' . $path;
+    }
+
     public function tasks()
     {
         return $this->hasMany(GraduateTask::class, 'graduate_id')->latest();

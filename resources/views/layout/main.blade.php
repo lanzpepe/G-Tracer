@@ -22,6 +22,7 @@
     <script src="{{ asset('js/popper.min.js') }}"></script>
     <script src="{{ asset('js/moment.min.js') }}"></script>
     <script src="{{ asset('semantic/dist/semantic.min.js') }}"></script>
+    <script src="{{ asset('js/load-image.all.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
 </head>
 <body>

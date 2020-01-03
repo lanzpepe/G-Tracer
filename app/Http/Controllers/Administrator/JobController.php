@@ -22,52 +22,48 @@ class JobController extends Controller
         return view('administrator.related_job', compact('admin', 'courses', 'jobs', 'page'));
     }
 
-    public function addJob(Request $request)
+    public function addJob(StoreJobRequest $request)
     {
-        /* $validated = $request->validated();
+        $data['courses'] = [];
+        $validated = $request->validated();
 
         if ($validated) {
-            $exploded = explode(' - ', $request->course);
-            $course = Course::where('name', $exploded[0])->where('major', $exploded[1])->first();
-            $job = Job::where('name', $request->jobName)->first();
+            $explode = explode(',', $request->course);
 
-            if ($job) {
-                $result = DB::table('course_job')->where('course_id', $course->id)->where('job_id', $job->id)->first();
+            foreach ($explode as $row) {
+                $course = explode(' - ', $row);
+                array_push($data['courses'], $course);
+            }
 
-                if ($result) {
-                    return back()->withInput()->withErrors(['jobName' => "Job already exists in that particular course."]);
+            for ($row = 0; $row < count($data['courses']); $row++) {
+                $course = Course::where('name', $data['courses'][$row][0])->where('major', $data['courses'][$row][1])->first();
+                $job = Job::where('name', $request->job)->first();
+
+                if ($job) {
+                    $result = DB::table('course_job')->where('course_id', $course->id)->where('job_id', $job->id)->first();
+
+                    if ($result) {
+                        return back()->withInput()->withErrors(['job' => "Job already exists in that particular course."]);
+                    }
+                    else {
+                        $j = Job::find($job->id);
+                        $j->courses()->attach($course->id);
+                    }
                 }
                 else {
-                    $j = Job::find($job->id);
+                    $j = new Job();
+                    $j->id = Str::random();
+                    $j->name = strtoupper($request->job);
+                    $j->save();
                     $j->courses()->attach($course->id);
-
-                    return back()->with('success', "Job added successfully.");
                 }
             }
-            else {
-                $j = new Job();
-                $j->id = Str::random();
-                $j->name = strtoupper($request->jobName);
-                $j->save();
-                $j->courses()->attach($course->id);
 
-                return back()->with('success', "Job added successfully.");
-            }
+            return back()->with('success', "Job added successfully.");
         }
         else {
             return back()->withErrors($validated);
-        } */
-
-        $exploded = explode(',', $request->course);
-
-        $courses = [];
-
-        foreach ($exploded as $course) {
-            $c = explode(' - ', $course);
-            array_push($courses, $c);
         }
-
-        dd($courses);
     }
 
     public function markJob($jobName)

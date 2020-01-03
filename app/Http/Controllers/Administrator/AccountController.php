@@ -19,9 +19,9 @@ class AccountController extends Controller
     public function accounts(Request $request)
     {
         $admin = AdminController::admin();
-        $depts = Department::all();
-        $roles = Role::all();
-        $schools = School::all();
+        $depts = Department::orderBy('name')->get();
+        $roles = Role::orderBy('name')->get();
+        $schools = School::orderBy('name')->get();
         $genders = Gender::orderByDesc('name')->get();
         $admins = Admin::orderBy('username')->paginate(10);
         $page = $request->page;
@@ -31,58 +31,53 @@ class AccountController extends Controller
 
     public function addAccount(StoreAccountRequest $request)
     {
-        $roleId = Role::where('name', $request->role)->first()->id;
-        $deptId = Department::where('name', $request->department)->first()->id;
-        $schoolId = School::where('name', $request->school)->first()->id;
-        $validated = $request->validated();
+        $data = $request->validated();
+        $roleId = Role::where('name', $data['role'])->first()->id;
+        $deptId = Department::where('name', $data['dept'])->first()->id;
+        $schoolId = School::where('name', $data['school'])->first()->id;
 
-        if ($validated) {
-            if ($request->btnAccount == 'add') {
-                $user = new User(); $admin = new Admin();
+        if ($request->btnAccount == 'added') {
+            $user = User::create([
+                'user_id' => Str::random(),
+                'last_name' => AdminController::formatString($data['lastname']),
+                'first_name' => AdminController::formatString($data['firstname']),
+                'middle_name' => substr(AdminController::formatString($data['midname']), 0, 1),
+                'gender' => AdminController::formatString($data['gender']),
+                'birth_date' => $data['dob'],
+                'image_uri' => null
+            ]);
 
-                $user->user_id = Str::random();
-                $user->last_name = strtoupper($request->lastname);
-                $user->first_name = strtoupper($request->firstname);
-                $user->middle_name = substr(strtoupper($request->midname), 0, 1);
-                $user->gender = strtoupper($request->gender);
-                $user->birth_date = strtoupper($request->dob);
-                $user->image_uri = null;
-                $user->save();
+            $admin = Admin::create([
+                'admin_id' => Str::random(),
+                'username' => $data['username'],
+                'password' => Hash::make($data['password']),
+                'user_id' => $user->user_id
+            ]);
 
-                $admin->admin_id = Str::random();
-                $admin->username = $request->username;
-                $admin->password = Hash::make($request->password);
-                $admin->user_id = $user->user_id;
-                $admin->save();
+            $admin->roles()->attach($roleId);
+            $admin->departments()->attach($deptId);
+            $admin->schools()->attach($schoolId);
 
-                $admin->roles()->attach($roleId);
-                $admin->departments()->attach($deptId);
-                $admin->schools()->attach($schoolId);
-
-                return back()->with('success', "User added successfully.");
-            }
-            else {
-                $user = User::where('last_name', $request->lastname)->where('first_name', $request->firstname)->first();
-
-                $user->last_name = strtoupper($request->lastname);
-                $user->first_name = strtoupper($request->firstname);
-                $user->middle_name = substr(strtoupper($request->midname), 0, 1);
-                $user->gender = strtoupper($request->gender);
-                $user->birth_date = strtoupper($request->dob);
-                $user->image_uri = null;
-                $user->save();
-
-                $admin = Admin::find($user->admins()->first()->admin_id);
-
-                $admin->departments()->sync($deptId);
-                $admin->schools()->sync($schoolId);
-                $admin->roles()->sync($roleId);
-
-                return back()->with('success', "User modified successfully.");
-            }
+            return back()->with('success', "User {$request->btnAccount} successfully.");
         }
         else {
-            return back()->withInput()->withErrors($validated);
+            $user = User::updateOrCreate([
+                'last_name' => AdminController::formatString($data['lastname']),
+                'first_name' => AdminController::formatString($data['firstname'])
+            ], [
+                'middle_name' => substr(AdminController::formatString($data['midname']), 0, 1),
+                'gender' => AdminController::formatString($data['gender']),
+                'birth_date' => $data['dob'],
+                'image_uri' => null
+            ]);
+
+            $admin = Admin::find($user->admins()->first()->admin_id);
+
+            $admin->departments()->sync($deptId);
+            $admin->schools()->sync($schoolId);
+            $admin->roles()->sync($roleId);
+
+            return back()->with('success', "User {$request->btnAccount} successfully.");
         }
     }
 

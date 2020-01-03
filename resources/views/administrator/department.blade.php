@@ -3,74 +3,60 @@
 @section('title', 'Manage Departments')
 
 @section('header')
-    <i class="building icon"></i>
-    @yield('title')
+    <i class="ui building teal icon"></i> @yield('title')
 @endsection
 
 @section('button')
     <button type="button" class="ui right floated teal button add-dept">
-        <i class="plus icon"></i>
-        {{ __('Add Department') }}
+        <i class="plus icon"></i> {{ __('Add Department') }}
     </button>
 @endsection
 
-@section('alert')
-@if ($errors->any())
-    <div class="ui negative message">
-        <ul class="list">
-            @foreach ($errors->all() as $message)
-                <li>{{ $message }}</li>
-            @endforeach
-        </ul>
-    </div>
-@elseif ($message = Session::get('success'))
-    <div class="ui positive message">
-        <ul class="list">
-            <li>{{ $message }}</li>
-        </ul>
-    </div>
-@endif
-@endsection
-
 @section('main')
-<table class="ui unstackable selectable celled teal table">
-    <thead>
-        <tr class="center aligned">
-            <th>{{ __('Department Name') }}</th>
-            <th>{{ __('School') }}</th>
-            <th>{{ __('Remove') }}</th>
-        </tr>
-    </thead>
-    <tbody>
+<div class="ui centered grid">
+<div class="row">
+    <div class="column">
+    <div class="ui stackable three cards">
         @foreach ($depts as $dept)
             @foreach ($dept->schools as $school)
-            <tr class="center aligned">
-                <td>{{ $dept->name }}</td>
-                <td>{{ $school->name }}</td>
-                <td>
-                    <button type="button" class="ui compact icon red inverted button mark-dept"
-                            data-value='["{{ $dept->name }}", "{{ $school->name }}"]'>
-                        <i class="trash icon"></i>
-                    </button>
-                </td>
-            </tr>
+            <div class="card">
+                <div class="center aligned content">
+                    <div class="ui icon header">
+                        <i class="building teal icon"></i>
+                    </div>
+                    <div class="header">{{ $dept->name }}</div>
+                    <div class="description">{{ $school->name }}</div>
+                </div>
+                <div class="ui attached red inverted button mark-dept"
+                        data-value='["{{ $dept->name }}", "{{ $school->name }}"]'>
+                    <i class="trash icon"></i>{{ __('Remove') }}
+                </div>
+            </div>
             @endforeach
         @endforeach
-    </tbody>
-</table>
-{{ $depts->links() }}
+    </div>
+    </div>
+</div>
+<div class="row">
+    <div class="ui centered grid">
+        <div class="column">
+            {{ $depts->links('vendor.pagination.semantic-ui') }}
+        </div>
+    </div>
+</div>
+</div>
 @endsection
 
 @section('modal')
-<div class="ui top aligned tiny modal" id="deptModal" tabindex="-1" role="dialog" aria-labelledby="deptModalLabel" aria-hidden="true">
-    <div class="teal header" id="deptModalLabel">
-        <i class="question circle outline icon"></i>{{ __('Add New Department') }}
+<div class="ui tiny modal" id="deptModal" tabindex="-1" role="dialog" aria-labelledby="deptModalLabel" aria-hidden="true">
+    <div class="ui icon header" id="deptModalLabel">
+        <i class="question circle outline teal icon"></i>{{ __('Add New Department') }}
     </div>
     <div class="content" role="document">
         <form action="{{ route('add_dept') }}" class="ui form" id="deptForm" method="POST">
             @csrf
-            <div class="required field">
-                <label for="school"><i class="school icon"></i>{{ __('School') }}</label>
+            <div class="required field school">
+                <label for="school"><i class="ui school teal icon"></i>{{ __('School') }}</label>
                 <select id="school" name="school" class="ui fluid dropdown" required>
                     <option value="" selected>{{ __('-- Select School --') }}</option>
                     @foreach ($schools as $school)
@@ -78,9 +64,14 @@
                     @endforeach
                 </select>
             </div>
-            <div class="required field">
-                <label for="department"><i class="building icon"></i>{{ __('Department Name') }}</label>
-                <input type="text" class="input-text" name="department" id="department" required>
+            <div class="required field dept">
+                <label for="dept"><i class="ui building teal icon"></i>{{ __('Department Name') }}</label>
+                <select name="dept" id="dept" class="ui fluid search dropdown" required>
+                    <option value="" selected>{{ __('Department Name') }}</option>
+                    @foreach ($depts as $dept)
+                        <option value="{{ $dept->name }}">{{ $dept->name }}</option>
+                    @endforeach
+                </select>
             </div>
         </form>
     </div>
@@ -95,7 +86,7 @@
 </div>
 <div class="ui tiny basic modal" id="markDeptModal" tabindex="-1" role="dialog" aria-labelledby="markDeptModalLabel" aria-hidden="true">
     <div class="ui icon header" id="markDeptModalLabel">
-        <i class="exclamation triangle icon"></i>{{ __('Remove Department') }}
+        <i class="exclamation triangle red icon"></i>{{ __('Remove Department') }}
     </div>
     <div class="content" role="document">
         <h3>{{ __('The following entries will be removed:') }}</h3>

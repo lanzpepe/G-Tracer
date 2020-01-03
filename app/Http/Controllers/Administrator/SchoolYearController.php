@@ -13,7 +13,7 @@ class SchoolYearController extends Controller
     public function schoolYears(Request $request)
     {
         $admin = AdminController::admin();
-        $years = AcademicYear::orderByDesc('school_year')->paginate(10);
+        $years = AcademicYear::orderByDesc('school_year')->paginate(15);
         $page = $request->page;
 
         return view('administrator.school_year', compact('admin', 'years', 'page'));
@@ -21,19 +21,14 @@ class SchoolYearController extends Controller
 
     public function addSchoolYear(StoreSchoolYearRequest $request)
     {
-        $validated = $request->validated();
+        $data = $request->validated();
 
-        if ($validated) {
-            $sy = new AcademicYear();
-            $sy->id = Str::random();
-            $sy->school_year = $request->sy;
-            $sy->save();
+        $sy = new AcademicYear();
+        $sy->id = Str::random();
+        $sy->school_year = $data['sy'];
+        $sy->save();
 
-            return back()->with('success', "School year added successfully.");
-        }
-        else {
-            return back()->withInput()->withErrors($validated);
-        }
+        return back()->with('success', "School year added successfully.");
     }
 
     public function markSchoolYear($sy) {

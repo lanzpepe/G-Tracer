@@ -3,69 +3,56 @@
 @section('title', 'Manage School Years')
 
 @section('header')
-    <i class="calendar alternate icon"></i>
-    @yield('title')
+    <i class="ui calendar check teal icon"></i> @yield('title')
 @endsection
 
 @section('button')
     <button class="ui right floated teal button add-sy">
-        <i class="plus icon"></i>
-        {{ __('Add School Year') }}
+        <i class="plus icon"></i> {{ __('Add School Year') }}
     </button>
 @endsection
 
-@section('alert')
-@if ($errors->any())
-    <div class="ui negative message">
-        <ul class="list">
-            @foreach ($errors->all() as $message)
-                <li>{{ $message }}</li>
-            @endforeach
-        </ul>
-    </div>
-@elseif ($message = Session::get('success'))
-    <div class="ui positive message">
-        <ul class="list">
-            <li>{{ $message }}</li>
-        </ul>
-    </div>
-@endif
-@endsection
-
 @section('main')
-<table class="ui unstackable selectable celled teal table">
-    <thead>
-        <tr class="center aligned">
-            <th>{{ __('School Year') }}</th>
-            <th>{{ __('Remove') }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($years as $year)
-            <tr class="center aligned">
-                <td>{{ $year->school_year }}</td>
-                <td>
-                    <button class="ui compact icon red inverted button mark-sy" data-value="{{ $year->school_year }}">
-                        <i class="trash icon"></i>
-                    </button>
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
-</table>
-{{ $years->links() }}
+<div class="ui centered grid">
+    <div class="row">
+        <div class="column">
+            <div class="ui stackable three cards">
+                @foreach ($years as $year)
+                <div class="card">
+                    <div class="center aligned content">
+                        <div class="ui icon header">
+                            <i class="calendar check teal icon"></i>
+                        </div>
+                        <div class="header">{{ $year->school_year }}</div>
+                    </div>
+                    <div class="ui attached red inverted button mark-sy" data-value="{{ $year->school_year }}">
+                        <i class="trash icon"></i>{{ __('Remove') }}
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="ui centered grid">
+            <div class="column">
+                {{ $years->links('vendor.pagination.semantic-ui') }}
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('modal')
-<div class="ui top aligned tiny modal" id="schoolYearModal" tabindex="-1" role="dialog" aria-labelledby="schoolYearModalLabel" aria-hidden="true">
-    <div class="header" id="schoolYearModalLabel">
-        <i class="question circle outline icon"></i>{{ __('Add New School Year') }}
+<div class="ui tiny modal" id="schoolYearModal" tabindex="-1" role="dialog" aria-labelledby="schoolYearModalLabel" aria-hidden="true">
+    <div class="ui icon header" id="schoolYearModalLabel">
+        <i class="question circle outline teal icon"></i>{{ __('Add New School Year') }}
     </div>
     <div class="content" role="document">
         <form action="{{ route('add_sy') }}" class="ui form" id="schoolYearForm" method="POST">
             @csrf
             <div class="required field">
-                <label for="sy"><i class="school icon"></i>School Year</label>
+                <label for="sy"><i class="ui calendar check teal icon"></i>School Year</label>
                 <input type="text" class="input-text" name="sy" id="sy" required>
             </div>
         </form>
@@ -81,7 +68,7 @@
 </div>
 <div class="ui tiny basic modal" id="markSyModal" tabindex="-1" role="dialog" aria-labelledby="markSyModalLabel" aria-hidden="true">
     <div class="ui icon header" id="markSyModalLabel">
-        <i class="exclamation triangle icon"></i>{{ __('Remove School Year') }}
+        <i class="exclamation triangle red icon"></i>{{ __('Remove School Year') }}
     </div>
     <div class="content" role="document">
         <h3>{{ __('The following entries will be removed:') }}</h3>

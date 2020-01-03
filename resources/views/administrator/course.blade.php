@@ -3,33 +3,13 @@
 @section('title', 'Manage Courses')
 
 @section('header')
-    <i class="book open icon"></i>
-    @yield('title')
+    <i class="ui book reader teal icon"></i> @yield('title')
 @endsection
 
 @section('button')
     <button class="ui right floated teal button add-course">
-        <i class="plus icon"></i>
-        {{ __('Add Course') }}
+        <i class="plus icon"></i> {{ __('Add Course') }}
     </button>
-@endsection
-
-@section('alert')
-@if ($errors->any())
-    <div class="ui negative message">
-        <ul class="list">
-            @foreach ($errors->all() as $message)
-                <li>{{ $message }}</li>
-            @endforeach
-        </ul>
-    </div>
-@elseif ($message = Session::get('success'))
-    <div class="ui positive message">
-        <ul class="list">
-            <li>{{ $message }}</li>
-        </ul>
-    </div>
-@endif
 @endsection
 
 @section('main')
@@ -72,45 +52,49 @@
 @endsection
 
 @section('modal')
-<div class="ui top aligned tiny modal" id="courseModal" tabindex="-1" role="dialog" aria-labelledby="courseModalLabel" aria-hidden="true">
-    <div class="teal header" id="courseModalLabel">
-        <i class="question circle outline icon"></i><span class="title">{{ __('Add New Course') }}</span>
+<div class="ui small modal" id="courseModal" tabindex="-1" role="dialog" aria-labelledby="courseModalLabel" aria-hidden="true">
+    <div class="ui icon header" id="courseModalLabel">
+        <i class="question circle outline teal icon"></i><span class="title">{{ __('Add New Course') }}</span>
     </div>
     <div class="content" role="document">
         <form action="{{ route('add_course') }}" class="ui form" id="courseForm" method="POST">
             @csrf
-            <div class="required field school">
-                <label for="school"><i class="school icon"></i>{{ __('School') }}</label>
-                <select id="school" name="school" class="ui fluid dropdown" required>
-                    <option value="" selected>{{ __('-- SELECT SCHOOL --') }}</option>
-                    @foreach ($schools as $school)
-                        <option value="{{ $school->name }}">{{ $school->name }}</option>
-                    @endforeach
-                </select>
+            <div class="equal width fields">
+                <div class="required field school">
+                    <label for="school"><i class="ui school teal icon"></i>{{ __('School') }}</label>
+                    <select id="school" name="school" class="ui fluid dropdown" required>
+                        <option value="" selected>{{ __('-- Select School --') }}</option>
+                        @foreach ($schools as $school)
+                            <option value="{{ $school->name }}">{{ $school->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="required field dept">
+                    <label for="dept"><i class="ui building teal icon"></i>{{ __('Department') }}</label>
+                    <select id="dept" name="dept" class="ui fluid dropdown" required>
+                        <option value="" selected>{{ __('-- Select Department --') }}</option>
+                    </select>
+                </div>
             </div>
-            <div class="required field department">
-                <label for="department"><i class="building icon"></i>{{ __('Department') }}</label>
-                <select id="department" name="department" class="ui fluid dropdown" required>
-                    <option value="" selected>{{ __('-- SELECT DEPARTMENT --') }}</option>
-                </select>
-            </div>
-            <div class="required field course">
-                <label for="course"><i class="book open icon"></i>{{ __('Course Name') }}</label>
-                <select name="course" id="course" class="ui fluid search dropdown" required>
-                    <option value="" selected>{{ __('COURSE') }}</option>
-                    @foreach ($courses->unique('name') as $course)
-                        <option value="{{ $course->name }}">{{ $course->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="field major">
-                <label for="major"><i class="medal icon"></i>{{ __('Major') }}</label>
-                <select name="major" id="major" class="ui fluid search dropdown" required>
-                    <option value="" selected>{{ __('MAJOR') }}</option>
-                    @foreach ($courses->unique('major') as $course)
-                        <option value="{{ $course->major }}">{{ $course->major }}</option>
-                    @endforeach
-                </select>
+            <div class="equal width fields">
+                <div class="required field course">
+                    <label for="course"><i class="ui book reader teal icon"></i>{{ __('Course Name') }}</label>
+                    <select name="course" id="course" class="ui fluid search dropdown" required>
+                        <option value="" selected>{{ __('Course') }}</option>
+                        @foreach ($courses->unique('name') as $course)
+                            <option value="{{ $course->name }}">{{ $course->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="field major">
+                    <label for="major"><i class="ui medal teal icon"></i>{{ __('Major') }}</label>
+                    <select name="major" id="major" class="ui fluid search dropdown" required>
+                        <option value="" selected>{{ __('Major') }}</option>
+                        @foreach ($courses->unique('major') as $course)
+                            <option value="{{ $course->major }}">{{ $course->major }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
         </form>
     </div>
@@ -119,14 +103,14 @@
             <i class="close icon"></i>{{ __('Cancel') }}
         </button>
         <button type="submit" class="ui green submit inverted button" form="courseForm" id="btnCourse"
-                name="btnCourse" value="add">
+                name="btnCourse" value="added">
             <i class="check icon"></i><span class="label">{{ __('Submit') }}</span>
         </button>
     </div>
 </div>
 <div class="ui tiny basic modal" id="markCourseModal" tabindex="-1" role="dialog" aria-labelledby="markCourseModalLabel" aria-hidden="true">
     <div class="ui icon header" id="markCourseModalLabel">
-        <i class="exclamation triangle icon"></i>{{ __('Remove Course') }}
+        <i class="exclamation triangle red icon"></i>{{ __('Remove Course') }}
     </div>
     <div class="content" role="document">
         <h3>{{ __('The following entries will be removed:') }}</h3>

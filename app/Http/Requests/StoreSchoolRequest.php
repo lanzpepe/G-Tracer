@@ -24,12 +24,12 @@ class StoreSchoolRequest extends FormRequest
     public function rules()
     {
         return [
-            'school' => ['required', 'regex:/^[A-z\s-]+$/', 'unique:schools,name', 'max:64']
+            'school' => ['required', 'regex:/^[A-z\s-]+$/', 'unique:schools,name', 'max:32']
         ];
     }
 
     /**
-     * Custom messages for validation
+     * Get the error messages for the defined validation rules.
      *
      * @return array
      */
@@ -39,7 +39,7 @@ class StoreSchoolRequest extends FormRequest
             'school.required' => 'School name is required.',
             'school.regex' => 'School name format is invalid.',
             'school.unique' => 'School name already exists.',
-            'school.max' => 'School name should not exceed 64 characters long.'
+            'school.max' => 'School name should not exceed 32 characters long.'
         ];
     }
 }

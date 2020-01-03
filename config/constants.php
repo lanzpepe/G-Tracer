@@ -2,7 +2,7 @@
 
 return [
     'roles' => [
-        'admin' => 'ADMINISTRATOR',
-        'dept' => 'DEPARTMENT'
+        'admin' => 'Administrator',
+        'dept' => 'Department'
     ]
 ];

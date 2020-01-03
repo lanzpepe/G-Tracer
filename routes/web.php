@@ -11,6 +11,9 @@
 |
 */
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 })->name('index');
@@ -53,11 +56,10 @@ Route::middleware('department')->group(function () {
     Route::get('dept', 'Department\DepartmentController@index')->name('dept');
     Route::get('reports', 'Department\DepartmentController@report')->name('reports');
     Route::get('graduates', 'Department\GraduateController@graduates')->name('graduates');
-    Route::post('graduate/add', 'DepartmentController@addGraduate')->name('add_graduate');
-    Route::get('manual', 'ImportController@displayManualEntry')->name('manual');
-    Route::post('addEntry', 'ImportController@addEntry')->name('addEntry');
+    Route::post('graduate/add', 'Department\GraduateController@addGraduate')->name('add_graduate');
+    Route::get('graduate/{id}/mark', 'Department\GraduateController@markGraduate');
     Route::get('import', 'Department\ImportController@import')->name('import');
-    Route::post('import', 'Department\ImportController@parseImport')->name('import');
+    Route::post('import/parse', 'Department\ImportController@parseImport')->name('import_parse');
     Route::post('import/process', 'Department\ImportController@processImport')->name('import_process');
     Route::get('dept/profile', 'Department\DepartmentController@profile')->name('dept_profile');
 });

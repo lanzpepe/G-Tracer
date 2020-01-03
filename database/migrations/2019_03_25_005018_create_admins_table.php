@@ -17,7 +17,7 @@ class CreateAdminsTable extends Migration
             $table->string('admin_id', 32)->primary();
             $table->string('username', 32)->unique();
             $table->string('password');
-            $table->string('remember_token')->nullable();
+            $table->rememberToken();
             $table->string('user_id', 32);
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
             $table->timestamps();

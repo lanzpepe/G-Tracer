@@ -14,6 +14,13 @@ class User extends Authenticatable
     protected $guarded = [];
     public $incrementing = false;
 
+    public function image()
+    {
+        $path = $this->gender == 'Male' ? asset('storage/defaults/default_avatar_m.png') : asset('storage/defaults/default_avatar_f.png');
+
+        return $path;
+    }
+
     public function admins()
     {
         return $this->hasMany(Admin::class, 'user_id');

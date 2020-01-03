@@ -14,6 +14,16 @@ class DepartmentController extends Controller
         return Admin::find(Auth::user()->admin_id);
     }
 
+    public static function formatString(string $tag)
+    {
+        $words = ['Of', 'The'];
+        $regex = '/\b(' . implode('|', $words) . ')\b/i';
+
+        return preg_replace_callback($regex, function ($matches) {
+            return strtolower($matches[1]);
+        }, ucwords($tag));
+    }
+
     public function index()
     {
         $admin = $this->department();
@@ -26,7 +36,7 @@ class DepartmentController extends Controller
         $admin = $this->department();
         $user = User::find($admin->user_id);
 
-        return view('department.profile', compact('admin', 'user'));
+        return view('layout.profile', compact('admin', 'user'));
     }
 
     public function report()

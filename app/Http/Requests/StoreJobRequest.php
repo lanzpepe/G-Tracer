@@ -24,7 +24,7 @@ class StoreJobRequest extends FormRequest
     public function rules()
     {
         return [
-            'course' => ['required', 'regex:/^[A-z\s-]+$/', 'max:64'],
+            'course' => ['required', 'regex:/^(,?[A-z\s-])+$/', 'max:255'],
             'job' => ['required', 'regex:/^[A-z\s-]+$/', 'max:255']
         ];
     }

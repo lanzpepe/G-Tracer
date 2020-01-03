@@ -25,21 +25,21 @@ class StoreDepartmentRequest extends FormRequest
     {
         return [
             'school' => ['required', 'regex:/^[A-z\s-]+$/', 'max:64', 'exists:schools,name'],
-            'department' => ['required', 'regex:/^[A-z\s-]+$/', 'max:64']
+            'dept' => ['required', 'regex:/^[A-z\s-]+$/', 'max:64']
         ];
     }
 
     /**
-     * Custom messages for validation
+     * Get the error messages for the defined validation rules.
      *
      * @return array
      */
     public function messages()
     {
         return [
-            'department.required' => 'Department name is required.',
-            'department.regex' => 'Department name format is invalid.',
-            'department.max' => 'Department name should not exceed 64 characters long.',
+            'dept.required' => 'Department name is required.',
+            'dept.regex' => 'Department name format is invalid.',
+            'dept.max' => 'Department name should not exceed 64 characters long.',
             'school.required' => 'School name is required.',
             'school.regex' => 'School name format is invalid.',
             'school.max' => 'School name should not exceed 64 characters long.',

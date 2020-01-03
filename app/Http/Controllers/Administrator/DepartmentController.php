@@ -16,7 +16,7 @@ class DepartmentController extends Controller
     {
         $school = School::where('name', $request->get('value'))->first();
         $data = $school->departments()->get();
-        $option = '<option value="" selected>-- SELECT DEPARTMENT --</option>';
+        $option = '<option value="" selected>-- Select Department --</option>';
 
         foreach ($data as $row) {
             $option .= '<option value="' . $row->name . '">' . $row->name . '</option>';
@@ -28,8 +28,8 @@ class DepartmentController extends Controller
     public function departments(Request $request)
     {
         $admin = AdminController::admin();
-        $schools = School::all();
-        $depts = Department::orderBy('name')->paginate(10);
+        $schools = School::orderBy('name')->get();
+        $depts = Department::orderBy('name')->paginate(15);
         $page = $request->page;
 
         return view('administrator.department', compact('admin', 'depts', 'schools', 'page'));
@@ -37,36 +37,31 @@ class DepartmentController extends Controller
 
     public function addDepartment(StoreDepartmentRequest $request)
     {
-        $school = School::where('name', $request->school)->first();
-        $department = Department::where('name', $request->department)->first();
-        $validated = $request->validated();
+        $data = $request->validated();
+        $school = School::where('name', $data['school'])->first();
+        $department = Department::where('name', $data['dept'])->first();
 
-        if ($validated) {
-            if ($department) {
-                $result = DB::table('school_department')->where('dept_id', $department->id)->where('school_id', $school->id)->first();
+        if ($department) {
+            $result = DB::table('school_department')->where('dept_id', $department->id)->where('school_id', $school->id)->first();
 
-                if ($result) {
-                    return back()->withErrors(['department' => "Department already exists."]);
-                }
-                else {
-                    $dept = Department::find($department->id);
-                    $dept->schools()->attach($school->id);
-
-                    return back()->with('success', "Department added successfully.");
-                }
+            if ($result) {
+                return back()->withErrors(['department' => "Department already exists."]);
             }
             else {
-                $dept = new Department();
-                $dept->id = Str::random();
-                $dept->name = strtoupper($request->department);
-                $dept->save();
+                $dept = Department::find($department->id);
                 $dept->schools()->attach($school->id);
 
                 return back()->with('success', "Department added successfully.");
             }
         }
         else {
-            return back()->withInput()->withErrors($validated);
+            $dept = new Department();
+            $dept->id = Str::random();
+            $dept->name = AdminController::formatString($data['dept']);
+            $dept->save();
+            $dept->schools()->attach($school->id);
+
+            return back()->with('success', "Department added successfully.");
         }
     }
 
