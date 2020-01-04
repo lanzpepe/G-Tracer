@@ -27,8 +27,7 @@
                     <div class="header">{{ $dept->name }}</div>
                     <div class="description">{{ $school->name }}</div>
                 </div>
-                <div class="ui attached red inverted button mark-dept"
-                        data-value='["{{ $dept->name }}", "{{ $school->name }}"]'>
+                <div class="ui attached red inverted button mark-dept" data-value="{{ $dept->id . "+" . $school->id }}">
                     <i class="trash icon"></i>{{ __('Remove') }}
                 </div>
             </div>
@@ -53,7 +52,7 @@
         <i class="question circle outline teal icon"></i>{{ __('Add New Department') }}
     </div>
     <div class="content" role="document">
-        <form action="{{ route('add_dept') }}" class="ui form" id="deptForm" method="POST">
+        <form action="{{ route('departments.store') }}" class="ui form" id="deptForm" method="POST" role="form">
             @csrf
             <div class="required field school">
                 <label for="school"><i class="ui school teal icon"></i>{{ __('School') }}</label>
@@ -81,7 +80,7 @@
         </button>
         <button type="submit" class="ui green submit inverted button" form="deptForm">
             <i class="check icon"></i> {{ __('Submit') }}
-        </div>
+        </button>
     </div>
 </div>
 <div class="ui tiny basic modal" id="markDeptModal" tabindex="-1" role="dialog" aria-labelledby="markDeptModalLabel" aria-hidden="true">
@@ -89,16 +88,20 @@
         <i class="exclamation triangle red icon"></i>{{ __('Remove Department') }}
     </div>
     <div class="content" role="document">
-        <h3>{{ __('The following entries will be removed:') }}</h3>
-        <p class="department name"></p>
-        <p class="school name"></p>
-        <h3>{{ __('Proceed anyway?') }}</h3>
+        <form action="#" class="ui form" id="deleteForm" method="POST" role="form">
+            @csrf
+            @method('DELETE')
+            <h3>{{ __('The following entries will be removed:') }}</h3>
+            <p class="department name"></p>
+            <p class="school name"></p>
+            <h3>{{ __('Proceed anyway?') }}</h3>
+        </form>
     </div>
     <div class="actions">
         <button type="button" class="ui green cancel basic inverted button">
             <i class="close icon"></i>{{ __('Cancel') }}
         </button>
-        <button type="button" class="ui red submit inverted button delete-dept">
+        <button type="submit" class="ui red submit inverted button delete-dept" form="deleteForm">
             <i class="trash icon"></i> {{ __('Delete') }}
         </button>
     </div>

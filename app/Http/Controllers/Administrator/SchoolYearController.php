@@ -2,43 +2,68 @@
 
 namespace App\Http\Controllers\Administrator;
 
-use App\Models\AcademicYear;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSchoolYearRequest;
-use Illuminate\Http\Request;
+use App\Models\AcademicYear;
+use App\Models\Admin;
 use Illuminate\Support\Str;
 
 class SchoolYearController extends Controller
 {
-    public function schoolYears(Request $request)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        $admin = AdminController::admin();
+        $admin = Admin::authUser();
         $years = AcademicYear::orderByDesc('school_year')->paginate(15);
-        $page = $request->page;
+        $page = request()->page;
 
         return view('administrator.school_year', compact('admin', 'years', 'page'));
     }
 
-    public function addSchoolYear(StoreSchoolYearRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreSchoolYearRequest $request)
     {
         $data = $request->validated();
 
-        $sy = new AcademicYear();
-        $sy->id = Str::random();
-        $sy->school_year = $data['sy'];
-        $sy->save();
+        AcademicYear::create([
+            'id' => Str::random(),
+            'school_year' => $data['sy']
+        ]);
 
         return back()->with('success', "School year added successfully.");
     }
 
-    public function markSchoolYear($sy) {
-        $sy = AcademicYear::where('school_year', $sy)->first();
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $sy = AcademicYear::find($id);
 
         return response()->json(compact('sy'));
     }
 
-    public function removeSchoolYear($sy) {
-        $sy = AcademicYear::where('school_year', $sy);
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $sy = AcademicYear::find($id);
 
         if ($sy) {
             $sy->delete();

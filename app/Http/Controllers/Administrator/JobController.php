@@ -2,84 +2,102 @@
 
 namespace App\Http\Controllers\Administrator;
 
-use App\Models\Course;
-use App\Models\Job;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreJobRequest;
+use App\Models\Admin;
+use App\Models\Course;
+use App\Models\Job;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class JobController extends Controller
 {
-    public function jobs(Request $request)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        $admin = AdminController::admin();
-        $courses = Course::all();
-        $jobs = Job::paginate(10);
-        $page = $request->page;
+        $admin = Admin::authUser();
+        $courses = Course::orderBy('name')->get();
+        $jobs = Job::orderBy('name')->paginate(10);
+        $page = request()->page;
 
         return view('administrator.related_job', compact('admin', 'courses', 'jobs', 'page'));
     }
 
-    public function addJob(StoreJobRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreJobRequest $request)
     {
-        $data['courses'] = [];
-        $validated = $request->validated();
+        $courses['course'] = [];
+        $data = $request->validated();
+        $explode = explode(',', $data['course']);
 
-        if ($validated) {
-            $explode = explode(',', $request->course);
+        foreach ($explode as $row) {
+            $course = explode(' - ', $row);
+            array_push($courses['course'], $course);
+        }
 
-            foreach ($explode as $row) {
-                $course = explode(' - ', $row);
-                array_push($data['courses'], $course);
-            }
+        for ($row = 0; $row < count($courses['course']); $row++) {
+            $course = Course::where('name', $courses['course'][$row][0])->where('major', $courses['course'][$row][1])->first();
+            $job = Job::where('name', $data['job'])->first();
 
-            for ($row = 0; $row < count($data['courses']); $row++) {
-                $course = Course::where('name', $data['courses'][$row][0])->where('major', $data['courses'][$row][1])->first();
-                $job = Job::where('name', $request->job)->first();
+            if ($job) {
+                $result = DB::table('course_job')->where('course_id', $course->id)->where('job_id', $job->id)->first();
 
-                if ($job) {
-                    $result = DB::table('course_job')->where('course_id', $course->id)->where('job_id', $job->id)->first();
-
-                    if ($result) {
-                        return back()->withInput()->withErrors(['job' => "Job already exists in that particular course."]);
-                    }
-                    else {
-                        $j = Job::find($job->id);
-                        $j->courses()->attach($course->id);
-                    }
+                if ($result) {
+                    return back()->withInput()->withErrors(['job' => "Job already exists in that particular course."]);
                 }
                 else {
-                    $j = new Job();
-                    $j->id = Str::random();
-                    $j->name = strtoupper($request->job);
-                    $j->save();
+                    $j = Job::find($job->id);
                     $j->courses()->attach($course->id);
                 }
             }
+            else {
+                $j = Job::create([
+                    'id' => Str::random(),
+                    'name' => User::formatString($data['job'])
+                ]);
+                $j->courses()->attach($course->id);
+            }
+        }
 
-            return back()->with('success', "Job added successfully.");
-        }
-        else {
-            return back()->withErrors($validated);
-        }
+        return back()->with('success', "Job added successfully.");
     }
 
-    public function markJob($jobName)
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        $job = Job::where('name', $jobName)->first();
+        $job = Job::with('courses')->find($id);
 
         return response()->json(compact('job'));
     }
 
-    public function removeJob($job, $course, $major)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
     {
-        $course = Course::where('name', $course)->where('major', $major)->first();
-        $job = Job::where('name', $job)->first();
+        $data = explode('+', $id);
+        $job = Job::find($data[0]);
 
         if ($job) {
-            $job->courses()->detach($course->id);
+            $job->courses()->detach($data[1]);
         }
 
         return back()->with('success', "Job removed succesfully.");

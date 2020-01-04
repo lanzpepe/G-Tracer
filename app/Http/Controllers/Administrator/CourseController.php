@@ -2,29 +2,41 @@
 
 namespace App\Http\Controllers\Administrator;
 
-use App\Models\Department;
-use App\Models\Course;
-use App\Models\School;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCourseRequest;
-use Illuminate\Http\Request;
+use App\Models\Admin;
+use App\Models\Course;
+use App\Models\Department;
+use App\Models\School;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
-    public function courses(Request $request)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        $admin = AdminController::admin();
+        $admin = Admin::authUser();
         $depts = Department::orderBy('name')->get();
         $schools = School::orderBy('name')->get();
         $courses = Course::orderBy('name')->paginate(10);
-        $page = $request->page;
+        $page = request()->page;
 
         return view('administrator.course', compact('admin', 'courses', 'depts', 'schools', 'page'));
     }
 
-    public function addCourse(StoreCourseRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreCourseRequest $request)
     {
         $data = $request->validated();
         $school = School::where('name', $data['school'])->first();
@@ -36,8 +48,8 @@ class CourseController extends Controller
             if (!$course) {
                 $newCourse = Course::create([
                     'id' => Str::random(),
-                    'name' => AdminController::formatString($data['course']),
-                    'major' => $request->filled('major') ? AdminController::formatString($major) : "NONE"
+                    'name' => User::formatString($data['course']),
+                    'major' => $request->filled('major') ? User::formatString($major) : "NONE"
                 ]);
                 $newCourse->departments()->attach($dept->id);
                 $newCourse->schools()->attach($school->id);
@@ -63,8 +75,8 @@ class CourseController extends Controller
         else {
             if (!$course) {
                 $createCourse = Department::find($dept->id)->courses->first();
-                $createCourse->name = AdminController::formatString($data['course']);
-                $createCourse->major = AdminController::formatString($data['major']);
+                $createCourse->name = User::formatString($data['course']);
+                $createCourse->major = User::formatString($data['major']);
                 $createCourse->save();
 
                 return back()->with(['success' => "Course {$request->btnCourse} successfully."]);
@@ -87,21 +99,46 @@ class CourseController extends Controller
         }
     }
 
-    public function markCourse($course, $major)
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        $course = Course::where('name', $course)->where('major', $major)->first();
+        $course = Course::with(['departments', 'schools'])->find($id);
 
         return response()->json(compact('course'));
     }
 
-    public function removeCourse($course, $major, $department, $school) {
-        $course = Course::where('name', $course)->where('major', $major)->first();
-        $deptId = Department::where('name', $department)->first()->id;
-        $schoolId = School::where('name', $school)->first()->id;
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $course = Course::with(['departments', 'schools'])->find($id);
+
+        return response()->json(compact('course'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $data = explode('+', $id);
+        $course = Course::find($data[0]);
 
         if ($course) {
-            $course->departments()->detach($deptId);
-            $course->schools()->detach($schoolId);
+            $course->departments()->detach($data[1]);
+            $course->schools()->detach($data[2]);
         }
 
         return back()->with('success', "Course removed successfully.");

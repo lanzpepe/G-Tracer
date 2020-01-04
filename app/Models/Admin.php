@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class Admin extends Authenticatable
 {
@@ -12,6 +13,11 @@ class Admin extends Authenticatable
     protected $primaryKey = 'admin_id';
     protected $guarded = [];
     public $incrementing = false;
+
+    public static function authUser()
+    {
+        return Admin::find(Auth::user()->admin_id);
+    }
 
     public function user()
     {

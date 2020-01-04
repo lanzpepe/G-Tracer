@@ -2,45 +2,69 @@
 
 namespace App\Http\Controllers\Administrator;
 
-use App\Models\School;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSchoolRequest;
-use Illuminate\Http\Request;
+use App\Models\Admin;
+use App\Models\School;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 class SchoolController extends Controller
 {
-    public function schools(Request $request)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        $admin = AdminController::admin();
+        $admin = Admin::authUser();
         $schools = School::orderBy('name')->paginate(15);
-        $page = $request->page;
+        $page = request()->page;
 
         return view('administrator.school', compact('admin', 'schools', 'page'));
     }
 
-    public function addSchool(StoreSchoolRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreSchoolRequest $request)
     {
         $data = $request->validated();
 
-        $school = new School();
-        $school->id = Str::random();
-        $school->name = AdminController::formatString($data['school']);
-        $school->save();
+        School::create([
+            'id' => Str::random(),
+            'name' => User::formatString($data['school'])
+        ]);
 
         return back()->with('success', "School added successfully.");
     }
 
-    public function markSchool($schoolName)
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        $school = School::where('name', $schoolName)->first();
+        $school = School::find($id);
 
         return response()->json(compact('school'));
     }
 
-    public function removeSchool($schoolName)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
     {
-        $school = School::where('name', $schoolName)->first();
+        $school = School::find($id);
 
         if ($school)
             $school->delete();

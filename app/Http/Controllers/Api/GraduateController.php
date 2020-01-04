@@ -9,7 +9,6 @@ use App\Models\Token;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 
 class GraduateController extends Controller
 {
@@ -33,7 +32,7 @@ class GraduateController extends Controller
         $user = User::findOrFail($request->userId);
         $user->addGraduates()->attach($graduateId);
 
-        return response()->json(['message' => "Graduate has been added."], 200);
+        return response()->json(['message' => "Graduate has been added."]);
     }
 
     public function addResponseToGraduate(Request $request, $graduateId)
@@ -48,7 +47,7 @@ class GraduateController extends Controller
         ]);
         $response->users()->attach($respondent);
 
-        return response()->json(['message' => 'Submitted. Thank you for your time.'], 200);
+        return response()->json(['message' => 'Submitted. Thank you for your time.']);
     }
 
     public function addToken(Request $request)

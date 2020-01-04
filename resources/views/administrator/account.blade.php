@@ -39,10 +39,10 @@
                                 <td>{{ $adm->schools->first()->name }}</td>
                                 <td>{{ $dept->name }}</td>
                                 <td>
-                                    <button class="ui compact icon green inverted button edit-account" data-value="{{ $adm->username }}">
+                                    <button class="ui compact icon green inverted button edit-account" data-value="{{ $adm->admin_id }}">
                                         <i class="pen icon"></i>
                                     </button>
-                                    <button class="ui compact icon red inverted button mark-account" data-value="{{ $adm->username }}">
+                                    <button class="ui compact icon red inverted button mark-account" data-value="{{ $adm->admin_id }}">
                                         <i class="trash icon"></i>
                                     </button>
                                 </td>
@@ -69,7 +69,7 @@
         <i class="question circle outline teal icon"></i><span class="title">{{ __('Add Account') }}</span>
     </div>
     <div class="content" role="document">
-        <form action="{{ route('add_account') }}" class="ui form" id="accountForm" method="POST">
+        <form action="{{ route('accounts.store') }}" class="ui form" id="accountForm" method="POST">
             @csrf
             <input type="hidden" name="adminId" id="adminId" value="">
             <div class="required field username">
@@ -164,18 +164,22 @@
         <i class="exclamation triangle red icon"></i>{{ __('Remove Account') }}
     </div>
     <div class="content" role="document">
-        <h3>{{ __('The following entries will be removed:') }}</h3>
-        <p class="username holder"></p>
-        <p class="name holder"></p>
-        <p class="department holder"></p>
-        <p class="school holder"></p>
-        <h3>{{ __('Proceed anyway?') }}</h3>
+        <form action="{{ route('accounts.destroy', $adm->admin_id) }}" class="ui form" id="deleteForm" method="POST">
+            @csrf
+            @method('DELETE')
+            <h3>{{ __('The following entries will be removed:') }}</h3>
+            <p class="username holder"></p>
+            <p class="name holder"></p>
+            <p class="department holder"></p>
+            <p class="school holder"></p>
+            <h3>{{ __('Proceed anyway?') }}</h3>
+        </form>
     </div>
     <div class="actions">
         <button type="button" class="ui green cancel basic inverted button">
             <i class="close icon"></i>{{ __('Cancel') }}
         </button>
-        <button type="submit" class="ui red submit inverted button delete-account">
+        <button type="submit" class="ui red submit inverted button delete-account" form="deleteForm">
             <i class="trash icon"></i> {{ __('Delete') }}
         </button>
     </div>

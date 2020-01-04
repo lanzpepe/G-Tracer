@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Department;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreGraduateRequest;
 use App\Models\AcademicYear;
+use App\Models\Admin;
 use App\Models\Batch;
 use App\Models\Course;
 use App\Models\Department;
 use App\Models\Gender;
 use App\Models\Graduate;
-use Illuminate\Support\Facades\Response;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
@@ -18,7 +19,7 @@ class GraduateController extends Controller
 {
     public function graduates()
     {
-        $admin = DepartmentController::department();
+        $admin = Admin::authUser();
         $dept = Department::find($admin->departments->first()->id);
         $courses = Course::join('department_course', 'courses.id', '=', 'course_id')
                     ->join('departments', 'department_course.dept_id', '=', 'departments.id')
@@ -37,7 +38,6 @@ class GraduateController extends Controller
     public function addGraduate(StoreGraduateRequest $request)
     {
         $data = $request->validated();
-        $graduateId = Str::random();
         $imagePath = null;
 
         if ($request->has('image')) {
@@ -46,21 +46,39 @@ class GraduateController extends Controller
             $image->save();
         }
 
-        Graduate::updateOrCreate([
-            'last_name' => DepartmentController::formatString($data['lastname']),
-            'first_name' => DepartmentController::formatString($data['firstname']),
-            'middle_name' => DepartmentController::formatString($data['midname'])
-        ], [
-            'graduate_id' => $graduateId,
-            'gender' => DepartmentController::formatString($data['gender']),
-            'degree' => DepartmentController::formatString($data['course']),
-            'major' => DepartmentController::formatString($data['major']),
-            'department' => DepartmentController::formatString($data['dept']),
-            'school' => DepartmentController::formatString($data['school']),
-            'school_year' => $data['sy'],
-            'batch' => DepartmentController::formatString($data['batch']),
-            'image_uri' => $imagePath
-        ]);
+        if ($request->btnGraduate == 'added') {
+            Graduate::create([
+                'graduate_id' => Str::random(),
+                'last_name' => User::formatString($data['lastname']),
+                'first_name' => User::formatString($data['firstname']),
+                'middle_name' => User::formatString($data['midname']),
+                'gender' => User::formatString($data['gender']),
+                'degree' => User::formatString($data['course']),
+                'major' => User::formatString($data['major']),
+                'department' => User::formatString($data['dept']),
+                'school' => User::formatString($data['school']),
+                'school_year' => $data['sy'],
+                'batch' => User::formatString($data['batch']),
+                'image_uri' => $imagePath
+            ]);
+        }
+        else {
+            Graduate::updateOrCreate([
+                'graduate_id' => $request->temp
+            ], [
+                'last_name' => User::formatString($data['lastname']),
+                'first_name' => User::formatString($data['firstname']),
+                'middle_name' => User::formatString($data['midname']),
+                'gender' => User::formatString($data['gender']),
+                'degree' => User::formatString($data['course']),
+                'major' => User::formatString($data['major']),
+                'department' => User::formatString($data['dept']),
+                'school' => User::formatString($data['school']),
+                'school_year' => $data['sy'],
+                'batch' => User::formatString($data['batch']),
+                'image_uri' => $imagePath
+            ]);
+        }
 
         return back()->with('success', "Graduate {$request->btnGraduate} successfully.");
     }
@@ -69,6 +87,6 @@ class GraduateController extends Controller
     {
         $graduate = Graduate::find($graduateId);
 
-        return Response::json(compact('graduate'), 200);
+        return response()->json(compact('graduate'));
     }
 }

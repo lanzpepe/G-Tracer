@@ -2,34 +2,44 @@
 
 namespace App\Http\Controllers\Administrator;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreAccountRequest;
 use App\Models\Admin;
 use App\Models\Department;
 use App\Models\Gender;
 use App\Models\Role;
 use App\Models\School;
 use App\Models\User;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreAccountRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AccountController extends Controller
 {
-    public function accounts(Request $request)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        $admin = AdminController::admin();
+        $admin = Admin::authUser();
         $depts = Department::orderBy('name')->get();
         $roles = Role::orderBy('name')->get();
         $schools = School::orderBy('name')->get();
         $genders = Gender::orderByDesc('name')->get();
         $admins = Admin::orderBy('username')->paginate(10);
-        $page = $request->page;
+        $page = request()->page;
 
         return view('administrator.account', compact('admin', 'admins', 'depts', 'genders', 'roles', 'schools', 'page'));
     }
 
-    public function addAccount(StoreAccountRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreAccountRequest $request)
     {
         $data = $request->validated();
         $roleId = Role::where('name', $data['role'])->first()->id;
@@ -39,59 +49,82 @@ class AccountController extends Controller
         if ($request->btnAccount == 'added') {
             $user = User::create([
                 'user_id' => Str::random(),
-                'last_name' => AdminController::formatString($data['lastname']),
-                'first_name' => AdminController::formatString($data['firstname']),
-                'middle_name' => substr(AdminController::formatString($data['midname']), 0, 1),
-                'gender' => AdminController::formatString($data['gender']),
+                'last_name' => User::formatString($data['lastname']),
+                'first_name' => User::formatString($data['firstname']),
+                'middle_name' => substr(User::formatString($data['midname']), 0, 1),
+                'gender' => User::formatString($data['gender']),
                 'birth_date' => $data['dob'],
                 'image_uri' => null
             ]);
 
-            $admin = Admin::create([
+            $user->admins()->create([
                 'admin_id' => Str::random(),
                 'username' => $data['username'],
                 'password' => Hash::make($data['password']),
                 'user_id' => $user->user_id
             ]);
 
-            $admin->roles()->attach($roleId);
-            $admin->departments()->attach($deptId);
-            $admin->schools()->attach($schoolId);
+            $user->admins->first()->roles()->attach($roleId);
+            $user->admins->first()->departments()->attach($deptId);
+            $user->admins->first()->schools()->attach($schoolId);
 
             return back()->with('success', "User {$request->btnAccount} successfully.");
         }
         else {
             $user = User::updateOrCreate([
-                'last_name' => AdminController::formatString($data['lastname']),
-                'first_name' => AdminController::formatString($data['firstname'])
+                'user_id' => $request->userId
             ], [
-                'middle_name' => substr(AdminController::formatString($data['midname']), 0, 1),
-                'gender' => AdminController::formatString($data['gender']),
+                'last_name' => User::formatString($data['lastname']),
+                'first_name' => User::formatString($data['firstname']),
+                'middle_name' => substr(User::formatString($data['midname']), 0, 1),
+                'gender' => User::formatString($data['gender']),
                 'birth_date' => $data['dob'],
                 'image_uri' => null
             ]);
 
-            $admin = Admin::find($user->admins()->first()->admin_id);
-
-            $admin->departments()->sync($deptId);
-            $admin->schools()->sync($schoolId);
-            $admin->roles()->sync($roleId);
+            $user->admins->first()->departments()->sync($deptId);
+            $user->admins->first()->schools()->sync($schoolId);
+            $user->admins->first()->roles()->sync($roleId);
 
             return back()->with('success', "User {$request->btnAccount} successfully.");
         }
     }
 
-    public function markAccount($username)
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        $admin = Admin::with(['user', 'departments', 'schools', 'roles'])
-                ->where('username', $username)->first();
+        $admin = Admin::with(['user', 'departments', 'schools', 'roles'])->find($id);
 
         return response()->json(compact('admin'));
     }
 
-    public function removeAccount($username)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
-        $user = Admin::where('username', $username)->first()->user;
+        $admin = Admin::with(['user', 'departments', 'schools', 'roles'])->find($id);
+
+        return response()->json(compact('admin'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $user = Admin::find($id)->user;
 
         if ($user) {
             $user->delete();
