@@ -23,7 +23,7 @@
                         <div class="ui dimmer">
                             <div class="content">
                                 <div class="center">
-                                    <div class="ui inverted green button edit-graduate" data-value="{{ $graduate->graduate_id }}">{{ __('Update') }}</div>
+                                    <div class="ui inverted button edit-graduate" data-value="{{ $graduate->graduate_id }}">{{ __('Update') }}</div>
                                 </div>
                             </div>
                         </div>

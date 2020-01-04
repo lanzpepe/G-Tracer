@@ -13,42 +13,54 @@
 @endsection
 
 @section('main')
-<table class="ui unstackable selectable celled teal table">
-    <thead>
-        <tr class="center aligned">
-            <th>{{ __('Course Name') }}</th>
-            <th>{{ __('Major') }}</th>
-            <th>{{ __('Department') }}</th>
-            <th>{{ __('School') }}</th>
-            <th>{{ __('Manage') }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($courses as $course)
-            @foreach ($course->departments as $dept)
-                @foreach ($dept->schools as $school)
-                <tr class="center aligned">
-                    <td>{{ $course->name }}</td>
-                    <td>{{ $course->major }}</td>
-                    <td>{{ $dept->name }}</td>
-                    <td>{{ $school->name }}</td>
-                    <td>
-                        <button type="button" class="ui compact icon green inverted button edit-course"
-                            data-value="{{ $course->id . '+' . $dept->id . '+' . $school->id }}">
-                        <i class="pen icon"></i>
-                        </button>
-                        <button type="button" class="ui compact icon red inverted button mark-course"
-                            data-value="{{ $course->id . '+' . $dept->id . '+' . $school->id }}">
-                        <i class="trash icon"></i>
-                        </button>
-                    </td>
-                </tr>
-                @endforeach
-            @endforeach
-        @endforeach
-    </tbody>
-</table>
-{{ $courses->links() }}
+<div class="ui centered grid">
+    <div class="row">
+        <div class="column">
+            <table class="ui unstackable selectable celled teal table">
+                <thead>
+                    <tr class="center aligned">
+                        <th>{{ __('Course Name') }}</th>
+                        <th>{{ __('Major') }}</th>
+                        <th>{{ __('Department') }}</th>
+                        <th>{{ __('School') }}</th>
+                        <th>{{ __('Manage') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($courses as $course)
+                        @foreach ($course->departments as $dept)
+                            @foreach ($dept->schools as $school)
+                            <tr class="center aligned">
+                                <td>{{ $course->name }}</td>
+                                <td>{{ $course->major }}</td>
+                                <td>{{ $dept->name }}</td>
+                                <td>{{ $school->name }}</td>
+                                <td>
+                                    <button type="button" class="ui compact icon green inverted button edit-course"
+                                        data-value="{{ $course->id . '+' . $dept->id . '+' . $school->id }}">
+                                    <i class="pen icon"></i>
+                                    </button>
+                                    <button type="button" class="ui compact icon red inverted button mark-course"
+                                        data-value="{{ $course->id . '+' . $dept->id . '+' . $school->id }}">
+                                    <i class="trash icon"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        @endforeach
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="ui centered grid">
+            <div class="column">
+                {{ $courses->links('vendor.pagination.semantic-ui') }}
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('modal')

@@ -13,33 +13,45 @@
 @endsection
 
 @section('main')
-<table class="ui unstackable selectable celled teal table">
-    <thead>
-        <tr class="center aligned">
-            <th>{{ __('Course') }}</th>
-            <th>{{ __('Major') }}</th>
-            <th>{{ __('Related Job') }}</th>
-            <th>{{ __('Remove') }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($jobs as $job)
-            @foreach ($job->courses as $course)
-                <tr class="center aligned">
-                    <td>{{ $course->name }}</td>
-                    <td>{{ $course->major }}</td>
-                    <td>{{ $job->name }}</td>
-                    <td>
-                        <button class="ui compact icon red inverted button mark-job" data-value="{{ $job->id . '+' . $course->id }}">
-                            <i class="trash icon"></i>
-                        </button>
-                    </td>
-                </tr>
-            @endforeach
-        @endforeach
-    </tbody>
-</table>
-{{ $jobs->links() }}
+<div class="ui centered grid">
+    <div class="row">
+        <div class="column">
+            <table class="ui unstackable selectable celled teal table">
+                <thead>
+                    <tr class="center aligned">
+                        <th>{{ __('Course') }}</th>
+                        <th>{{ __('Major') }}</th>
+                        <th>{{ __('Related Job') }}</th>
+                        <th>{{ __('Remove') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($jobs as $job)
+                        @foreach ($job->courses as $course)
+                            <tr class="center aligned">
+                                <td>{{ $course->name }}</td>
+                                <td>{{ $course->major }}</td>
+                                <td>{{ $job->name }}</td>
+                                <td>
+                                    <button class="ui compact icon red inverted button mark-job" data-value="{{ $job->id . '+' . $course->id }}">
+                                        <i class="trash icon"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="ui centered grid">
+            <div class="column">
+                {{ $jobs->links('vendor.pagination.semantic-ui') }}
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('modal')

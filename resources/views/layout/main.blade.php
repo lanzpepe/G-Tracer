@@ -26,8 +26,6 @@
     <script src="{{ asset('js/main.js') }}"></script>
 </head>
 <body>
-    @yield('nav')
     @yield('content')
-    @yield('js_code')
 </body>
 </html>

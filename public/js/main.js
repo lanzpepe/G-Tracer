@@ -33,6 +33,12 @@ $(function () {
         on: 'hover'
     });
 
+    $('.menu .browse').popup({
+        inline: true,
+        hoverable: true,
+        position: 'bottom left'
+    });
+
     // account modal functions
     $('.add-account').click(function () {
         $('#accountModal').modal(
