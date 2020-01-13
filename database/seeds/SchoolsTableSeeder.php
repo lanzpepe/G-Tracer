@@ -13,11 +13,10 @@ class SchoolsTableSeeder extends Seeder
      */
     public function run()
     {
-        $school = new School();
-
-        $school->id = Str::random();
-        $school->name = 'UNIVERSITY OF SAN JOSE-RECOLETOS';
-
-        $school->save();
+        School::create([
+            'id' => Str::random(),
+            'name' => 'University of San Jose - Recoletos',
+            'logo' => 'schools/University of San Jose - Recoletos'
+        ]);
     }
 }

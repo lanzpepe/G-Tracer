@@ -1,16 +1,13 @@
-<div class="ui top fixed segment borderless unstackable menu">
+<div class="ui top fixed borderless unstackable large teal inverted menu">
     <div class="ui container">
         <div class="item">
-            <div class="ui teal header">
-                {{-- <img src="https://fomantic-ui.com/examples/assets/images/logo.png" alt=""> --}}
-                {{ __('G-Tracer') }}
-            </div>
+            <h3 class="header">{{ __('G-Tracer') }}</h3>
         </div>
         @if ($admin->roles->first()->name == config('constants.roles.admin'))
-        <a href="{{ route('admin.index') }}" class="teal item {{ request()->is('admin') ? 'active' : '' }}">{{ __('Home') }}</a>
+        <a href="{{ route('admin.index') }}" class="item {{ request()->is('admin') ? 'active' : '' }}">{{ __('Home') }}</a>
         <a class="browse item">{{ __('Manage') }}<i class="dropdown icon"></i></a>
         <div class="ui flowing popup bottom left transition hidden">
-            <div class="ui five column divided center aligned grid">
+            <div class="ui five column relaxed divided center aligned grid">
                 <div class="column">
                     <h4 class="ui header">{{ __('Account') }}</h4>
                     <div class="ui link list">
@@ -40,25 +37,32 @@
                 <div class="column">
                     <h4 class="ui header">{{ __('Reward') }}</h4>
                     <div class="ui link list">
-                        <a href="#" class="item">{{ __('Reward List') }}</a>
+                        <a href="#" class="teal item">{{ __('Reward List') }}</a>
                     </div>
                 </div>
             </div>
         </div>
-        <a href="{{ route('admin.profile') }}" class="teal item {{ request()->is('admin/profile') ? 'active' : '' }}">{{ __('Profile') }}</a>
+        <a href="{{ route('admin.profile') }}" class="item {{ request()->is('admin/profile') ? 'active' : '' }}">{{ __('Profile') }}</a>
         @else
-            <a href="{{ route('dept') }}" class="teal item {{ Request::is('dept') ? 'active' : '' }}">Home</a>
+            <a href="{{ route('dept') }}" class="item {{ request()->is('dept') ? 'active' : '' }}">Home</a>
             <div class="ui simple dropdown item">{{ __('Graduates') }}<i class="dropdown icon"></i>
                 <div class="menu">
-                    <a href="{{ route('graduates') }}" class="teal item {{ Request::is('graduates') ? 'active' : '' }}">Graduate List</a>
-                    <a href="{{ route('import') }}" class="teal item {{ Request::is('import') ? 'active' : '' }}">Import Graduates</a>
+                    <a href="{{ route('graduates') }}" class="item {{ request()->is('graduates') ? 'active' : '' }}">{{ __('Graduate List') }}</a>
+                    <a href="{{ route('import') }}" class="item {{ request()->is('import') ? 'active' : '' }}">{{ __('Import Graduates') }}</a>
                 </div>
             </div>
-            <a href="{{ route('reports') }}" class="teal item {{ Request::is('reports') ? 'active' : '' }}">Reports</a>
-            <a href="{{ route('dept_profile') }}" class="teal item {{ Request::is('dept/profile') ? 'active' : '' }}">Profile</a>
+            <a href="{{ route('reports') }}" class="item {{ request()->is('reports') ? 'active' : '' }}">{{ __('Statistics') }}</a>
+            <a href="{{ route('dept_profile') }}" class="item {{ request()->is('dept/profile') ? 'active' : '' }}">{{ __('Profile') }}</a>
         @endif
+        <div class="ui search right item">
+            <div class="ui icon input">
+                <input type="text" class="prompt" id="search" name="search" placeholder="Search" value="{{ old('search') }}">
+                <i class="search teal icon"></i>
+            </div>
+            <div class="results"></div>
+        </div>
         <div class="right item">
-            <button class="ui teal icon basic button logout" data-target="{{ route('logout') }}">
+            <button class="ui icon inverted button logout">
                 <i class="sign out alternate icon"></i>
             </button>
             <form id="logout-form" action="{{ route('logout') }}" method="POST">

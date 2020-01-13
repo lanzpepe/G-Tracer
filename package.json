@@ -14,17 +14,21 @@
         "bootstrap": "^4.0.0",
         "cross-env": "^6.0.3",
         "jquery": "^3.2",
-        "laravel-mix": "^5.0.0",
+        "laravel-mix": "^5.0.1",
         "lodash": "^4.17.5",
         "popper.js": "^1.12",
-        "resolve-url-loader": "^3.1.0",
-        "sass": "^1.20.1",
+        "resolve-url-loader": "^3.1.1",
+        "sass": "^1.24.2",
         "sass-loader": "^8.0.0",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "fomantic-ui": "^2.8.2",
-        "gulp": "^4.0.2"
+        "blueimp-load-image": "^2.26.0",
+        "chart.js": "^2.9.3",
+        "fomantic-ui": "^2.8.3",
+        "gulp": "^4.0.2",
+        "moment": "^2.24.0",
+        "node-sass": "^4.13.0"
     }
 }

@@ -16,24 +16,25 @@
 <div class="ui centered grid">
     <div class="row">
         <div class="column">
-            <table class="ui unstackable selectable celled teal table">
+            <table class="ui compact unstackable selectable celled teal table">
                 <thead>
                     <tr class="center aligned">
-                        <th>{{ __('Course') }}</th>
-                        <th>{{ __('Major') }}</th>
+                        <th>{{ __('Course Code') }}</th>
+                        <th>{{ __('Course Name') }}</th>
                         <th>{{ __('Related Job') }}</th>
-                        <th>{{ __('Remove') }}</th>
+                        <th>{{ __('Actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($jobs as $job)
                         @foreach ($job->courses as $course)
                             <tr class="center aligned">
+                                <td>{{ $course->code }}</td>
                                 <td>{{ $course->name }}</td>
-                                <td>{{ $course->major }}</td>
                                 <td>{{ $job->name }}</td>
                                 <td>
-                                    <button class="ui compact icon red inverted button mark-job" data-value="{{ $job->id . '+' . $course->id }}">
+                                    <button class="ui compact icon red inverted button mark-job"
+                                    data-value="{{ $job->id . '+' . $course->id }}">
                                         <i class="trash icon"></i>
                                     </button>
                                 </td>
@@ -44,19 +45,13 @@
             </table>
         </div>
     </div>
-    <div class="row">
-        <div class="ui centered grid">
-            <div class="column">
-                {{ $jobs->links('vendor.pagination.semantic-ui') }}
-            </div>
-        </div>
-    </div>
+    {{ $jobs->links('vendor.pagination.semantic-ui') }}
 </div>
 @endsection
 
 @section('modal')
 <div class="ui tiny modal" id="jobModal" tabindex="-1" role="dialog" aria-labelledby="jobModalLabel" aria-hidden="true">
-    <div class="teal header" id="jobModalLabel">
+    <div class="header" id="jobModalLabel">
         <i class="ui question circle outline teal icon"></i><span class="title">{{ __('Add Related Job') }}</span>
     </div>
     <div class="content" role="document">
@@ -79,7 +74,7 @@
                     <div class="default text">{{ __('-- Select Course(s) --') }}</div>
                     <div class="menu">
                         @foreach ($courses as $course)
-                            <div class="item" data-value="{{ $course->name . " - " . $course->major }}">{{ $course->name }} @if ($course->major != 'None') {{ " - " . $course->major }} @endif</div>
+                            <div class="item" data-value="{{ $course->name . " - " . $course->major }}">{{ $course->code }}</div>
                         @endforeach
                     </div>
                 </div>
@@ -106,7 +101,6 @@
             <h3>{{ __('The following entries will be removed:') }}</h3>
             <p class="job name"></p>
             <p class="course name"></p>
-            <p class="major name"></p>
             <h3>{{ __('Proceed anyway?') }}</h3>
         </form>
     </div>

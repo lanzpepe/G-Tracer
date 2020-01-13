@@ -25,7 +25,8 @@ class StoreDepartmentRequest extends FormRequest
     {
         return [
             'school' => ['required', 'regex:/^[A-z\s-]+$/', 'max:64', 'exists:schools,name'],
-            'dept' => ['required', 'regex:/^[A-z\s-]+$/', 'max:64']
+            'dept' => ['required', 'regex:/^[A-z\s-]+$/', 'max:64'],
+            'logo' => ['mimes:jpeg,png']
         ];
     }
 

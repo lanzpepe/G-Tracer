@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdminRoleTable extends Migration
+class CreateAdminPageTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateAdminRoleTable extends Migration
      */
     public function up()
     {
-        Schema::create('admin_role', function (Blueprint $table) {
-            $table->string('admin_id', 32);
-            $table->string('role_id', 32);
+        Schema::create('admin_page', function (Blueprint $table) {
+            $table->string('admin_id');
+            $table->unsignedBigInteger('page_id');
             $table->foreign('admin_id')->references('admin_id')->on('admins')->onDelete('cascade');
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateAdminRoleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_role');
+        Schema::dropIfExists('admin_page');
     }
 }

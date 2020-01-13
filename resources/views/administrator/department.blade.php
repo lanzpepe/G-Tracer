@@ -14,18 +14,18 @@
 
 @section('main')
 <div class="ui centered grid">
-<div class="row">
+    <div class="row">
     <div class="column">
-    <div class="ui stackable three cards">
+    <div class="ui five doubling cards">
         @foreach ($depts as $dept)
             @foreach ($dept->schools as $school)
             <div class="card">
+                <div class="image">
+                    <img src="{{ 'storage/' . $dept->logo }}">
+                </div>
                 <div class="center aligned content">
-                    <div class="ui icon header">
-                        <i class="building teal icon"></i>
-                    </div>
                     <div class="header">{{ $dept->name }}</div>
-                    <div class="description">{{ $school->name }}</div>
+                    <div class="meta">{{ $school->name }}</div>
                 </div>
                 <div class="ui attached red inverted button mark-dept" data-value="{{ $dept->id . "+" . $school->id }}">
                     <i class="trash icon"></i>{{ __('Remove') }}
@@ -35,24 +35,18 @@
         @endforeach
     </div>
     </div>
-</div>
-<div class="row">
-    <div class="ui centered grid">
-        <div class="column">
-            {{ $depts->links('vendor.pagination.semantic-ui') }}
-        </div>
     </div>
-</div>
+    {{ $depts->links('vendor.pagination.semantic-ui') }}
 </div>
 @endsection
 
 @section('modal')
 <div class="ui tiny modal" id="deptModal" tabindex="-1" role="dialog" aria-labelledby="deptModalLabel" aria-hidden="true">
-    <div class="ui icon header" id="deptModalLabel">
-        <i class="question circle outline teal icon"></i>{{ __('Add New Department') }}
+    <div class="header" id="deptModalLabel">
+        <i class="ui question circle outline teal icon"></i>{{ __('Add New Department') }}
     </div>
     <div class="content" role="document">
-        <form action="{{ route('departments.store') }}" class="ui form" id="deptForm" method="POST" role="form">
+        <form action="{{ route('departments.store') }}" class="ui form" id="deptForm" method="POST" role="form" enctype="multipart/form-data">
             @csrf
             <div class="required field school">
                 <label for="school"><i class="ui school teal icon"></i>{{ __('School') }}</label>
@@ -66,11 +60,15 @@
             <div class="required field dept">
                 <label for="dept"><i class="ui building teal icon"></i>{{ __('Department Name') }}</label>
                 <select name="dept" id="dept" class="ui fluid search dropdown" required>
-                    <option value="" selected>{{ __('Department Name') }}</option>
+                    <option value="{{ old('dept') }}" selected>{{ __('Department Name') }}</option>
                     @foreach ($depts as $dept)
                         <option value="{{ $dept->name }}">{{ $dept->name }}</option>
                     @endforeach
                 </select>
+            </div>
+            <div class="field">
+                <label for="logo"><i class="file image teal icon"></i>{{ __('Department Logo (if applicable)') }}</label>
+                <input type="file" accept="image/*" name="logo" id="logo">
             </div>
         </form>
     </div>

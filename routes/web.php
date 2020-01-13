@@ -14,11 +14,9 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('index');
-
 Auth::routes();
+
+Route::get('/', 'IndexController@index')->name('index');
 
 Route::middleware('admin')->group(function () {
     Route::get('admin', 'Administrator\AdminController@index')->name('admin.index');
@@ -36,10 +34,12 @@ Route::middleware('admin')->group(function () {
 
 Route::middleware('department')->group(function () {
     Route::get('dept', 'Department\DepartmentController@index')->name('dept');
-    Route::get('reports', 'Department\DepartmentController@report')->name('reports');
+    Route::get('reports', 'Department\ReportController@reports')->name('reports');
+    Route::get('reports/{id}', 'Department\ReportController@report')->name('report');
     Route::get('graduates', 'Department\GraduateController@graduates')->name('graduates');
-    Route::post('graduate/add', 'Department\GraduateController@addGraduate')->name('add_graduate');
-    Route::get('graduate/{id}/mark', 'Department\GraduateController@markGraduate');
+    Route::post('graduates/add', 'Department\GraduateController@add')->name('add_graduate');
+    Route::get('graduates/{id}/mark', 'Department\GraduateController@mark');
+    Route::get('graduates/{id}/delete', 'Department\GraduateController@remove');
     Route::get('import', 'Department\ImportController@import')->name('import');
     Route::post('import/parse', 'Department\ImportController@parseImport')->name('import_parse');
     Route::post('import/process', 'Department\ImportController@processImport')->name('import_process');

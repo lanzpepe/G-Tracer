@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Admin;
 use App\Models\Department;
 use App\Models\Role;
 use App\Models\School;
@@ -18,49 +17,28 @@ class AdminsTableSeeder extends Seeder
      */
     public function run()
     {
-        $adminRole = Role::where('name', 'ADMINISTRATOR')->first();
-        $deptRole = Role::where('name', 'DEPARTMENT')->first();
+        $adminRole = Role::where('name', config('constants.roles.admin'))->first();
         $dept = Department::where('name', 'ICCT')->first();
-        $school = School::where('name', 'UNIVERSITY OF SAN JOSE-RECOLETOS')->first();
+        $school = School::where('name', 'University of San Jose - Recoletos')->first();
 
-        $user = new User();
-        $user->user_id = Str::random();
-        $user->last_name = 'DOE';
-        $user->first_name = 'JOHN';
-        $user->middle_name = 'F';
-        $user->gender = 'MALE';
-        $user->birth_date = "12/26/1991";
-        $user->save();
+        $user = User::create([
+            'user_id' => Str::random(),
+            'last_name' => 'Doe',
+            'first_name' => 'John',
+            'middle_name' => 'F',
+            'gender' => 'Male',
+            'birth_date' => 'February 14, 1991'
+        ]);
 
-        $admin = new Admin();
-        $admin->admin_id = Str::random();
-        $admin->username = 'admin';
-        $admin->password = Hash::make("usjr123");
-        $admin->user_id = $user->user_id;
-        $admin->save();
+        $user->admin()->create([
+            'admin_id' => Str::random(),
+            'username' => 'admin',
+            'password' => Hash::make('usjr123'),
+            'user_id' => $user->user_id
+        ]);
 
-        $admin->roles()->attach($adminRole->id);
-        $admin->departments()->attach($dept->id);
-        $admin->schools()->attach([$school->id]);
-
-        $user = new User();
-        $user->user_id = Str::random();
-        $user->last_name = 'DOE';
-        $user->first_name = 'JANE';
-        $user->middle_name = 'A';
-        $user->gender = 'MALE';
-        $user->birth_date = "12/26/1997";
-        $user->save();
-
-        $admin = new Admin();
-        $admin->admin_id = Str::random();
-        $admin->username = 'janedoe';
-        $admin->password = Hash::make("usjr123");
-        $admin->user_id = $user->user_id;
-        $admin->save();
-
-        $admin->roles()->attach([$deptRole->id]);
-        $admin->departments()->attach($dept->id);
-        $admin->schools()->attach([$school->id]);
+        $user->admin->roles()->attach($adminRole->id);
+        $user->admin->departments()->attach($dept->id);
+        $user->admin->schools()->attach($school->id);
     }
 }

@@ -7,13 +7,14 @@ use App\Http\Requests\StoreDepartmentRequest;
 use App\Models\Admin;
 use App\Models\Department;
 use App\Models\School;
-use App\Models\User;
+use App\Traits\StaticTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class DepartmentController extends Controller
 {
+    use StaticTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -38,27 +39,31 @@ class DepartmentController extends Controller
     public function store(StoreDepartmentRequest $request)
     {
         $data = $request->validated();
-        $school = School::where('name', $data['school'])->first();
-        $department = Department::where('name', $data['dept'])->first();
+        $deptName = $this->capitalize($data['dept']);
+        $schoolName = $this->capitalize($data['school']);
+        $school = School::where('name', $schoolName)->first();
+        $department = Department::where('name', $deptName)->first();
+        $imagePath = null;
 
-        if ($department) {
-            $result = DB::table('school_department')->where('dept_id', $department->id)->where('school_id', $school->id)->first();
+        if ($request->has('logo')) {
+            $imagePath = $request->file('logo')->storeAs('departments/' . $schoolName, $deptName,  'public');
+        }
 
-            if ($result) {
-                return back()->withErrors(['department' => "Department already exists."]);
-            }
-            else {
-                $dept = Department::find($department->id);
-                $dept->schools()->attach($school->id);
+        $result = Department::whereHas('schools', function ($query) use ($school) {
+            return $query->where('id', $school->id);
+        })->where('id', $department->id)->first();
 
-                return back()->with('success', "Department added successfully.");
-            }
+        if ($result) {
+            return back()->withErrors(['department' => "Department already exists."]);
         }
         else {
-            $dept = Department::create([
-                'id' => Str::random(),
-                'name' => User::formatString($data['dept'])
+            $dept = Department::updateOrCreate([
+                'id' => $department ? $department->id : Str::random()
+            ], [
+                'name' => $deptName,
+                'logo' => $imagePath
             ]);
+
             $dept->schools()->attach($school->id);
 
             return back()->with('success', "Department added successfully.");

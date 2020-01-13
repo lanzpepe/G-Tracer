@@ -2,7 +2,6 @@
 
 use App\Models\Batch;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class BatchesTableSeeder extends Seeder
 {
@@ -14,13 +13,11 @@ class BatchesTableSeeder extends Seeder
     public function run()
     {
         Batch::create([
-            'id' => Str::random(),
-            'name' => 'MARCH'
+            'name' => 'March'
         ]);
 
         Batch::create([
-            'id' => Str::random(),
-            'name' => 'OCTOBER'
+            'name' => 'October'
         ]);
     }
 }

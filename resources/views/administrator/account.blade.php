@@ -16,28 +16,26 @@
 <div class="ui centered grid">
     <div class="row">
         <div class="column">
-            <table class="ui unstackable selectable celled teal table">
+            <table class="ui compact unstackable selectable celled teal table">
                 <thead>
                     <tr class="center aligned">
+                        <th>{{ __('Admin Type') }}</th>
                         <th>{{ __('Username') }}</th>
-                        <th>{{ __('Last Name') }}</th>
-                        <th>{{ __('First Name') }}</th>
-                        <th>{{ __('M.I.') }}</th>
-                        <th>{{ __('School') }}</th>
+                        <th>{{ __('Name') }}</th>
                         <th>{{ __('Department') }}</th>
-                        <th>{{ __('Manage') }}</th>
+                        <th>{{ __('School') }}</th>
+                        <th>{{ __('Actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($admins as $adm)
                         @foreach ($adm->departments as $dept)
                             <tr class="center aligned">
+                                <td>{{ $adm->getRoleName() }}</td>
                                 <td>{{ $adm->username }}</td>
-                                <td>{{ $adm->user->last_name }}</td>
-                                <td>{{ $adm->user->first_name }}</td>
-                                <td>{{ $adm->user->middle_name }}</td>
-                                <td>{{ $adm->schools->first()->name }}</td>
+                                <td>{{ $adm->getFullNameAttribute() }}</td>
                                 <td>{{ $dept->name }}</td>
+                                <td>{{ $adm->getSchoolName() }}</td>
                                 <td>
                                     <button class="ui compact icon green inverted button edit-account" data-value="{{ $adm->admin_id }}">
                                         <i class="pen icon"></i>
@@ -53,52 +51,46 @@
             </table>
         </div>
     </div>
-    <div class="row">
-        <div class="ui centered grid">
-            <div class="column">
-                {{ $admins->links('vendor.pagination.semantic-ui') }}
-            </div>
-        </div>
-    </div>
+    {{ $admins->links('vendor.pagination.semantic-ui') }}
 </div>
 @endsection
 
 @section('modal')
-<div class="ui overlay fullscreen modal" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="accountModalLabel" aria-hidden="true">
-    <div class="ui icon header" id="accountModalLabel">
-        <i class="question circle outline teal icon"></i><span class="title">{{ __('Add Account') }}</span>
+<div class="ui overlay fullscreen modal" id="accountModal" role="dialog" tabindex="-1" aria-labelledby="accountModalLabel" aria-hidden="true">
+    <div class="header" id="accountModalLabel">
+        <i class="ui question circle outline teal icon"></i><span class="title">{{ __('Add New Account') }}</span>
     </div>
-    <div class="content" role="document">
+    <div class="scrolling content" role="document">
         <form action="{{ route('accounts.store') }}" class="ui form" id="accountForm" method="POST">
             @csrf
             <input type="hidden" name="adminId" id="adminId" value="">
             <div class="required field username">
                 <label for="username"><i class="ui user teal icon"></i>{{ __('Username') }}</label>
-                <input type="text" name="username" id="username" value="" required>
+                <input type="text" name="username" id="username" value="{{ old('username') }}" required>
             </div>
             <div class="two fields password">
                 <div class="required field">
                     <label for="password"><i class="ui key teal icon"></i>{{ __('Password') }}</label>
-                    <input type="password" name="password" id="password" value="" required>
+                    <input type="password" name="password" id="password" value="{{ old('password') }}" required>
                 </div>
                 <div class="required field">
                     <label for="password-confirm"><i class="ui key teal icon"></i>{{ __('Confirm Password') }}</label>
-                    <input type="password" name="password_confirmation" id="password-confirm" value="" required>
+                    <input type="password" name="password_confirmation" id="password-confirm" value="{{ old('password-confirm') }}" required>
                 </div>
             </div>
             <input type="hidden" name="userId" id="userId" value="">
             <div class="equal width fields">
                 <div class="seven wide required field">
                     <label for="lastname"><i class="ui user outline teal icon"></i>{{ __('Last Name') }}</label>
-                    <input type="text" name="lastname" id="lastname" value="" required>
+                    <input type="text" name="lastname" id="lastname" value="{{ old('lastname') }}" required>
                 </div>
                 <div class="seven wide required field">
                     <label for="firstname"><i class="ui user outline teal icon"></i>{{ __('First Name') }}</label>
-                    <input type="text" name="firstname" id="firstname" value="" required>
+                    <input type="text" name="firstname" id="firstname" value="{{ old('firstname') }}" required>
                 </div>
                 <div class="two wide required field">
                     <label for="midname"><i class="ui user outline teal icon"></i>{{ __('M.I.') }}</label>
-                    <input type="text" name="midname" id="midname" value="" required>
+                    <input type="text" name="midname" id="midname" value="{{ old('midname') }}" required>
                 </div>
             </div>
             <div class="two fields">
@@ -115,7 +107,7 @@
                     <label for="dob"><i class="ui calendar alternate teal icon"></i>{{ __('Date of Birth') }}</label>
                     <div class="ui calendar" id="birthdate">
                         <div class="ui input">
-                            <input type="text" id="dob" name="dob" value="01/01/1990" required>
+                            <input type="text" id="dob" name="dob" value="January 1, 1990" required>
                         </div>
                     </div>
                 </div>

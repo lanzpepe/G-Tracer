@@ -14,7 +14,7 @@ class CreateAcademicYearsTable extends Migration
     public function up()
     {
         Schema::create('academic_years', function (Blueprint $table) {
-            $table->string('id', 32)->primary();
+            $table->bigIncrements('id');
             $table->string('school_year', 16)->unique();
             $table->timestamps();
         });

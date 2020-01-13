@@ -10,11 +10,14 @@ use App\Models\Gender;
 use App\Models\Role;
 use App\Models\School;
 use App\Models\User;
+use App\Traits\StaticTrait;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AccountController extends Controller
 {
+    use StaticTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -49,24 +52,24 @@ class AccountController extends Controller
         if ($request->btnAccount == 'added') {
             $user = User::create([
                 'user_id' => Str::random(),
-                'last_name' => User::formatString($data['lastname']),
-                'first_name' => User::formatString($data['firstname']),
-                'middle_name' => substr(User::formatString($data['midname']), 0, 1),
-                'gender' => User::formatString($data['gender']),
+                'last_name' => $this->capitalize($data['lastname']),
+                'first_name' => $this->capitalize($data['firstname']),
+                'middle_name' => substr($this->capitalize($data['midname']), 0, 1),
+                'gender' => $this->capitalize($data['gender']),
                 'birth_date' => $data['dob'],
                 'image_uri' => null
             ]);
 
-            $user->admins()->create([
+            $user->admin()->create([
                 'admin_id' => Str::random(),
                 'username' => $data['username'],
                 'password' => Hash::make($data['password']),
                 'user_id' => $user->user_id
             ]);
 
-            $user->admins->first()->roles()->attach($roleId);
-            $user->admins->first()->departments()->attach($deptId);
-            $user->admins->first()->schools()->attach($schoolId);
+            $user->admin->roles()->attach($roleId);
+            $user->admin->departments()->attach($deptId);
+            $user->admin->schools()->attach($schoolId);
 
             return back()->with('success', "User {$request->btnAccount} successfully.");
         }
@@ -74,17 +77,17 @@ class AccountController extends Controller
             $user = User::updateOrCreate([
                 'user_id' => $request->userId
             ], [
-                'last_name' => User::formatString($data['lastname']),
-                'first_name' => User::formatString($data['firstname']),
-                'middle_name' => substr(User::formatString($data['midname']), 0, 1),
-                'gender' => User::formatString($data['gender']),
+                'last_name' => $this->capitalize($data['lastname']),
+                'first_name' => $this->capitalize($data['firstname']),
+                'middle_name' => substr($this->capitalize($data['midname']), 0, 1),
+                'gender' => $this->capitalize($data['gender']),
                 'birth_date' => $data['dob'],
                 'image_uri' => null
             ]);
 
-            $user->admins->first()->departments()->sync($deptId);
-            $user->admins->first()->schools()->sync($schoolId);
-            $user->admins->first()->roles()->sync($roleId);
+            $user->admin->departments()->sync($deptId);
+            $user->admin->schools()->sync($schoolId);
+            $user->admin->roles()->sync($roleId);
 
             return back()->with('success', "User {$request->btnAccount} successfully.");
         }

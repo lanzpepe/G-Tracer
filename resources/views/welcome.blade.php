@@ -6,10 +6,10 @@
 <div class="ui large top fixed hidden borderless menu">
     <div class="ui container">
         <div class="header item">
-            <img src="https://fomantic-ui.com/examples/assets/images/logo.png" alt="Brand Logo" class="logo">
+            <img src="{{ asset('img/logo.png') }}" alt="Brand Logo" class="logo">
         </div>
         <div class="right item">
-            <button class="ui yellow button btn-login" data-target="{{ route('login') }}">
+            <button class="ui teal button btn-login" data-target="{{ route('login') }}">
                 @if (Route::has('login'))
                     @auth
                         <i class="home icon"></i>
@@ -23,14 +23,14 @@
         </div>
     </div>
 </div>
-<div class="ui inverted vertical center aligned masthead segment" style="background-image: url('{{ asset('img/bg3.jpg') }}')">
+<div class="ui inverted vertical center aligned masthead segment" style="background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url({{ asset('img/gtracer.jpg') }}); background-size: cover">
     <div class="ui container">
         <div class="ui large secondary inverted menu">
             <div class="header item">
-                <img src="https://fomantic-ui.com/examples/assets/images/logo.png" alt="Brand Logo" class="logo">
+                <img src="{{ asset('img/logo.png') }}" alt="Brand Logo" class="logo">
             </div>
             <div class="right item">
-                <button class="ui yellow button btn-login" data-target="{{ route('login') }}">
+                <button class="ui teal inverted button btn-login" data-target="{{ route('login') }}">
                     @if (Route::has('login'))
                         @auth
                             <i class="home icon"></i>
@@ -46,28 +46,9 @@
     </div>
     <div class="ui text container">
         <h1 class="ui inverted header">
-            {{ __('Graduate Tracer System') }}
+            {{ __('G-Tracer') }}
         </h1>
-        <h2>A Web and Mobile Application using Crowdsourcing and Social Media Listening</h2>
-    </div>
-</div>
-<div class="ui vertical stripe segment">
-    <div class="ui middle aligned stackable grid container">
-        <div class="row">
-            <div class="eight wide column">
-                <h3 class="ui header">
-                    What does it means to you?
-                </h3>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo, odit? Neque, consequuntur! Placeat, facere vitae! Aut quaerat veritatis nemo quo repudiandae aspernatur accusamus soluta odio, modi nihil totam. Distinctio, delectus!</p>
-                <h3 class="ui header">
-                    What does it means to you?
-                </h3>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus, maxime. Exercitationem iste repellendus cumque voluptates, quidem neque, commodi aliquam impedit porro fuga earum et tempora, dolorum amet corporis sunt magnam.</p>
-            </div>
-            <div class="six wide right floated column">
-                <img src="{{ asset('storage/defaults/default_avatar_m.png') }}" alt="" class="ui large bordered rounded image">
-            </div>
-        </div>
+        <h2>{{ __('A web and mobile Graduate Tracer Application using Crowdsourcing and Social Media Listening') }}</h2>
     </div>
 </div>
 @endsection

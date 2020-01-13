@@ -8,12 +8,13 @@ use App\Models\Admin;
 use App\Models\Course;
 use App\Models\Department;
 use App\Models\School;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
+use App\Traits\StaticTrait;
 use Illuminate\Support\Str;
 
 class CourseController extends Controller
 {
+    use StaticTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -39,63 +40,40 @@ class CourseController extends Controller
     public function store(StoreCourseRequest $request)
     {
         $data = $request->validated();
+        $major = $request->filled('major') ? $data['major'] : "None";
         $school = School::where('name', $data['school'])->first();
         $dept = Department::where('name', $data['dept'])->first();
-        $major = $request->filled('major') ? $data['major'] : "None";
-        $course = Course::where('name', $data['course'])->where('major', $major)->first();
 
         if ($request->btnCourse == 'added') {
-            if (!$course) {
-                $newCourse = Course::create([
-                    'id' => Str::random(),
-                    'name' => User::formatString($data['course']),
-                    'major' => $request->filled('major') ? User::formatString($major) : "NONE"
-                ]);
-                $newCourse->departments()->attach($dept->id);
-                $newCourse->schools()->attach($school->id);
+            $course = Course::create([
+                'id' => Str::random(),
+                'name' => $this->capitalize($data['course']),
+                'major' => $this->capitalize($major),
+                'code' => $data['code']
+            ]);
 
-                return back()->with('success', "Course {$request->btnCourse} successfully.");
-            }
-            else {
-                $result = DB::table('course_school')->where('course_id', $course->id)
-                            ->where('school_id', $school->id)->first();
+            $course->departments()->attach($dept->id);
+            $course->schools()->attach($school->id);
 
-                if (!$result) {
-                    $createCourse = Course::find($course->id);
-                    $createCourse->departments()->attach($dept->id);
-                    $createCourse->schools()->attach($school->id);
-
-                    return back()->with('success', "Course added successfully.");
-                }
-                else {
-                    return back()->withInput()->withErrors(['course' => "Course already exists."]);
-                }
-            }
+            return back()->with('success', "Course {$request->btnCourse} successfully.");
         }
         else {
-            if (!$course) {
-                $createCourse = Department::find($dept->id)->courses->first();
-                $createCourse->name = User::formatString($data['course']);
-                $createCourse->major = User::formatString($data['major']);
-                $createCourse->save();
+            $result = Course::whereHas('departments', function ($query) use ($dept) {
+                return $query->where('id', $dept->id);
+            })->where('code', $data['code'])->first();
 
-                return back()->with(['success' => "Course {$request->btnCourse} successfully."]);
-            }
-            else {
-                $result = DB::table('department_course')->where('dept_id', $dept->id)
-                        ->where('course_id', $course->id)->first();
+            $course = Course::updateOrCreate([
+                'id' => $result->id
+            ], [
+                'name' => $this->capitalize($data['course']),
+                'major' => $this->capitalize($major),
+                'code' => $data['code']
+            ]);
 
-                if (!$result) {
-                    $createCourse = Course::find($course->id);
-                    $createCourse->departments()->sync($dept->id);
-                    $createCourse->schools()->sync($school->id);
+            $course->departments()->sync($dept->id);
+            $course->schools()->sync($school->id);
 
-                    return back()->with('success', "Course added successfully.");
-                }
-                else {
-                    return back()->withInput()->withErrors(['course' => "Course already exists."]);
-                }
-            }
+            return back()->with('success', "Course added successfully.");
         }
     }
 

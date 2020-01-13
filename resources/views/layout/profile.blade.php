@@ -13,9 +13,8 @@
     </div>
     <div class="row">
         <h2 class="ui center aligned header">
-            <div class="content">
-                {{ $user->first_name . " ". $user->middle_name . " " . $user->last_name }}
-                <div class="sub header">{{ $admin->departments->first()->name }} &middot; {{ $admin->schools->first()->name }}</div>
+            <div class="content"> {{ $user->getFullNameAttribute() }}
+                <div class="sub header">{{ $admin->getDepartmentName() }} &middot; {{ $admin->getSchoolName() }}</div>
             </div>
         </h2>
     </div>
@@ -32,7 +31,7 @@
         </div>
         <div class="three wide column">
             <h4 class="ui center aligned grey header">
-                <i class="user cog teal icon"></i>{{ $admin->roles->first()->name }}
+                <i class="user cog teal icon"></i>{{ $admin->getRoleName() }}
             </h4>
         </div>
     </div>

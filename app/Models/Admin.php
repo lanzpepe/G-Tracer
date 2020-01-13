@@ -38,4 +38,24 @@ class Admin extends Authenticatable
     {
         return $this->belongsToMany(School::class, 'admin_school', 'admin_id', 'school_id')->withTimestamps();
     }
+
+    public function getFullNameAttribute()
+    {
+        return $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name;
+    }
+
+    public function getDepartmentName()
+    {
+        return $this->departments->first()->name;
+    }
+
+    public function getSchoolName()
+    {
+        return $this->schools->first()->name;
+    }
+
+    public function getRoleName()
+    {
+        return $this->roles->first()->name;
+    }
 }

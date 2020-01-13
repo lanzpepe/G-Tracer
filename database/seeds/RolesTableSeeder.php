@@ -2,8 +2,6 @@
 
 use App\Models\Role;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 
 class RolesTableSeeder extends Seeder
 {
@@ -14,16 +12,12 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        $role = new Role();
+        Role::create([
+            'name' => config('constants.roles.admin')
+        ]);
 
-        $role->id = Str::random();
-        $role->name = config('constants.roles.admin');
-        $role->save();
-
-        $role = new Role();
-
-        $role->id = Str::random();
-        $role->name = config('constants.roles.dept');
-        $role->save();
+        Role::create([
+            'name' => config('constants.roles.dept')
+        ]);
     }
 }

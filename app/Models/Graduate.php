@@ -18,14 +18,28 @@ class Graduate extends Model
         return 'storage/' . $path;
     }
 
-    public function tasks()
+    public function user()
     {
-        return $this->hasMany(GraduateTask::class, 'graduate_id')->latest();
+        return $this->belongsTo(User::class, 'graduate_id');
     }
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'added_graduates', 'graduate_id',
-            'user_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'user_graduate', 'graduate_id', 'user_id')->withPivot('response_id')->withTimestamps();
+    }
+
+    public function responses()
+    {
+        return $this->belongsToMany(Response::class, 'user_graduate', 'graduate_id', 'response_id')->withPivot('user_id')->withTimestamps();
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name;
+    }
+
+    public function getBatchYearAttribute()
+    {
+        return $this->batch . ' ' . $this->school_year;
     }
 }

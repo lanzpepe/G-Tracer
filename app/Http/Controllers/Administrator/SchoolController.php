@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Models\Admin;
 use App\Models\School;
-use App\Models\User;
+use App\Traits\StaticTrait;
 use Illuminate\Support\Str;
 
 class SchoolController extends Controller
 {
+    use StaticTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -34,10 +36,17 @@ class SchoolController extends Controller
     public function store(StoreSchoolRequest $request)
     {
         $data = $request->validated();
+        $school = $this->capitalize($data['school']);
+        $imagePath = null;
+
+        if ($request->has('logo')) {
+            $imagePath = $request->file('logo')->storeAs('schools', $school, 'public');
+        }
 
         School::create([
             'id' => Str::random(),
-            'name' => User::formatString($data['school'])
+            'name' => $school,
+            'logo' => $imagePath
         ]);
 
         return back()->with('success', "School added successfully.");

@@ -18,7 +18,6 @@ class CreateGraduatesTable extends Migration
             $table->string('last_name', 64);
             $table->string('first_name', 64);
             $table->string('middle_name', 64);
-            $table->string('suffix', 8)->nullable();
             $table->string('gender', 8);
             $table->string('degree', 128);
             $table->string('major', 128)->nullable();
@@ -27,6 +26,8 @@ class CreateGraduatesTable extends Migration
             $table->string('school_year', 32);
             $table->string('batch', 32);
             $table->string('image_uri')->nullable();
+            $table->string('user_id')->nullable();
+            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('set null');
             $table->unique(['graduate_id', 'last_name', 'first_name', 'middle_name']);
             $table->timestamps();
         });

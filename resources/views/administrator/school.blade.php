@@ -3,57 +3,55 @@
 @section('title', 'Manage Schools')
 
 @section('header')
-    <i class="ui school teal icon"></i> @yield('title')
+<i class="ui school teal icon"></i> @yield('title')
 @endsection
 
 @section('button')
-    <button class="ui right floated teal button add-school">
-        <i class="plus icon"></i> {{ __('Add School') }}
-    </button>
+<button class="ui right floated teal button add-school">
+    <i class="plus icon"></i> {{ __('Add School') }}
+</button>
 @endsection
 
 @section('main')
 <div class="ui centered grid">
     <div class="row">
         <div class="column">
-            <div class="ui stackable three cards">
+            <div class="ui five doubling cards">
                 @foreach ($schools as $school)
                 <div class="card">
+                    <div class="image">
+                        <img src="{{ 'storage/' . $school->logo }}">
+                    </div>
                     <div class="center aligned content">
-                        <div class="ui icon header">
-                            <i class="school teal icon"></i>
-                        </div>
                         <div class="header">{{ $school->name }}</div>
                     </div>
                     <div class="ui attached red inverted button mark-school" data-value="{{ $school->id }}">
-                        <i class="trash icon"></i>Remove
+                        <i class="trash icon"></i> {{ __('Remove') }}
                     </div>
                 </div>
                 @endforeach
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="ui centered grid">
-            <div class="column">
-                {{ $schools->links('vendor.pagination.semantic-ui') }}
-            </div>
-        </div>
-    </div>
+    {{ $schools->links('vendor.pagination.semantic-ui') }}
 </div>
 @endsection
 
 @section('modal')
 <div class="ui tiny modal" id="schoolModal" tabindex="-1" role="dialog" aria-labelledby="schoolModalLabel" aria-hidden="true">
-    <div class="ui icon header" id="schoolModalLabel">
-        <i class="question circle outline teal icon"></i>{{ __('Add New School') }}
+    <div class="header" id="schoolModalLabel">
+        <i class="ui question circle outline teal icon"></i>{{ __('Add New School') }}
     </div>
     <div class="content" role="document">
-        <form action="{{ route('schools.store') }}" class="ui form" id="schoolForm" method="POST" role="form">
+        <form action="{{ route('schools.store') }}" class="ui form" id="schoolForm" method="POST" role="form" enctype="multipart/form-data">
             @csrf
             <div class="required field">
                 <label for="school"><i class="ui school teal icon"></i>{{ __('School Name') }}</label>
                 <input type="text" name="school" id="school" required>
+            </div>
+            <div class="field">
+                <label for="logo"><i class="file image teal icon"></i>{{ __('School Logo (if applicable)') }}</label>
+                <input type="file" name="logo" id="logo" accept="image/*">
             </div>
         </form>
     </div>

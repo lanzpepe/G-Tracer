@@ -3,7 +3,7 @@
 @section('title', 'Import Graduates')
 
 @section('header')
-    <i class="ui file import teal icon"></i> @yield('title')
+<i class="ui file import teal icon"></i> @yield('title')
 @endsection
 
 @section('button')
@@ -18,8 +18,8 @@
 
 @section('modal')
 <div class="ui modal" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-    <div class="ui icon header" id="uploadModalLabel">
-        <i class="question circle outline teal icon"></i>{{ __('Import Graduates') }}
+    <div class="header" id="uploadModalLabel">
+        <i class="ui question circle outline teal icon"></i>{{ __('Import Graduates') }}
     </div>
     <div class="content" role="document">
         <form action="{{ route('import_parse') }}" class="ui form" id="uploadForm" method="POST" enctype="multipart/form-data">
@@ -35,6 +35,24 @@
                     <label for="dept"><i class="ui building teal icon"></i>{{ __('Department') }}</label>
                     <select name="dept" id="dept" class="ui fluid dropdown" required>
                         <option value="{{ $admin->departments->first()->name }}">{{ $admin->departments->first()->name }}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="equal width fields">
+                <div class="required field">
+                    <label for="course"><i class="ui book reader teal icon"></i>{{ __('Course') }}</label>
+                    <select name="course" id="course" class="ui fluid dropdown">
+                        @foreach ($courses as $course)
+                        <option value="{{ $course->name }}">{{ $course->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="required field">
+                    <label for="major"><i class="ui award teal icon"></i>{{ __('Major') }}</label>
+                    <select name="major" id="major" class="ui fluid dropdown">
+                        @foreach ($courses as $course)
+                        <option value="{{ $course->major }}">{{ $course->major }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>

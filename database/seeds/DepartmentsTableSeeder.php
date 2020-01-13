@@ -14,12 +14,14 @@ class DepartmentsTableSeeder extends Seeder
      */
     public function run()
     {
-        $school = School::where('name', 'UNIVERSITY OF SAN JOSE-RECOLETOS')->first();
+        $school = School::where('name', 'University of San Jose - Recoletos')->first();
 
-        $dept = new Department();
-        $dept->id = Str::random();
-        $dept->name = 'ICCT';
-        $dept->save();
+        $dept = Department::create([
+            'id' => Str::random(),
+            'name' => 'ICCT',
+            'logo' => 'departments/University of San Jose - Recoletos/ICCT'
+        ]);
+
         $dept->schools()->attach([$school->id]);
     }
 }

@@ -10,8 +10,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
-    protected $primaryKey = 'user_id';
     protected $guarded = [];
+    protected $primaryKey = 'user_id';
     public $incrementing = false;
 
     public function image()
@@ -21,19 +21,9 @@ class User extends Authenticatable
         return $path;
     }
 
-    public static function formatString(string $tag)
+    public function admin()
     {
-        $words = ['Of', 'The'];
-        $regex = '/\b(' . implode('|', $words) . ')\b/i';
-
-        return preg_replace_callback($regex, function ($matches) {
-            return strtolower($matches[1]);
-        }, ucwords($tag));
-    }
-
-    public function admins()
-    {
-        return $this->hasMany(Admin::class, 'user_id');
+        return $this->hasOne(Admin::class, 'user_id');
     }
 
     public function contacts()
@@ -56,35 +46,23 @@ class User extends Authenticatable
         return $this->hasOne(SocialAccount::class, 'user_id');
     }
 
-    public function addedGraduates()
+    public function graduate()
     {
-        return $this->belongsToMany(Graduate::class, 'added_graduates', 'user_id',
-            'graduate_id')->withTimestamps();
+        return $this->hasOne(Graduate::class, 'user_id');
+    }
+
+    public function graduates()
+    {
+        return $this->belongsToMany(Graduate::class, 'user_graduate', 'user_id', 'graduate_id')->withPivot('response_id')->withTimestamps();
     }
 
     public function responses()
     {
-        return $this->belongsToMany(Response::class, 'added_graduates', 'user_id',
-            'graduate_id', 'response_id')->withTimestamps();
+        return $this->belongsToMany(Response::class, 'user_graduate', 'user_id', 'response_id')->withPivot('graduate_id')->withTimestamps();
     }
 
-    public function createContact($contact)
+    public function getFullNameAttribute()
     {
-        return $this->contacts()->create($contact);
-    }
-
-    public function createAcademic($academic)
-    {
-        return $this->academic()->create($academic);
-    }
-
-    public function createEmployment($employment)
-    {
-        return $this->employments()->create($employment);
-    }
-
-    public function createSocialAccount($socialAccount)
-    {
-        return $this->socialAccount()->create($socialAccount);
+        return $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name;
     }
 }

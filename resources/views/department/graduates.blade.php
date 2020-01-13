@@ -13,51 +13,61 @@
 @endsection
 
 @section('main')
-<div class="ui centered grid">
-    <div class="row">
-        <div class="column">
-            <div class="ui four special cards">
-                @foreach ($graduates as $graduate)
-                <div class="ui teal raised card">
-                    <div class="blurring dimmable image">
-                        <div class="ui dimmer">
-                            <div class="content">
-                                <div class="center">
-                                    <div class="ui inverted button edit-graduate" data-value="{{ $graduate->graduate_id }}">{{ __('Update') }}</div>
+<div class="ui equal width centered grid">
+    @if (count($graduates) > 0)
+    <div class="column">
+        <div class="ui four special doubling cards">
+            @foreach ($graduates as $graduate)
+            <div class="ui teal raised card">
+                <div class="blurring dimmable image">
+                    <div class="ui dimmer">
+                        <div class="content">
+                            <div class="center">
+                                <div class="ui tiny green inverted button edit-graduate" data-value="{{ $graduate->graduate_id }}">
+                                    <i class="pen icon"></i> {{ __('Update') }}
+                                </div>
+                                <div class="ui tiny red inverted button mark-graduate" data-value={{ $graduate->graduate_id }}>
+                                    <i class="trash icon"></i> {{ __('Delete') }}
                                 </div>
                             </div>
                         </div>
-                        <img src="{{ $graduate->image() }}">
                     </div>
-                    <div class="content">
-                        <div class="header">{{ $graduate->first_name . " " . $graduate->middle_name . " " . $graduate->last_name }}</div>
-                        <div class="meta">{{ $graduate->degree }}</div>
-                        <div class="description">
-                            <p>{{ "S.Y. Graduated: " . $graduate->school_year }}</p>
-                            <p>{{ "Batch: " . $graduate->batch }}</p>
-                        </div>
+                    <img src="{{ $graduate->image() }}">
+                </div>
+                <div class="content">
+                    <a href="{{ route('report', ['id' => $graduate->graduate_id]) }}" class="header">{{ $graduate->getFullNameAttribute() }}</a>
+                    <div class="meta">{{ $graduate->degree }}</div>
+                    <div class="description">
+                        <p>{{ "S.Y. Graduated: " . $graduate->school_year }}</p>
+                        <p>{{ "Batch: " . $graduate->batch }}</p>
                     </div>
                 </div>
-                @endforeach
             </div>
+            @endforeach
         </div>
     </div>
+    {{ $graduates->links('vendor.pagination.semantic-ui') }}
+    @else
     <div class="row">
-        <div class="ui centered grid">
-            <div class="column">
-                {{ $graduates->links('vendor.pagination.semantic-ui') }}
+        <div class="column">
+            <div class="ui placeholder segment">
+                <div class="ui icon header">
+                    <i class="frown outline teal icon"></i>
+                    {{ __('No graduates displayed.') }}
+                </div>
             </div>
         </div>
     </div>
+    @endif
 </div>
 @endsection
 
 @section('modal')
 <div class="ui overlay fullscreen modal" id="graduateModal" tabindex="-1" role="dialog" aria-labelledby="graduateModalLabel" aria-hidden="true">
-    <div class="ui icon header" id="graduateModalLabel">
-        <i class="question circle outline teal icon"></i><span class="title">{{ __('Add Graduate') }}</span>
+    <div class="header" id="graduateModalLabel">
+        <i class="ui question circle outline teal icon"></i><span class="title">{{ __('Add Graduate') }}</span>
     </div>
-    <div class="content" role="document">
+    <div class="scrolling content" role="document">
         <form action="{{ route('add_graduate') }}" class="ui form" id="graduateForm" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="ui grid container">
@@ -69,7 +79,7 @@
                     <div class="ui dimmer">
                         <div class="content">
                         <div class="center">
-                        <button type="button" class="ui inverted button">
+                        <button type="button" class="ui teal inverted button">
                             <label for="image">{{ __('Upload Image') }}</label>
                             <input type="file" name="image" id="image" accept="image/*">
                         </button>
@@ -187,14 +197,17 @@
     </div>
     <div class="content" role="document">
         <h3>{{ __('The following entries will be removed:') }}</h3>
-        <p class="school name"></p>
+        <p class="graduate name"></p>
+        <p class="graduate course"></p>
+        <p class="graduate school"></p>
+        <p class="graduate batch"></p>
         <h3>{{ __('Proceed anyway?') }}</h3>
     </div>
     <div class="actions">
         <button type="button" class="ui green cancel basic inverted button">
             <i class="close icon"></i>{{ __('Cancel') }}
         </button>
-        <button type="submit" class="ui red submit inverted button delete-school">
+        <button type="submit" class="ui red submit inverted button delete-graduate">
             <i class="trash icon"></i> {{ __('Delete') }}
         </button>
     </div>

@@ -17,7 +17,7 @@ class CreateAcademicsTable extends Migration
             $table->string('academic_id')->primary();
             $table->string('degree', 128);
             $table->string('major', 128)->nullable();
-            $table->string('department', 32);
+            $table->string('department', 128);
             $table->string('school', 128);
             $table->string('school_year', 32);
             $table->string('batch', 32);

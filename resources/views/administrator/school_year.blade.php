@@ -16,7 +16,7 @@
 <div class="ui centered grid">
     <div class="row">
         <div class="column">
-            <div class="ui stackable three cards">
+            <div class="ui three doubling cards">
                 @foreach ($years as $year)
                 <div class="card">
                     <div class="center aligned content">
@@ -33,20 +33,14 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="ui centered grid">
-            <div class="column">
-                {{ $years->links('vendor.pagination.semantic-ui') }}
-            </div>
-        </div>
-    </div>
+    {{ $years->links('vendor.pagination.semantic-ui') }}
 </div>
 @endsection
 
 @section('modal')
 <div class="ui tiny modal" id="schoolYearModal" tabindex="-1" role="dialog" aria-labelledby="schoolYearModalLabel" aria-hidden="true">
-    <div class="ui icon header" id="schoolYearModalLabel">
-        <i class="question circle outline teal icon"></i>{{ __('Add New School Year') }}
+    <div class="header" id="schoolYearModalLabel">
+        <i class="ui question circle outline teal icon"></i>{{ __('Add School Year') }}
     </div>
     <div class="content" role="document">
         <form action="{{ route('school_years.store') }}" class="ui form" id="schoolYearForm" method="POST" role="form">

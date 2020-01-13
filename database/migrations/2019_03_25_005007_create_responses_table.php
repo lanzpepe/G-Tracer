@@ -17,7 +17,8 @@ class CreateResponsesTable extends Migration
             $table->string('response_id')->primary();
             $table->string('company_name', 128);
             $table->string('company_address');
-            $table->string('company_position', 128);
+            $table->string('job_position', 128);
+            $table->string('date_employed', 16);
             $table->string('remarks')->nullable();
             $table->timestamps();
         });

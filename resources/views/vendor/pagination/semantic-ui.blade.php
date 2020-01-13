@@ -1,4 +1,5 @@
 @if ($paginator->hasPages())
+<div class="row">
     <div class="ui pagination menu" role="navigation">
         {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
@@ -33,4 +34,5 @@
             <a class="icon item disabled" aria-disabled="true" aria-label="@lang('pagination.next')"> <i class="right chevron icon"></i> </a>
         @endif
     </div>
+</div>
 @endif

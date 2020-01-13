@@ -26,9 +26,11 @@ class StoreImportRequest extends FormRequest
         return [
             'school' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:schools,name', 'max:64'],
             'dept' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:departments,name', 'max:64'],
+            'course' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:courses,name', 'max:64'],
+            'major' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:courses,major', 'max:32'],
             'sy' => ['required', 'regex:/^20[0-9]\d-20[0-9]\d|2100$/', 'size:9'],
             'batch' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:batches,name'],
-            'file' => ['required', 'mimes:csv,txt']
+            'file' => ['required', 'file', 'mimes:csv,txt']
         ];
     }
 }

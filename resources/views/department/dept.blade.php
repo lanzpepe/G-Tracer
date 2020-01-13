@@ -1,30 +1,30 @@
-<div class="ui four cards">
-    <div class="teal raised card">
-        <a href="{{ route('graduates') }}" class="ui placeholder segment">
+<div class="ui four doubling cards">
+    <a href="{{ route('graduates') }}" class="teal raised card">
+        <div class="ui placeholder segment">
             <div class="ui icon header">
-                <i class="ui user graduate teal icon"></i>{{ __('Graduate List') }}
+                <i class="user graduate teal icon"></i>{{ __('Graduate List') }}
             </div>
-        </a>
-    </div>
-    <div class="teal raised card">
-        <a href="{{ route('import') }}" class="ui placeholder segment">
+        </div>
+    </a>
+    <a href="{{ route('import') }}" class="teal raised card">
+        <div class="ui placeholder segment">
             <div class="ui icon header">
-                <i class="ui file import teal icon"></i>{{ __('Import Graduate') }}
+                <i class="file import teal icon"></i>{{ __('Import Graduate') }}
             </div>
-        </a>
-    </div>
-    <div class="teal raised card">
-        <a href="{{ route('reports') }}" class="ui placeholder segment">
+        </div>
+    </a>
+    <a href="{{ route('reports') }}" class="teal raised card">
+        <div class="ui placeholder segment">
             <div class="ui icon header">
-                <i class="ui chart bar outline teal icon"></i>{{ __('Summary Reports') }}
+                <i class="chart bar outline teal icon"></i>{{ __('Statistics') }}
             </div>
-        </a>
-    </div>
-    <div class="teal raised card">
-        <a href="{{ route('dept_profile') }}" class="ui placeholder segment">
+        </div>
+    </a>
+    <a href="{{ route('dept_profile') }}" class="teal raised card">
+        <div class="ui placeholder segment">
             <div class="ui icon header">
-                <i class="ui user outline teal icon"></i>{{ __('Profile') }}
+                <i class="user outline teal icon"></i>{{ __('Profile') }}
             </div>
-        </a>
-    </div>
+        </div>
+    </a>
 </div>

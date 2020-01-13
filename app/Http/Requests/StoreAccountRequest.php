@@ -32,13 +32,13 @@ class StoreAccountRequest extends FormRequest
             ],
             'lastname' => ['required', 'regex:/^[A-z\s-]+$/', 'max:64'],
             'midname' => ['required', 'regex:/^[A-z\s-]+$/', 'max:64'],
-            'gender' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:genders,name', 'max:8'],
-            'dob' => ['required', 'regex:/^\d{1,2}\/\d{1,2}\/\d{4}$/', 'size:10'],
+            'gender' => ['required', 'string', 'exists:genders,name', 'max:8'],
+            'dob' => ['required', 'date', 'max:18'],
             'school' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:schools,name', 'max:64'],
             'dept' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:departments,name', 'max:64'],
             'username' => ['required', 'max:32', Rule::unique('admins', 'username')->ignore($this->adminId, 'admin_id')],
             'password' => ['required', 'confirmed', 'max:255'],
-            'role' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:roles,name', 'max:16']
+            'role' => ['required', 'string', 'exists:roles,name', 'max:16']
         ];
     }
 
@@ -61,12 +61,11 @@ class StoreAccountRequest extends FormRequest
             'midname.regex' => 'Middle name format is invalid.',
             'midname.max' => 'Middle name should not exceed 64 characters long.',
             'gender.required' => 'Gender is required.',
-            'gender.regex' => 'Gender format is invalid.',
-            'gender.exists' => 'Gender does not exists.',
-            'gender.max' => 'Gender should not exceed 8 characters long.',
+            'gender.exists' => 'Gender name does not exists.',
+            'gender.max' => 'Gender name should not exceed 8 characters long.',
             'dob.required' => 'Birth date is required.',
-            'dob.regex' => 'Birth date format is invalid.',
-            'dob.size' => 'Birth date should be 10 characters long.',
+            'dob.date' => 'Birth date format is invalid.',
+            'dob.max' => 'Birth date should not exceed 18 characters long.',
             'school.required' => 'School name is required.',
             'school.regex' => 'School name format is invalid.',
             'school.unique' => 'School name already exists.',
@@ -80,9 +79,8 @@ class StoreAccountRequest extends FormRequest
             'username.unique' => 'Username already exists. Please try a different username.',
             'password.required' => 'Password is required.',
             'role.required' => 'Role is required.',
-            'role.regex' => 'Role format is invalid.',
-            'role.exists' => 'Role does not exists.',
-            'role.max' => 'Role should not exceed 16 characters long.'
+            'role.exists' => 'Role name does not exists.',
+            'role.max' => 'Role name should not exceed 16 characters long.'
         ];
     }
 }

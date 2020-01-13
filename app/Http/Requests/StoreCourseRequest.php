@@ -26,6 +26,7 @@ class StoreCourseRequest extends FormRequest
         return [
             'school' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:schools,name', 'max:64'],
             'dept' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:departments,name', 'max:64'],
+            'code' => ['required', 'regex:/^[A-Z-]+$/'],
             'course' => ['required', 'regex:/^[A-z\s-]+$/', 'max:64'],
             'major' => ['regex:/^[A-z\s-]+$/', 'max:32', 'nullable']
         ];
@@ -39,6 +40,8 @@ class StoreCourseRequest extends FormRequest
     public function messages()
     {
         return [
+            'code.required' => 'Course code is required.',
+            'code.regex' => 'Course code format is invalid.',
             'course.required' => 'Course name is required.',
             'course.regex' => 'Course name format is invalid.',
             'course.max' => 'Course name should not exceed 64 characters long.',

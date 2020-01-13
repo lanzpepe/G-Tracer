@@ -15,7 +15,7 @@ class CreateEmploymentsTable extends Migration
     {
         Schema::create('employments', function (Blueprint $table) {
             $table->string('user_id'); $table->string('company_id');
-            $table->string('position', 128)->nullable();
+            $table->string('job_position', 128)->nullable();
             $table->string('date_employed')->nullable();
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
             $table->foreign('company_id')->references('company_id')->on('companies')->onDelete('cascade');

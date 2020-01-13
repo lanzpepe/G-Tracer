@@ -1,7 +1,9 @@
 $(function () {
-    var modal = { closable: false, autofocus: false };
     var dropdown = { allowAdditions: true, forceSelection: false, hideAdditions: false };
+    var modal = { closable: false, autofocus: false };
+    var options = { clearable: true };
     var base = window.location.href;
+    var date = new Date();
 
     $.ajaxSetup({
         headers: {
@@ -19,7 +21,7 @@ $(function () {
         }
     });
 
-    $('.year').html(new Date().getFullYear());
+    $('.year').html(date.getFullYear());
 
     $('.notify.toast').toast({
         showProgress: 'bottom',
@@ -39,14 +41,33 @@ $(function () {
         position: 'bottom left'
     });
 
+    $('.tabular.menu .item').tab();
+
+    if ($('.item').hasClass('active')) {
+        console.log(window.location.pathname.replace('/', ''));
+        console.log(base);
+    }
+
+    /* var content = [
+        {
+            'title': 'Statistics',
+            'description': 'http://localhost/reports',
+            'url': 'reports'
+        }
+    ];
+
+    $('.ui.search').search({
+        source: content,
+        fullTextSearch: false
+    }); */
+
     // account modal functions
     $('.add-account').click(function () {
         $('#accountModal').modal(
             $.extend(modal, {
                 onShow: () => {
-                    $('.ui.dropdown').dropdown();
+                    $('.ui.dropdown').dropdown(options);
                     calendar('#birthdate'); dynamic('.school .ui.dropdown');
-                    $('.department .ui.dropdown').dropdown({ placeholder: false });
                 },
                 onHide: () => {
                     window.location.assign('accounts');
@@ -89,9 +110,8 @@ $(function () {
                             $('#role').val(data.admin.roles[0].name);
                             $('#btnAccount').val('updated');
                             $('#btnAccount .label').html('Apply');
-                            $('.ui.dropdown').dropdown();
+                            $('.ui.dropdown').dropdown(options);
                             calendar('#birthdate'); dynamic('.school .ui.dropdown');
-                            $('.department .ui.dropdown').dropdown({ placeholder: false });
                         },
                         onHide: () => {
                             window.location.assign('accounts');
@@ -182,7 +202,7 @@ $(function () {
         $('#deptModal').modal(
             $.extend(modal, {
                 onShow: () => {
-                    $('.school .ui.dropdown').dropdown();
+                    $('.ui.dropdown').dropdown(options);
                     $('.dept .ui.dropdown').dropdown(dropdown);
                     dynamic('.school .ui.dropdown');
                 },
@@ -230,8 +250,8 @@ $(function () {
         $('#courseModal').modal(
             $.extend(modal, {
                 onShow: () => {
-                    $('.school .ui.dropdown, .dept .ui.dropdown').dropdown();
-                    $('.course .ui.dropdown, .major .ui.dropdown').dropdown(dropdown);
+                    $('.school .ui.dropdown').dropdown(options);
+                    $('.ui.dropdown').dropdown(dropdown);
                     dynamic('.school .ui.dropdown');
                 },
                 onHide: () => {
@@ -259,9 +279,11 @@ $(function () {
                             $('#courseModal .title').html('Edit Course');
                             $('#school').val(school[0].name);
                             $('#dept').html('<option value="' + dept[0].name + '" selected>' + dept[0].name + '</option>')
+                            $('#code').val(result.course.code);
                             $('#course').val(result.course.name);
                             $('#major').val(result.course.major);
-                            $('.ui.dropdown').dropdown();
+                            $('.school .ui.dropdown').dropdown(options);
+                            $('.ui.dropdown').dropdown(dropdown);
                             $('#btnCourse').val('updated');
                             $('#btnCourse .label').html('Apply');
                         },
@@ -295,8 +317,9 @@ $(function () {
                             var dept = $.grep(result.course.departments, (a) => {
                                 return a.id == data[1];
                             });
-                            $('.course.name').val(result.course.id).html('Course Name: ' + result.course.name);
-                            $('.major.name').html('Major: ' + ((result.course.major === 'NONE') ? 'NONE' : result.course.major));
+                            $('.course.code').val(result.course.id).html('Course Code: ' + result.course.code);
+                            $('.course.name').val(result.course.name).html('Course Name: ' + result.course.name);
+                            $('.major.name').html('Major: ' + result.course.major);
                             $('.department.name').val(dept[0].id).html('Department: ' + dept[0].name);
                             $('.school.name').val(school[0].id).html('School: ' + school[0].name);
                             $('#deleteForm').attr('action', base + '/' + result.course.id + '+' + dept[0].id + '+' + school[0].id);
@@ -360,8 +383,8 @@ $(function () {
         $('#jobModal').modal(
             $.extend(modal, {
                 onShow: () => {
+                    $('.ui.dropdown').dropdown(options);
                     $('.job .ui.dropdown').dropdown(dropdown);
-                    $('.course .ui.dropdown').dropdown();
                 },
                 onApprove: () => {
                     $('#course').dropdown('get value');
@@ -386,8 +409,7 @@ $(function () {
                                 return a.id == data[1];
                             });
                             $('.job.name').val(result.job.id).html('Job Name: ' + result.job.name);
-                            $('.course.name').val(course[0].id).html('Course: ' + course[0].name);
-                            $('.major.name').html('Major: ' + course[0].major);
+                            $('.course.name').val(course[0].id).html('Course: ' + course[0].code);
                             $('#deleteForm').attr('action', base + '/' + result.job.id + '+' + course[0].id);
                         },
                         onHide: () => {
@@ -423,7 +445,7 @@ $(function () {
     $('.edit-graduate').click(function () {
         var id = $(this).data('value');
         $.ajax({
-            url: 'graduate/' + id + '/mark',
+            url: 'graduates/' + id + '/mark',
             method: 'GET',
             dataType: 'json',
             success: (result) => {
@@ -441,7 +463,7 @@ $(function () {
                             $('#major').val(result.graduate.major);
                             $('#temp').val(result.graduate.graduate_id);
                             image('#image');
-                            $('.ui.dropdown').dropdown();
+                            $('.ui.dropdown').dropdown(options);
                             $('#btnGraduate').val('updated');
                             $('#btnGraduate .label').html('Apply');
                         },
@@ -458,6 +480,36 @@ $(function () {
                 console.log(result);
             }
         });
+    });
+    $('.mark-graduate').click(function () {
+        var id = $(this).data('value');
+        $.ajax({
+            url: 'graduates/' + id + '/mark',
+            method: 'GET',
+            dataType: 'json',
+            success: (result) => {
+                var graduate = result.graduate;
+                $('#markGraduateModal').modal(
+                    $.extend(modal, {
+                        onShow: () => {
+                            $('.graduate.name').val(graduate.graduate_id).html('Name: ' + graduate.first_name + ' ' + graduate.middle_name + ' ' + graduate.last_name);
+                            $('.graduate.course').html('Course: ' + graduate.degree);
+                            $('.graduate.school').html('School: ' + graduate.school);
+                            $('.graduate.batch').html('Batch: ' + graduate.batch + ' ' + graduate.school_year);
+                        },
+                        onHide: () => {
+                            window.location.assign('graduates');
+                        }
+                    })
+                ).modal('show');
+            },
+            error: (result) => {
+                console.log(result);
+            }
+        })
+    });
+    $('.delete-graduate').click(function () {
+        window.location.assign('graduates/' + $('.graduate.name').val() + '/delete');
     });
     // end graduate modal
 
@@ -477,28 +529,15 @@ $(function () {
     // end import modal
 
     replace('.btn-login');
-    replace('.btn-profile');
+    replace('.graduates');
 
-    replace('.btn-account');
-    replace('.btn-school');
-    replace('.btn-dept');
-    replace('.btn-course');
-    replace('.btn-sy');
-    replace('.btn-job');
-
-    replace('.btn-report');
-    replace('.btn-import');
-    replace('.btn-graduate');
-    replace('.btn-add');
-    replace('.btn-task');
-
-    $('.logout').click(function(e){
+    $('.logout').click(function (e) {
         e.preventDefault();
         $('#logout-form').submit();
     });
 
     function replace(a){$(a).click(function(e){e.preventDefault();window.location.replace($(this).data('target'))})}
-    function calendar(a){$(a).calendar({type:'date',formatter:{date:(date)=>{if(!date)return'';var b=('0'+date.getDate()).slice(-2);var c=('0'+(date.getMonth()+1)).slice(-2);var d=date.getFullYear();return c+'/'+b+'/'+d}}})}
+    function calendar(a){$(a).calendar({type:'date'})}
     function dynamic(a){$(a).dropdown({onChange:(value)=>{var b=$('input[name="_token"]').val();$.ajax({url:'departments/fetch',method:'POST',data:{value:value,_token:b},success:(result)=>{$('#dept').html(result)},error:(result)=>{console.log(result)}})}})}
     function image(a){$(a).change(function(e){loadImage(e.target.files[0],(canvas)=>{var a=canvas.toDataURL('image/jpeg');a.replace(/^data\:image\/\w+\;base64\,/,'');$('#preview').attr('src',a)},{canvas:true,orientation:true})})};
 });

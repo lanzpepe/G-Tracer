@@ -11,18 +11,15 @@
     <title>@yield('title')</title>
 
     <!-- Favicon -->
-    <link rel="icon" href="https://fomantic-ui.com/examples/assets/images/logo.png">
+    <link rel="icon" href="{{ asset('img/logo.png') }}">
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('semantic/dist/semantic.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 
     <!-- Scripts -->
-    <script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/popper.min.js') }}"></script>
-    <script src="{{ asset('js/moment.min.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('semantic/dist/semantic.min.js') }}"></script>
-    <script src="{{ asset('js/load-image.all.min.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
 </head>
 <body>

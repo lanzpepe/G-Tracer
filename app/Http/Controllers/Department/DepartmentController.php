@@ -22,11 +22,4 @@ class DepartmentController extends Controller
 
         return view('layout.profile', compact('admin', 'user'));
     }
-
-    public function report()
-    {
-        $admin = Admin::authUser();
-
-        return view('department.report', compact('admin'));
-    }
 }

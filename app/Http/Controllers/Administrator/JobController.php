@@ -7,12 +7,14 @@ use App\Http\Requests\StoreJobRequest;
 use App\Models\Admin;
 use App\Models\Course;
 use App\Models\Job;
-use App\Models\User;
+use App\Traits\StaticTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class JobController extends Controller
 {
+    use StaticTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -63,7 +65,7 @@ class JobController extends Controller
             else {
                 $j = Job::create([
                     'id' => Str::random(),
-                    'name' => User::formatString($data['job'])
+                    'name' => $this->capitalize($data['job'])
                 ]);
                 $j->courses()->attach($course->id);
             }
