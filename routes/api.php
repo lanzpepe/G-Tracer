@@ -22,10 +22,10 @@ Route::prefix('v1')->group(function () {
     Route::get('departments/{course}/{school}', 'User\RegisterController@department');
     Route::get('school_years', 'User\RegisterController@schoolYears');
     Route::get('batches', 'User\RegisterController@batches');
+    Route::get('jobs/{course}', 'User\RegisterController@jobs');
 
     Route::middleware('auth:api')->group(function () {
         Route::get('graduates/{id}', 'User\GraduateController@graduate');
-        Route::post('graduates/{id}/save', 'User\GraduateController@save');
         Route::post('graduates/{id}/response', 'User\GraduateController@response');
 
         Route::get('users', 'User\UserController@users');

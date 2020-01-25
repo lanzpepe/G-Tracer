@@ -16,7 +16,7 @@
 <div class="ui centered grid">
     <div class="row">
         <div class="column">
-            <table class="ui compact unstackable selectable celled teal table">
+            <table class="ui compact unstackable structured celled teal table">
                 <thead>
                     <tr class="center aligned">
                         <th>{{ __('Course Code') }}</th>
@@ -26,11 +26,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($jobs as $job)
-                        @foreach ($job->courses as $course)
-                            <tr class="center aligned">
-                                <td>{{ $course->code }}</td>
-                                <td>{{ $course->name }}</td>
+                    @foreach ($courses->unique('code') as $course)
+                        @if ($course->jobs->count() > 0)
+                        <tr class="center aligned">
+                            <td rowspan="{{ $course->jobs->count() }}">{{ $course->code }}</td>
+                            <td rowspan="{{ $course->jobs->count() }}">{{ $course->name }}</td>
+                            @foreach ($course->jobs as $job)
+                                @if ($loop->first)
                                 <td>{{ $job->name }}</td>
                                 <td>
                                     <button class="ui compact icon red inverted button mark-job"
@@ -38,8 +40,20 @@
                                         <i class="trash icon"></i>
                                     </button>
                                 </td>
-                            </tr>
-                        @endforeach
+                                @else
+                                <tr class="center aligned">
+                                    <td>{{ $job->name }}</td>
+                                    <td>
+                                        <button class="ui compact icon red inverted button mark-job"
+                                        data-value="{{ $job->id . '+' . $course->id }}">
+                                            <i class="trash icon"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                @endif
+                            @endforeach
+                        </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>

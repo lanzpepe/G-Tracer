@@ -14,7 +14,7 @@ class ReportController extends Controller
     {
         $admin = Admin::authUser();
         $graduates = Graduate::all();
-        $courses = $graduates->groupBy('degree')->map(function ($values) {
+        $courses = $graduates->groupBy('code')->map(function ($values) {
             return $values->count();
         })->sort()->reverse();
         $years = $graduates->groupBy('batch_year')->map(function ($values) {

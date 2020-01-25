@@ -18,15 +18,6 @@ class GraduateController extends Controller
         return response()->json(compact('graduate'));
     }
 
-    // graduates saved by user
-    public function save(Request $request, $graduateId)
-    {
-        $user = User::findOrFail($request->userId);
-        $user->graduates()->attach($graduateId);
-
-        return response()->json(['message' => "Graduate has been saved."]);
-    }
-
     // responses from user
     public function response(Request $request, $graduateId)
     {
@@ -40,7 +31,7 @@ class GraduateController extends Controller
             'remarks' => $request->remarks
         ]);
 
-        $user->graduates()->syncWithoutDetaching([
+        $user->graduates()->attach([
             $graduateId => ['response_id' => $response->response_id]
         ]);
 

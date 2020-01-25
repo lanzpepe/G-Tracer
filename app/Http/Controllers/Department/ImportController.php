@@ -13,6 +13,7 @@ use App\Models\Graduate;
 use App\Traits\StaticTrait;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use League\Csv\Reader;
@@ -89,6 +90,7 @@ class ImportController extends Controller
                             ->where('first_name', $this->capitalize($data['First Name']))
                             ->where('middle_name', substr($this->capitalize($data['M.I.']), 0, 1))
                             ->first();
+                $course = Course::where('name', $request->course)->where('major', $request->major)->first();
 
                 Graduate::updateOrCreate([
                     'last_name' => $this->capitalize($data['Last Name']),
@@ -97,13 +99,17 @@ class ImportController extends Controller
                 ], [
                     'graduate_id' => $graduate ? $graduate->graduate_id : Str::random(),
                     'gender' => $this->capitalize($data['Gender']),
+                    'code' => $course->code,
                     'degree' => $this->capitalize($request->course),
                     'major' => $this->capitalize($request->major),
                     'department' => $this->capitalize($request->dept),
                     'school' => $this->capitalize($request->school),
                     'school_year' => $request->sy,
                     'batch' => $this->capitalize($request->batch),
-                    'image_uri' => null
+                    'image_uri' => rawurlencode(
+                        "files/" . Auth::user()->admin_id . "/graduates/{$course->code}/" .
+                        "{$request->batch} {$request->sy}/{$data['Last Name']}, {$data['First Name']}.jpg"
+                    )
                 ]);
             }
 

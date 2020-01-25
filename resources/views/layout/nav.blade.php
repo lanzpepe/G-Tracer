@@ -45,10 +45,11 @@
         <a href="{{ route('admin.profile') }}" class="item {{ request()->is('admin/profile') ? 'active' : '' }}">{{ __('Profile') }}</a>
         @else
             <a href="{{ route('dept') }}" class="item {{ request()->is('dept') ? 'active' : '' }}">Home</a>
-            <div class="ui simple dropdown item">{{ __('Graduates') }}<i class="dropdown icon"></i>
+            <div class="ui simple dropdown item">{{ __('Manage') }}<i class="dropdown icon"></i>
                 <div class="menu">
                     <a href="{{ route('graduates') }}" class="item {{ request()->is('graduates') ? 'active' : '' }}">{{ __('Graduate List') }}</a>
                     <a href="{{ route('import') }}" class="item {{ request()->is('import') ? 'active' : '' }}">{{ __('Import Graduates') }}</a>
+                    <a href="{{ route('file_manager') }}" class="item {{ request()->is('file_manager') ? 'active' : '' }}">{{ __('File Manager') }}</a>
                 </div>
             </div>
             <a href="{{ route('reports') }}" class="item {{ request()->is('reports') ? 'active' : '' }}">{{ __('Statistics') }}</a>

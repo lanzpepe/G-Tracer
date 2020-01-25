@@ -21,7 +21,7 @@
         <tr class="center aligned">
             <th>{{ __('Last Name') }}</th>
             <th>{{ __('First Name') }}</th>
-            <th>{{ __('M.I') }}</th>
+            <th>{{ __('M.I.') }}</th>
             <th>{{ __('Gender') }}</th>
         </tr>
     </thead>

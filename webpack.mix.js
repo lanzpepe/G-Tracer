@@ -17,6 +17,7 @@ mix.js('resources/js/app.js', 'public/js')
 mix.scripts([
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/popper/dist/popper.min.js',
+    'node_modules/bootstrap/dist/bootstrap.min.js',
     'node_modules/moment/min/moment.min.js',
     'node_modules/blueimp-load-image/js/load-image.all.min.js',
     'node_modules/chart.js/dist/Chart.min.js'

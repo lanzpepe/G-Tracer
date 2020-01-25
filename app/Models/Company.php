@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\UserEmployment;
+use App\Models\Employment;
 use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
@@ -13,6 +13,6 @@ class Company extends Model
 
     public function employments()
     {
-        return $this->hasMany(UserEmployment::class, "company_id");
+        return $this->hasMany(Employment::class, "company_id");
     }
 }

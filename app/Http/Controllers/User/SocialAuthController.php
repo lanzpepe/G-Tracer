@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Graduate;
 use App\Models\Response;
 use App\Models\SocialAccount;
@@ -72,6 +73,7 @@ class SocialAuthController extends Controller
         ]);
 
         $this->addSocialAccount($request, $user);
+        $this->addEmployment($request, $user);
 
         $graduate = $this->search($user);
 
@@ -80,6 +82,22 @@ class SocialAuthController extends Controller
         }
 
         return $user;
+    }
+
+    private function addEmployment(Request $request, User $user)
+    {
+        $company = Company::create([
+            'company_id' => Str::random(),
+            'name' => $request->companyName,
+            'address' => $request->companyAddress,
+            'contact' => null
+        ]);
+
+        $company->employments()->create([
+            'user_id' => $user->user_id,
+            'job_position' => $request->jobPosition,
+            'date_employed' => $request->dateEmployed
+        ]);
     }
 
     private function addEmploymentResponse(Request $request, User $user, Graduate $graduate)

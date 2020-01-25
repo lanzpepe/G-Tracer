@@ -61,7 +61,7 @@ class DepartmentController extends Controller
                 'id' => $department ? $department->id : Str::random()
             ], [
                 'name' => $deptName,
-                'logo' => $imagePath
+                'logo' => rawurlencode($imagePath)
             ]);
 
             $dept->schools()->attach($school->id);

@@ -528,6 +528,8 @@ $(function () {
     });
     // end import modal
 
+    $('.ui.embed').embed();
+
     replace('.btn-login');
     replace('.graduates');
 

@@ -20,7 +20,7 @@
                 @foreach ($schools as $school)
                 <div class="card">
                     <div class="image">
-                        <img src="{{ 'storage/' . $school->logo }}">
+                        <img src="{{ 'storage/' . rawurldecode($school->logo) }}">
                     </div>
                     <div class="center aligned content">
                         <div class="header">{{ $school->name }}</div>

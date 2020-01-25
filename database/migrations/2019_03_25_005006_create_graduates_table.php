@@ -19,6 +19,7 @@ class CreateGraduatesTable extends Migration
             $table->string('first_name', 64);
             $table->string('middle_name', 64);
             $table->string('gender', 8);
+            $table->string('code', 16);
             $table->string('degree', 128);
             $table->string('major', 128)->nullable();
             $table->string('department', 128);

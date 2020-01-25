@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
 
 class Graduate extends Model
 {
@@ -13,9 +14,13 @@ class Graduate extends Model
     public function image()
     {
         $defaultImage = $this->gender == 'Male' ? 'defaults/default_avatar_m.png' : 'defaults/default_avatar_f.png';
-        $path = $this->image_uri ?? $defaultImage;
+        $imagePath = 'storage/' . rawurldecode($this->image_uri);
 
-        return 'storage/' . $path;
+        if (File::exists($imagePath)) {
+            return $imagePath;
+        }
+
+        return 'storage/' . $defaultImage;
     }
 
     public function user()

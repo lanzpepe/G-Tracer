@@ -43,5 +43,6 @@ Route::middleware('department')->group(function () {
     Route::get('import', 'Department\ImportController@import')->name('import');
     Route::post('import/parse', 'Department\ImportController@parseImport')->name('import_parse');
     Route::post('import/process', 'Department\ImportController@processImport')->name('import_process');
+    Route::get('file_manager', 'Department\FileManagerController@index')->name('file_manager');
     Route::get('dept/profile', 'Department\DepartmentController@profile')->name('dept_profile');
 });

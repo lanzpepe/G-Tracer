@@ -19,7 +19,7 @@ class DepartmentsTableSeeder extends Seeder
         $dept = Department::create([
             'id' => Str::random(),
             'name' => 'ICCT',
-            'logo' => 'departments/University of San Jose - Recoletos/ICCT'
+            'logo' => rawurlencode('logos/departments/University of San Jose - Recoletos/ICCT')
         ]);
 
         $dept->schools()->attach([$school->id]);

@@ -19,7 +19,7 @@
 @section('modal')
 <div class="ui modal" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
     <div class="header" id="uploadModalLabel">
-        <i class="ui question circle outline teal icon"></i>{{ __('Import Graduates') }}
+        <i class="ui question circle outline teal icon"></i> @yield('title')
     </div>
     <div class="content" role="document">
         <form action="{{ route('import_parse') }}" class="ui form" id="uploadForm" method="POST" enctype="multipart/form-data">
@@ -42,7 +42,7 @@
                 <div class="required field">
                     <label for="course"><i class="ui book reader teal icon"></i>{{ __('Course') }}</label>
                     <select name="course" id="course" class="ui fluid dropdown">
-                        @foreach ($courses as $course)
+                        @foreach ($courses->unique('name') as $course)
                         <option value="{{ $course->name }}">{{ $course->name }}</option>
                         @endforeach
                     </select>
@@ -50,7 +50,7 @@
                 <div class="required field">
                     <label for="major"><i class="ui award teal icon"></i>{{ __('Major') }}</label>
                     <select name="major" id="major" class="ui fluid dropdown">
-                        @foreach ($courses as $course)
+                        @foreach ($courses->unique('major') as $course)
                         <option value="{{ $course->major }}">{{ $course->major }}</option>
                         @endforeach
                     </select>

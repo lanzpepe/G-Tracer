@@ -43,25 +43,29 @@ class CourseController extends Controller
         $major = $request->filled('major') ? $data['major'] : "None";
         $school = School::where('name', $data['school'])->first();
         $dept = Department::where('name', $data['dept'])->first();
+        $result = Course::whereHas('departments', function ($query) use ($dept) {
+            return $query->where('id', $dept->id);
+        })->where('code', $data['code'])->first();
 
         if ($request->btnCourse == 'added') {
-            $course = Course::create([
-                'id' => Str::random(),
-                'name' => $this->capitalize($data['course']),
-                'major' => $this->capitalize($major),
-                'code' => $data['code']
-            ]);
+            if (!$result) {
+                $course = Course::create([
+                    'id' => Str::random(),
+                    'name' => $this->capitalize($data['course']),
+                    'major' => $this->capitalize($major),
+                    'code' => $data['code']
+                ]);
 
-            $course->departments()->attach($dept->id);
-            $course->schools()->attach($school->id);
+                $course->departments()->attach($dept->id);
+                $course->schools()->attach($school->id);
 
-            return back()->with('success', "Course {$request->btnCourse} successfully.");
+                return back()->with('success', "Course {$request->btnCourse} successfully.");
+            }
+            else {
+                return back()->withInput()->withErrors(['Course already exists.']);
+            }
         }
         else {
-            $result = Course::whereHas('departments', function ($query) use ($dept) {
-                return $query->where('id', $dept->id);
-            })->where('code', $data['code'])->first();
-
             $course = Course::updateOrCreate([
                 'id' => $result->id
             ], [

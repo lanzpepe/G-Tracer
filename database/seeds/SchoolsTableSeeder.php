@@ -16,7 +16,7 @@ class SchoolsTableSeeder extends Seeder
         School::create([
             'id' => Str::random(),
             'name' => 'University of San Jose - Recoletos',
-            'logo' => 'schools/University of San Jose - Recoletos'
+            'logo' => rawurlencode('logos/schools/University of San Jose - Recoletos')
         ]);
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Batch;
 use App\Models\Course;
 use App\Models\Department;
 use App\Models\Gender;
+use App\Models\Job;
 use App\Models\School;
 
 class RegisterController extends Controller
@@ -28,7 +29,7 @@ class RegisterController extends Controller
 
     public function courses($schoolName)
     {
-        $school = School::where('name', str_replace('+', ' ', $schoolName))->first();
+        $school = School::where('name', rawurldecode($schoolName))->first();
         $courses = Course::whereHas('schools', function ($query) use ($school) {
             return $query->where('id', $school->id);
         })->get();
@@ -38,8 +39,8 @@ class RegisterController extends Controller
 
     public function department($courseName, $schoolName)
     {
-        $course = Course::where('name', str_replace('+', ' ', $courseName))->first();
-        $school = School::where('name', str_replace('+', ' ', $schoolName))->first();
+        $course = Course::where('name', rawurldecode($courseName))->first();
+        $school = School::where('name', rawurldecode($schoolName))->first();
         $department = Department::whereHas('courses', function ($query) use ($course) {
             return $query->where('id', $course->id);
         })->whereHas('schools', function ($query) use ($school) {
@@ -61,5 +62,15 @@ class RegisterController extends Controller
         $batches = Batch::orderBy('name')->get();
 
         return response()->json(compact('batches'));
+    }
+
+    public function jobs($courseName)
+    {
+        $course = Course::where('name', rawurldecode($courseName))->first();
+        $jobs = Job::whereHas('courses', function ($query) use ($course) {
+            return $query->where('id', $course->id);
+        })->get();
+
+        return response()->json(compact('jobs'));
     }
 }

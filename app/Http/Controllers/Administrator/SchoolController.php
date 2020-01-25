@@ -40,13 +40,13 @@ class SchoolController extends Controller
         $imagePath = null;
 
         if ($request->has('logo')) {
-            $imagePath = $request->file('logo')->storeAs('schools', $school, 'public');
+            $imagePath = $request->file('logo')->storeAs('logos/schools', $school, 'public');
         }
 
         School::create([
             'id' => Str::random(),
             'name' => $school,
-            'logo' => $imagePath
+            'logo' => rawurlencode($imagePath)
         ]);
 
         return back()->with('success', "School added successfully.");
