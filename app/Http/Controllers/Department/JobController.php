@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Administrator;
+namespace App\Http\Controllers\Department;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreJobRequest;
@@ -27,7 +27,7 @@ class JobController extends Controller
         $jobs = Job::orderBy('name')->paginate(10);
         $page = request()->page;
 
-        return view('administrator.related_job', compact('admin', 'courses', 'jobs', 'page'));
+        return view('department.related_job', compact('admin', 'courses', 'jobs', 'page'));
     }
 
     /**

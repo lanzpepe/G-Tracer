@@ -14,13 +14,13 @@ class Graduate extends Model
     public function image()
     {
         $defaultImage = $this->gender == 'Male' ? 'defaults/default_avatar_m.png' : 'defaults/default_avatar_f.png';
-        $imagePath = 'storage/' . rawurldecode($this->image_uri);
+        $imagePath = "storage/{rawurldecode($this->image_uri)}";
 
         if (File::exists($imagePath)) {
             return $imagePath;
         }
 
-        return 'storage/' . $defaultImage;
+        return "storage/{$defaultImage}";
     }
 
     public function user()

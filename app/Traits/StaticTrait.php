@@ -16,7 +16,7 @@ trait StaticTrait
                     ->where('department', $user->academic->department)
                     ->where('school', $user->academic->school)
                     ->where('school_year', $user->academic->school_year)
-                    ->where('batch', $user->academic->batch)->first();
+                    ->where('batch', $user->academic->batch)->firstOrFail();
 
         if ($graduate) {
             $user->graduate()->save($graduate);

@@ -35,7 +35,6 @@ class SchoolYearController extends Controller
         $data = $request->validated();
 
         AcademicYear::create([
-            'id' => Str::random(),
             'school_year' => $data['sy']
         ]);
 

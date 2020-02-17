@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreImportRequest;
 use App\Models\AcademicYear;
 use App\Models\Admin;
-use App\Models\Batch;
 use App\Models\Course;
 use App\Models\CsvFile;
 use App\Models\Graduate;
@@ -35,9 +34,8 @@ class ImportController extends Controller
             return $query->where('name', $department->name);
         })->orderBy('name')->get();
         $schoolYears = AcademicYear::orderByDesc('school_year')->get();
-        $batches = Batch::orderBy('name')->get();
 
-        return view('department.import', compact('admin', 'courses', 'schoolYears', 'batches'));
+        return view('department.import', compact('admin', 'courses', 'schoolYears'));
     }
 
     public function parseImport(StoreImportRequest $request)
@@ -53,7 +51,6 @@ class ImportController extends Controller
             return $query->where('name', $department->name);
         })->orderBy('name')->get();
         $schoolYears = AcademicYear::orderByDesc('school_year')->get();
-        $batches = Batch::orderBy('name')->get();
         $course = $this->capitalize($data['course']);
         $major = $this->capitalize($data['major']);
         $schoolYear = $this->capitalize($data['sy']);
@@ -71,8 +68,7 @@ class ImportController extends Controller
             ]);
 
             return view('department.fields', compact('admin', 'schoolYears', 'batch',
-                    'batches', 'course', 'courses', 'major', 'csvFile', 'csvData',
-                    'schoolYear'));
+                    'course', 'courses', 'major', 'csvFile', 'csvData', 'schoolYear'));
         }
         else
             return redirect()->route('import');
@@ -115,7 +111,7 @@ class ImportController extends Controller
 
             $csvFile->delete();
 
-            return redirect()->route('graduates');
+            return redirect()->route('graduates.index');
 
         } catch (DecryptException $e) {
             $e->getMessage();

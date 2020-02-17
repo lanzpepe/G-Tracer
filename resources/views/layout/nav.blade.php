@@ -7,7 +7,7 @@
         <a href="{{ route('admin.index') }}" class="item {{ request()->is('admin') ? 'active' : '' }}">{{ __('Home') }}</a>
         <a class="browse item">{{ __('Manage') }}<i class="dropdown icon"></i></a>
         <div class="ui flowing popup bottom left transition hidden">
-            <div class="ui five column relaxed divided center aligned grid">
+            <div class="ui three column relaxed divided center aligned grid">
                 <div class="column">
                     <h4 class="ui header">{{ __('Account') }}</h4>
                     <div class="ui link list">
@@ -21,19 +21,12 @@
                         <a href="{{ route('departments.index') }}" class="teal item {{ request()->is('departments') ? 'active' : '' }}">{{ __('Departments') }}</a>
                     </div>
                 </div>
-                <div class="column">
+                {{-- <div class="column">
                     <h4 class="ui header">{{ __('Academic') }}</h4>
                     <div class="ui link list">
-                        <a href="{{ route('courses.index') }}" class="teal item {{ request()->is('courses') ? 'active' : '' }}">{{ __('Courses') }}</a>
                         <a href="{{ route('school_years.index') }}" class="teal item {{ request()->is('school_years') ? 'active' : '' }}">{{ __('School Years') }}</a>
                     </div>
-                </div>
-                <div class="column">
-                    <h4 class="ui header">{{ __('Course Related') }}</h4>
-                    <div class="ui link list">
-                        <a href="{{ route('jobs.index') }}" class="teal item {{ request()->is('jobs') ? 'active' : '' }}">{{ __('Jobs') }}</a>
-                    </div>
-                </div>
+                </div> --}}
                 <div class="column">
                     <h4 class="ui header">{{ __('Reward') }}</h4>
                     <div class="ui link list">
@@ -44,12 +37,35 @@
         </div>
         <a href="{{ route('admin.profile') }}" class="item {{ request()->is('admin/profile') ? 'active' : '' }}">{{ __('Profile') }}</a>
         @else
-            <a href="{{ route('dept') }}" class="item {{ request()->is('dept') ? 'active' : '' }}">Home</a>
-            <div class="ui simple dropdown item">{{ __('Manage') }}<i class="dropdown icon"></i>
-                <div class="menu">
-                    <a href="{{ route('graduates') }}" class="item {{ request()->is('graduates') ? 'active' : '' }}">{{ __('Graduate List') }}</a>
-                    <a href="{{ route('import') }}" class="item {{ request()->is('import') ? 'active' : '' }}">{{ __('Import Graduates') }}</a>
-                    <a href="{{ route('file_manager') }}" class="item {{ request()->is('file_manager') ? 'active' : '' }}">{{ __('File Manager') }}</a>
+            <a href="{{ route('dept') }}" class="item {{ request()->is('dept') ? 'active' : '' }}">{{ __('Home') }}</a>
+            <a class="browse item">{{ __('Manage') }}<i class="dropdown icon"></i></a>
+            <div class="ui flowing popup bottom left transition hidden">
+                <div class="ui four column relaxed divided center aligned grid">
+                    <div class="column">
+                        <h4 class="ui header">{{ __('Graduates') }}</h4>
+                        <div class="ui link list">
+                            <a href="{{ route('graduates.index') }}" class="teal item {{ request()->is('graduates') ? 'active' : '' }}">{{ __('Graduate List') }}</a>
+                            <a href="{{ route('import') }}" class="teal item {{ request()->is('import') ? 'active' : '' }}">{{ __('Import Data') }}</a>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <h4 class="ui header">{{ __('Program') }}</h4>
+                        <div class="ui link list">
+                            <a href="{{ route('courses.index') }}" class="teal item {{ request()->is('courses') ? 'active' : '' }}">{{ __('Degree Programs') }}</a>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <h4 class="ui header">{{ __('Course Related') }}</h4>
+                        <div class="ui link list">
+                            <a href="{{ route('jobs.index') }}" class="teal item {{ request()->is('jobs') ? 'active' : '' }}">{{ __('Jobs') }}</a>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <h4 class="ui header">{{ __('Manage') }}</h4>
+                        <div class="ui link list">
+                            <a href="{{ route('file_manager') }}" class="teal item {{ request()->is('file_manager') ? 'active' : '' }}">{{ __('File Manager') }}</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <a href="{{ route('reports') }}" class="item {{ request()->is('reports') ? 'active' : '' }}">{{ __('Statistics') }}</a>

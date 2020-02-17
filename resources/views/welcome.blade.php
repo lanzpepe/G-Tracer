@@ -46,9 +46,9 @@
     </div>
     <div class="ui text container">
         <h1 class="ui inverted header">
-            {{ __('G-Tracer') }}
+            {{ __('G-TRACER') }}
         </h1>
-        <h2>{{ __('A web and mobile Graduate Tracer Application using Crowdsourcing and Social Media Listening') }}</h2>
+        <h2>{{ __('A web and mobile application for Graduate Tracing using Crowdsourcing and Social Media Listening') }}</h2>
     </div>
 </div>
 @endsection

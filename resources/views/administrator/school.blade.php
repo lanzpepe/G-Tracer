@@ -13,27 +13,29 @@
 @endsection
 
 @section('main')
-<div class="ui centered grid">
-    <div class="row">
-        <div class="column">
-            <div class="ui five doubling cards">
-                @foreach ($schools as $school)
-                <div class="card">
-                    <div class="image">
-                        <img src="{{ 'storage/' . rawurldecode($school->logo) }}">
+<div class="ui container">
+    <div class="ui equal width centered grid">
+        <div class="row">
+            <div class="column">
+                <div class="ui five doubling cards">
+                    @foreach ($schools as $school)
+                    <div class="card">
+                        <div class="image">
+                            <img src="{{ 'storage/' . rawurldecode($school->logo) }}">
+                        </div>
+                        <div class="center aligned content">
+                            <div class="header">{{ $school->name }}</div>
+                        </div>
+                        <div class="ui attached red inverted button mark-school" data-value="{{ $school->id }}">
+                            <i class="trash icon"></i> {{ __('Remove') }}
+                        </div>
                     </div>
-                    <div class="center aligned content">
-                        <div class="header">{{ $school->name }}</div>
-                    </div>
-                    <div class="ui attached red inverted button mark-school" data-value="{{ $school->id }}">
-                        <i class="trash icon"></i> {{ __('Remove') }}
-                    </div>
+                    @endforeach
                 </div>
-                @endforeach
             </div>
         </div>
+        {{ $schools->links('vendor.pagination.semantic-ui') }}
     </div>
-    {{ $schools->links('vendor.pagination.semantic-ui') }}
 </div>
 @endsection
 

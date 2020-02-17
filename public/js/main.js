@@ -67,7 +67,7 @@ $(function () {
             $.extend(modal, {
                 onShow: () => {
                     $('.ui.dropdown').dropdown(options);
-                    calendar('#birthdate'); dynamic('.school .ui.dropdown');
+                    calendar('#birthdate'); departments('.school .ui.dropdown');
                 },
                 onHide: () => {
                     window.location.assign('accounts');
@@ -111,7 +111,7 @@ $(function () {
                             $('#btnAccount').val('updated');
                             $('#btnAccount .label').html('Apply');
                             $('.ui.dropdown').dropdown(options);
-                            calendar('#birthdate'); dynamic('.school .ui.dropdown');
+                            calendar('#birthdate'); departments('.school .ui.dropdown');
                         },
                         onHide: () => {
                             window.location.assign('accounts');
@@ -204,7 +204,7 @@ $(function () {
                 onShow: () => {
                     $('.ui.dropdown').dropdown(options);
                     $('.dept .ui.dropdown').dropdown(dropdown);
-                    dynamic('.school .ui.dropdown');
+                    departments('.school .ui.dropdown');
                 },
                 onHide: () => {
                     window.location.assign('departments');
@@ -250,9 +250,7 @@ $(function () {
         $('#courseModal').modal(
             $.extend(modal, {
                 onShow: () => {
-                    $('.school .ui.dropdown').dropdown(options);
                     $('.ui.dropdown').dropdown(dropdown);
-                    dynamic('.school .ui.dropdown');
                 },
                 onHide: () => {
                     window.location.assign('courses');
@@ -276,7 +274,7 @@ $(function () {
                             var dept = $.grep(result.course.departments, (a) => {
                                 return a.id == data[1];
                             });
-                            $('#courseModal .title').html('Edit Course');
+                            $('#courseModal .title').html('Edit Degree Program');
                             $('#school').val(school[0].name);
                             $('#dept').html('<option value="' + dept[0].name + '" selected>' + dept[0].name + '</option>')
                             $('#code').val(result.course.code);
@@ -317,11 +315,9 @@ $(function () {
                             var dept = $.grep(result.course.departments, (a) => {
                                 return a.id == data[1];
                             });
-                            $('.course.code').val(result.course.id).html('Course Code: ' + result.course.code);
-                            $('.course.name').val(result.course.name).html('Course Name: ' + result.course.name);
+                            $('.course.code').val(result.course.id).html('Program Code: ' + result.course.code);
+                            $('.course.name').val(result.course.name).html('Name: ' + result.course.name);
                             $('.major.name').html('Major: ' + result.course.major);
-                            $('.department.name').val(dept[0].id).html('Department: ' + dept[0].name);
-                            $('.school.name').val(school[0].id).html('School: ' + school[0].name);
                             $('#deleteForm').attr('action', base + '/' + result.course.id + '+' + dept[0].id + '+' + school[0].id);
                         },
                         onHide: () => {
@@ -352,15 +348,15 @@ $(function () {
     });
     $('.mark-sy').click(function () {
         $.ajax({
-            url: 'school_years/' + $(this).data('value'),
+            url: `school_years/${$(this).data('value')}`,
             method: 'GET',
             dataType: 'json',
             success: (data) => {
                 $('#markSyModal').modal(
                     $.extend(modal, {
                         onShow: () => {
-                            $('.sy.name').val(data.sy.id).html('School Year: ' + data.sy.school_year);
-                            $('#deleteForm').attr('action', base + '/' + data.sy.id);
+                            $('.sy.name').val(data.sy.id).html(`School Year: ${data.sy.school_year}`);
+                            $('#deleteForm').attr('action', `${base}/${data.sy.id}`);
                         },
                         onHide: () => {
                             window.location.assign('school_years');
@@ -374,7 +370,7 @@ $(function () {
         });
     });
     $('.delete-sy').click(function () {
-        window.location.assign('school_years/' + $('.sy.name').val());
+        window.location.assign(`school_years/${$('.sy.name').val()}`);
     });
     // end school year modal
 
@@ -398,7 +394,7 @@ $(function () {
     $('.mark-job').click(function () {
         var data = $(this).data('value').split('+');
         $.ajax({
-            url: 'jobs/' + data[0],
+            url: `jobs/${data[0]}`,
             method: 'GET',
             dataType: 'json',
             success: (result) => {
@@ -408,9 +404,9 @@ $(function () {
                             var course = $.grep(result.job.courses, (a) => {
                                 return a.id == data[1];
                             });
-                            $('.job.name').val(result.job.id).html('Job Name: ' + result.job.name);
-                            $('.course.name').val(course[0].id).html('Course: ' + course[0].code);
-                            $('#deleteForm').attr('action', base + '/' + result.job.id + '+' + course[0].id);
+                            $('.job.name').val(result.job.id).html(`Job Name: ${result.job.name}`);
+                            $('.course.name').val(course[0].id).html(`Course: ${course[0].code}`);
+                            $('#deleteForm').attr('action', `${base}/${result.job.id}+${course[0].id}`);
                         },
                         onHide: () => {
                             window.location.assign('jobs');
@@ -421,7 +417,7 @@ $(function () {
         });
     });
     $('.delete-job').click(function () {
-        window.location.assign('jobs/' + $('.job.name').val() + '/' + $('.course.name').val());
+        window.location.assign(`jobs/${$('.job.name').val()}+${$('.course.name').val()}`);
     });
     // end related job
 
@@ -431,7 +427,7 @@ $(function () {
             $.extend(modal, {
                 onShow: () => {
                     $('.ui.dropdown').dropdown();
-                    image('#image');
+                    image('#image'); batches('.sy .ui.dropdown');
                 },
                 onHide: () => {
                     window.location.assign('graduates');
@@ -443,9 +439,8 @@ $(function () {
         ).modal('show');
     });
     $('.edit-graduate').click(function () {
-        var id = $(this).data('value');
         $.ajax({
-            url: 'graduates/' + id + '/mark',
+            url: `graduates/${$(this).data('value')}/edit`,
             method: 'GET',
             dataType: 'json',
             success: (result) => {
@@ -482,9 +477,8 @@ $(function () {
         });
     });
     $('.mark-graduate').click(function () {
-        var id = $(this).data('value');
         $.ajax({
-            url: 'graduates/' + id + '/mark',
+            url: `graduates/${$(this).data('value')}`,
             method: 'GET',
             dataType: 'json',
             success: (result) => {
@@ -492,10 +486,11 @@ $(function () {
                 $('#markGraduateModal').modal(
                     $.extend(modal, {
                         onShow: () => {
-                            $('.graduate.name').val(graduate.graduate_id).html('Name: ' + graduate.first_name + ' ' + graduate.middle_name + ' ' + graduate.last_name);
-                            $('.graduate.course').html('Course: ' + graduate.degree);
-                            $('.graduate.school').html('School: ' + graduate.school);
-                            $('.graduate.batch').html('Batch: ' + graduate.batch + ' ' + graduate.school_year);
+                            $('.graduate.name').val(graduate.graduate_id).html(`Name: ${graduate.first_name} ${graduate.middle_name} ${graduate.last_name}`);
+                            $('.graduate.course').html(`Degree: ${graduate.degree}`);
+                            $('.graduate.school').html(`School: ${graduate.school}`);
+                            $('.graduate.sy').html(`School Year & Batch: S.Y. ${graduate.school_year} / ${graduate.batch}`);
+                            $('#deleteForm').attr('action', `${base}/${graduate.graduate_id}`);
                         },
                         onHide: () => {
                             window.location.assign('graduates');
@@ -509,7 +504,7 @@ $(function () {
         })
     });
     $('.delete-graduate').click(function () {
-        window.location.assign('graduates/' + $('.graduate.name').val() + '/delete');
+        window.location.assign(`graduates/${$('.graduate.name').val()}`);
     });
     // end graduate modal
 
@@ -519,6 +514,7 @@ $(function () {
             $.extend(modal, {
                 onShow: () => {
                     $('.ui.dropdown').dropdown();
+                    batches('.sy .ui.dropdown');
                 },
                 onHide: () => {
                     window.location.assign('import');
@@ -540,7 +536,8 @@ $(function () {
 
     function replace(a){$(a).click(function(e){e.preventDefault();window.location.replace($(this).data('target'))})}
     function calendar(a){$(a).calendar({type:'date'})}
-    function dynamic(a){$(a).dropdown({onChange:(value)=>{var b=$('input[name="_token"]').val();$.ajax({url:'departments/fetch',method:'POST',data:{value:value,_token:b},success:(result)=>{$('#dept').html(result)},error:(result)=>{console.log(result)}})}})}
+    function batches(a){$(a).dropdown({onChange:(value)=>{var b=$('input[name="_token"]').val();$.ajax({url:'batches/fetch',method:'POST',data:{value:value,_token:b},success:(result)=>{$('#batch').html(result)},error:(result)=>{console.log(result)}})}})}
+    function departments(a){$(a).dropdown({onChange:(value)=>{var b=$('input[name="_token"]').val();$.ajax({url:'departments/fetch',method:'POST',data:{value:value,_token:b},success:(result)=>{$('#dept').html(result)},error:(result)=>{console.log(result)}})}})}
     function image(a){$(a).change(function(e){loadImage(e.target.files[0],(canvas)=>{var a=canvas.toDataURL('image/jpeg');a.replace(/^data\:image\/\w+\;base64\,/,'');$('#preview').attr('src',a)},{canvas:true,orientation:true})})};
 });
 

@@ -18,8 +18,8 @@ class CreateResponsesTable extends Migration
             $table->string('company_name', 128);
             $table->string('company_address');
             $table->string('job_position', 128);
-            $table->string('date_employed', 16);
-            $table->string('remarks')->nullable();
+            $table->string('date_employed', 32);
+            $table->string('remarks');
             $table->timestamps();
         });
     }

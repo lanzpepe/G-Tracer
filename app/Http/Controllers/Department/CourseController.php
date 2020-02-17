@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Administrator;
+namespace App\Http\Controllers\Department;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCourseRequest;
@@ -23,12 +23,10 @@ class CourseController extends Controller
     public function index()
     {
         $admin = Admin::authUser();
-        $depts = Department::orderBy('name')->get();
-        $schools = School::orderBy('name')->get();
         $courses = Course::orderBy('name')->paginate(10);
         $page = request()->page;
 
-        return view('administrator.course', compact('admin', 'courses', 'depts', 'schools', 'page'));
+        return view('department.course', compact('admin', 'courses', 'page'));
     }
 
     /**
@@ -53,7 +51,7 @@ class CourseController extends Controller
                     'id' => Str::random(),
                     'name' => $this->capitalize($data['course']),
                     'major' => $this->capitalize($major),
-                    'code' => $data['code']
+                    'code' => strtoupper($data['code'])
                 ]);
 
                 $course->departments()->attach($dept->id);
@@ -71,13 +69,13 @@ class CourseController extends Controller
             ], [
                 'name' => $this->capitalize($data['course']),
                 'major' => $this->capitalize($major),
-                'code' => $data['code']
+                'code' => strtoupper($data['code'])
             ]);
 
             $course->departments()->sync($dept->id);
             $course->schools()->sync($school->id);
 
-            return back()->with('success', "Course added successfully.");
+            return back()->with('success', "Course {$request->btnCourse} successfully.");
         }
     }
 

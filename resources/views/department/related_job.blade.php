@@ -8,40 +8,32 @@
 
 @section('button')
     <button class="ui right floated teal button add-job">
-        <i class="plus icon"></i> {{ __('Add Job') }}
+        <i class="plus icon"></i> {{ __('Add Related Job') }}
     </button>
 @endsection
 
 @section('main')
-<div class="ui centered grid">
-    <div class="row">
-        <div class="column">
-            <table class="ui compact unstackable structured celled teal table">
-                <thead>
-                    <tr class="center aligned">
-                        <th>{{ __('Course Code') }}</th>
-                        <th>{{ __('Course Name') }}</th>
-                        <th>{{ __('Related Job') }}</th>
-                        <th>{{ __('Actions') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($courses->unique('code') as $course)
-                        @if ($course->jobs->count() > 0)
+<div class="ui container">
+    <div class="ui centered grid">
+        <div class="row">
+            <div class="column">
+                <table class="ui compact unstackable structured celled teal table">
+                    <thead>
                         <tr class="center aligned">
-                            <td rowspan="{{ $course->jobs->count() }}">{{ $course->code }}</td>
-                            <td rowspan="{{ $course->jobs->count() }}">{{ $course->name }}</td>
-                            @foreach ($course->jobs as $job)
-                                @if ($loop->first)
-                                <td>{{ $job->name }}</td>
-                                <td>
-                                    <button class="ui compact icon red inverted button mark-job"
-                                    data-value="{{ $job->id . '+' . $course->id }}">
-                                        <i class="trash icon"></i>
-                                    </button>
-                                </td>
-                                @else
-                                <tr class="center aligned">
+                            <th>{{ __('Program Code') }}</th>
+                            <th>{{ __('Name') }}</th>
+                            <th>{{ __('Related Jobs') }}</th>
+                            <th>{{ __('Actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($courses->unique('code') as $course)
+                            @if ($course->jobs->count() > 0)
+                            <tr class="center aligned">
+                                <td rowspan="{{ $course->jobs->count() }}">{{ $course->code }}</td>
+                                <td rowspan="{{ $course->jobs->count() }}">{{ $course->name }}</td>
+                                @foreach ($course->jobs as $job)
+                                    @if ($loop->first)
                                     <td>{{ $job->name }}</td>
                                     <td>
                                         <button class="ui compact icon red inverted button mark-job"
@@ -49,17 +41,27 @@
                                             <i class="trash icon"></i>
                                         </button>
                                     </td>
-                                </tr>
-                                @endif
-                            @endforeach
-                        </tr>
-                        @endif
-                    @endforeach
-                </tbody>
-            </table>
+                                    @else
+                                    <tr class="center aligned">
+                                        <td>{{ $job->name }}</td>
+                                        <td>
+                                            <button class="ui compact icon red inverted button mark-job"
+                                            data-value="{{ $job->id . '+' . $course->id }}">
+                                                <i class="trash icon"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                @endforeach
+                            </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
+        {{ $jobs->links('vendor.pagination.semantic-ui') }}
     </div>
-    {{ $jobs->links('vendor.pagination.semantic-ui') }}
 </div>
 @endsection
 

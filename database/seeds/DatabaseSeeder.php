@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
             SchoolsTableSeeder::class,
             DepartmentsTableSeeder::class,
             AcademicYearsTableSeeder::class,
-            BatchesTableSeeder::class,
             RolesTableSeeder::class,
             AdminsTableSeeder::class,
             GendersTableSeeder::class

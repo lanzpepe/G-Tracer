@@ -49,24 +49,26 @@ class DepartmentController extends Controller
             $imagePath = $request->file('logo')->storeAs('departments/' . $schoolName, $deptName,  'public');
         }
 
-        $result = Department::whereHas('schools', function ($query) use ($school) {
-            return $query->where('id', $school->id);
-        })->where('id', $department->id)->first();
-
-        if ($result) {
-            return back()->withErrors(['department' => "Department already exists."]);
-        }
-        else {
-            $dept = Department::updateOrCreate([
-                'id' => $department ? $department->id : Str::random()
-            ], [
+        if (!$department) {
+            $dept = Department::firstOrCreate([
                 'name' => $deptName,
                 'logo' => rawurlencode($imagePath)
+            ], [
+                'id' => Str::random()
             ]);
 
             $dept->schools()->attach($school->id);
 
             return back()->with('success', "Department added successfully.");
+        }
+        else {
+            $result = Department::whereHas('schools', function ($query) use ($school) {
+                return $query->where('id', $school->id);
+            })->where('id', $department->id)->first();
+
+            if ($result) {
+                return back()->withInput()->withErrors(['department' => "Department already exists."]);
+            }
         }
     }
 
@@ -105,10 +107,10 @@ class DepartmentController extends Controller
     {
         $school = School::where('name', $request->get('value'))->first();
         $data = $school->departments()->get();
-        $option = '<option value="" selected>-- Select Department --</option>';
+        $option = "<option value='' selected>-- Select Department --</option>";
 
         foreach ($data as $row) {
-            $option .= '<option value="' . $row->name . '">' . $row->name . '</option>';
+            $option .= "<option value='{$row->name}'{$row->name}</option>";
         }
 
         return $option;

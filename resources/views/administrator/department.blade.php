@@ -3,40 +3,42 @@
 @section('title', 'Manage Departments')
 
 @section('header')
-    <i class="ui building teal icon"></i> @yield('title')
+<i class="ui building teal icon"></i> @yield('title')
 @endsection
 
 @section('button')
-    <button type="button" class="ui right floated teal button add-dept">
-        <i class="plus icon"></i> {{ __('Add Department') }}
-    </button>
+<button type="button" class="ui right floated teal button add-dept">
+    <i class="plus icon"></i> {{ __('Add Department') }}
+</button>
 @endsection
 
 @section('main')
-<div class="ui centered grid">
-    <div class="row">
-    <div class="column">
-    <div class="ui five doubling cards">
-        @foreach ($depts as $dept)
-            @foreach ($dept->schools as $school)
-            <div class="card">
-                <div class="image">
-                    <img src="{{ 'storage/' . rawurldecode($dept->logo) }}">
-                </div>
-                <div class="center aligned content">
-                    <div class="header">{{ $dept->name }}</div>
-                    <div class="meta">{{ $school->name }}</div>
-                </div>
-                <div class="ui attached red inverted button mark-dept" data-value="{{ $dept->id . "+" . $school->id }}">
-                    <i class="trash icon"></i>{{ __('Remove') }}
+<div class="ui container">
+    <div class="ui equal width centered grid">
+        <div class="row">
+            <div class="column">
+                <div class="ui five doubling cards">
+                    @foreach ($depts as $dept)
+                        @foreach ($dept->schools as $school)
+                        <div class="card">
+                            <div class="image">
+                                <img src="{{ 'storage/' . rawurldecode($dept->logo) }}">
+                            </div>
+                            <div class="center aligned content">
+                                <div class="header">{{ $dept->name }}</div>
+                                <div class="meta">{{ $school->name }}</div>
+                            </div>
+                            <div class="ui attached red inverted button mark-dept" data-value="{{ $dept->id . "+" . $school->id }}">
+                                <i class="trash icon"></i>{{ __('Remove') }}
+                            </div>
+                        </div>
+                        @endforeach
+                    @endforeach
                 </div>
             </div>
-            @endforeach
-        @endforeach
+        </div>
+        {{ $depts->links('vendor.pagination.semantic-ui') }}
     </div>
-    </div>
-    </div>
-    {{ $depts->links('vendor.pagination.semantic-ui') }}
 </div>
 @endsection
 

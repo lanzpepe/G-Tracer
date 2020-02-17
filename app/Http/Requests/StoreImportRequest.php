@@ -29,7 +29,7 @@ class StoreImportRequest extends FormRequest
             'course' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:courses,name', 'max:64'],
             'major' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:courses,major', 'max:32'],
             'sy' => ['required', 'regex:/^20[0-9]\d-20[0-9]\d|2100$/', 'size:9'],
-            'batch' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:batches,name'],
+            'batch' => ['required'],
             'file' => ['required', 'file', 'mimes:csv,txt']
         ];
     }

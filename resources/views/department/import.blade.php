@@ -8,7 +8,7 @@
 
 @section('button')
 <button class="ui right floated teal button import-graduates">
-    <i class="file import icon"></i> {{ __('Import Data') }}
+    <i class="file import icon"></i> {{ __('Import Graduate Data') }}
 </button>
 @endsection
 
@@ -57,20 +57,19 @@
                 </div>
             </div>
             <div class="equal width fields">
-                <div class="required field">
+                <div class="required field sy">
                     <label for="sy"><i class="ui calendar check outline teal icon"></i>{{ __('School Year') }}</label>
                     <select name="sy" id="sy" class="ui fluid dropdown" required>
+                        <option value="" selected>{{ __('-- Select School Year --') }}</option>
                         @foreach ($schoolYears as $sy)
                             <option value="{{ $sy->school_year }}">{{ $sy->school_year }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="required field">
+                <div class="required field batch">
                     <label for="batch"><i class="ui calendar check outline teal icon"></i>{{ __('Batch') }}</label>
                     <select name="batch" id="batch" class="ui fluid dropdown" required>
-                        @foreach ($batches as $batch)
-                            <option value="{{ $batch->name }}">{{ $batch->name }}</option>
-                        @endforeach
+                        <option value="" selected>{{ __('-- Select Batch --') }}</option>
                     </select>
                 </div>
             </div>

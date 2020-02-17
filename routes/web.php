@@ -26,9 +26,7 @@ Route::middleware('admin')->group(function () {
         'accounts' => 'Administrator\AccountController',
         'schools' => 'Administrator\SchoolController',
         'departments' => 'Administrator\DepartmentController',
-        'courses' => 'Administrator\CourseController',
-        'school_years' => 'Administrator\SchoolYearController',
-        'jobs' => 'Administrator\JobController'
+        'school_years' => 'Administrator\SchoolYearController'
     ]);
 });
 
@@ -36,13 +34,16 @@ Route::middleware('department')->group(function () {
     Route::get('dept', 'Department\DepartmentController@index')->name('dept');
     Route::get('reports', 'Department\ReportController@reports')->name('reports');
     Route::get('reports/{id}', 'Department\ReportController@report')->name('report');
-    Route::get('graduates', 'Department\GraduateController@graduates')->name('graduates');
-    Route::post('graduates/add', 'Department\GraduateController@add')->name('add_graduate');
-    Route::get('graduates/{id}/mark', 'Department\GraduateController@mark');
-    Route::get('graduates/{id}/delete', 'Department\GraduateController@remove');
     Route::get('import', 'Department\ImportController@import')->name('import');
     Route::post('import/parse', 'Department\ImportController@parseImport')->name('import_parse');
     Route::post('import/process', 'Department\ImportController@processImport')->name('import_process');
     Route::get('file_manager', 'Department\FileManagerController@index')->name('file_manager');
     Route::get('dept/profile', 'Department\DepartmentController@profile')->name('dept_profile');
+    Route::post('batches/fetch', 'Department\GraduateController@fetch');
+
+    Route::resources([
+        'graduates' => 'Department\GraduateController',
+        'courses' => 'Department\CourseController',
+        'jobs' => 'Department\JobController'
+    ]);
 });

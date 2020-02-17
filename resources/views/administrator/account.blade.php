@@ -3,55 +3,57 @@
 @section('title', 'Manage Accounts')
 
 @section('header')
-    <i class="ui users teal icon"></i> @yield('title')
+<i class="ui users teal icon"></i> @yield('title')
 @endsection
 
 @section('button')
-    <button class="ui right floated teal button add-account">
-        <i class="plus icon"></i> {{ __('Add Account') }}
-    </button>
+<button class="ui right floated teal button add-account">
+    <i class="plus icon"></i> {{ __('Add Account') }}
+</button>
 @endsection
 
 @section('main')
-<div class="ui centered grid">
-    <div class="row">
-        <div class="column">
-            <table class="ui compact unstackable selectable celled teal table">
-                <thead>
-                    <tr class="center aligned">
-                        <th>{{ __('Admin Type') }}</th>
-                        <th>{{ __('Username') }}</th>
-                        <th>{{ __('Name') }}</th>
-                        <th>{{ __('Department') }}</th>
-                        <th>{{ __('School') }}</th>
-                        <th>{{ __('Actions') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($admins as $adm)
-                        @foreach ($adm->departments as $dept)
-                            <tr class="center aligned">
-                                <td>{{ $adm->getRoleName() }}</td>
-                                <td>{{ $adm->username }}</td>
-                                <td>{{ $adm->getFullNameAttribute() }}</td>
-                                <td>{{ $dept->name }}</td>
-                                <td>{{ $adm->getSchoolName() }}</td>
-                                <td>
-                                    <button class="ui compact icon green inverted button edit-account" data-value="{{ $adm->admin_id }}">
-                                        <i class="pen icon"></i>
-                                    </button>
-                                    <button class="ui compact icon red inverted button mark-account" data-value="{{ $adm->admin_id }}">
-                                        <i class="trash icon"></i>
-                                    </button>
-                                </td>
-                            </tr>
+<div class="ui container">
+    <div class="ui equal width centered grid">
+        <div class="row">
+            <div class="column">
+                <table class="ui compact unstackable selectable celled teal table">
+                    <thead>
+                        <tr class="center aligned">
+                            <th>{{ __('Admin Type') }}</th>
+                            <th>{{ __('Username') }}</th>
+                            <th>{{ __('Name') }}</th>
+                            <th>{{ __('Department') }}</th>
+                            <th>{{ __('School') }}</th>
+                            <th>{{ __('Actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($admins as $adm)
+                            @foreach ($adm->departments as $dept)
+                                <tr class="center aligned">
+                                    <td>{{ $adm->getRoleName() }}</td>
+                                    <td>{{ $adm->username }}</td>
+                                    <td>{{ $adm->getFullNameAttribute() }}</td>
+                                    <td>{{ $dept->name }}</td>
+                                    <td>{{ $adm->getSchoolName() }}</td>
+                                    <td>
+                                        <button class="ui compact icon green inverted button edit-account" data-value="{{ $adm->admin_id }}">
+                                            <i class="pen icon"></i>
+                                        </button>
+                                        <button class="ui compact icon red inverted button mark-account" data-value="{{ $adm->admin_id }}">
+                                            <i class="trash icon"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @endforeach
-                    @endforeach
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
+        {{ $admins->links('vendor.pagination.semantic-ui') }}
     </div>
-    {{ $admins->links('vendor.pagination.semantic-ui') }}
 </div>
 @endsection
 

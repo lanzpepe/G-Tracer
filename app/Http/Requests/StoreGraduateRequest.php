@@ -39,7 +39,7 @@ class StoreGraduateRequest extends FormRequest
             'major' => ['regex:/^[A-z\s-]+$/', 'max:32', 'nullable'],
             'sy' => ['required', 'exists:academic_years,school_year', 'size:9',
                     'regex:/^20[0-9]\d-20[0-9]\d|2100$/'],
-            'batch' => ['required', 'regex:/^[A-z\s-]+$/', 'exists:batches,name', 'max:16'],
+            'batch' => ['required', 'max:16'],
             'image' => ['file', 'mimes:jpeg,png']
         ];
     }

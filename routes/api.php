@@ -14,25 +14,33 @@
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
-    Route::post('login', 'User\SocialAuthController@login');
-    Route::post('register', 'User\SocialAuthController@register');
-    Route::get('genders', 'User\RegisterController@genders');
-    Route::get('schools', 'User\RegisterController@schools');
-    Route::get('courses/{school}', 'User\RegisterController@courses');
-    Route::get('departments/{course}/{school}', 'User\RegisterController@department');
-    Route::get('school_years', 'User\RegisterController@schoolYears');
-    Route::get('batches', 'User\RegisterController@batches');
-    Route::get('jobs/{course}', 'User\RegisterController@jobs');
+    Route::post('login', 'Api\SocialAuthController@login');
+    Route::post('register', 'Api\SocialAuthController@register');
+    Route::get('graduates', 'Api\GraduateController@graduates');
+
+    Route::prefix('register')->group(function () {
+        Route::get('genders', 'Api\RegisterController@genders');
+        Route::get('schools', 'Api\RegisterController@schools');
+        Route::get('courses/{school}', 'Api\RegisterController@courses');
+        Route::get('departments/{course}/{school}', 'Api\RegisterController@department');
+        Route::get('academic_years', 'Api\RegisterController@academicYears');
+        Route::get('batches/{sy}', 'Api\RegisterController@batches');
+        Route::get('jobs/{course}', 'Api\RegisterController@jobs');
+        Route::get('companies', 'Api\RegisterController@companies');
+        Route::post('verify', 'Api\RegisterController@verify');
+    });
 
     Route::middleware('auth:api')->group(function () {
-        Route::get('graduates/{id}', 'User\GraduateController@graduate');
-        Route::post('graduates/{id}/response', 'User\GraduateController@response');
+        Route::get('graduates/{id}', 'Api\GraduateController@graduate');
+        Route::post('graduates/{id}/save', 'Api\GraduateController@save');
+        Route::post('graduates/{id}/response', 'Api\GraduateController@response');
 
-        Route::get('users', 'User\UserController@users');
-        Route::get('users/{id}', 'User\UserController@user');
-        Route::get('users/{id}/graduates', 'User\UserController@graduates');
+        Route::get('users', 'Api\UserController@users');
+        Route::get('users/{id}', 'Api\UserController@user');
+        Route::get('users/{id}/graduates', 'Api\UserController@graduates');
+        Route::post('users/{id}/update', 'Api\UserController@updateEmployment');
 
-        Route::get('logout', 'User\SocialAuthController@logout');
+        Route::get('logout', 'Api\SocialAuthController@logout');
     });
 });
 

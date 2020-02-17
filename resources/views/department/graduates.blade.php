@@ -3,7 +3,7 @@
 @section('title', 'Graduate List')
 
 @section('header')
-    <i class="ui user graduate teal icon"></i> @yield('title')
+<i class="ui user graduate teal icon"></i> @yield('title')
 @endsection
 
 @section('button')
@@ -13,52 +13,58 @@
 @endsection
 
 @section('main')
-<div class="ui equal width centered grid">
-    @if (count($graduates) > 0)
-    <div class="column">
-        <div class="ui four special doubling cards">
-            @foreach ($graduates as $graduate)
-            <div class="ui teal raised card">
-                <div class="blurring dimmable image">
-                    <div class="ui dimmer">
-                        <div class="content">
-                            <div class="center">
-                                <div class="ui tiny green inverted button edit-graduate" data-value="{{ $graduate->graduate_id }}">
-                                    <i class="pen icon"></i> {{ __('Update') }}
-                                </div>
-                                <div class="ui tiny red inverted button mark-graduate" data-value={{ $graduate->graduate_id }}>
-                                    <i class="trash icon"></i> {{ __('Delete') }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <img src="{{ $graduate->image() }}">
-                </div>
-                <div class="content">
-                    <a href="{{ route('report', ['id' => $graduate->graduate_id]) }}" class="header">{{ $graduate->getFullNameAttribute() }}</a>
-                    <div class="meta">{{ $graduate->degree }}</div>
-                    <div class="description">
-                        <p>{{ "S.Y. Graduated: " . $graduate->school_year }}</p>
-                        <p>{{ "Batch: " . $graduate->batch }}</p>
+<div class="ui container">
+    <div class="ui equal width centered grid">
+        <div class="row">
+            <div class="column">
+                @if (count($graduates) > 0)
+                <table class="ui unstackable selectable compact teal table">
+                    <thead>
+                        <tr class="center aligned">
+                            <th></th>
+                            <th>{{ __('Name of Graduate') }}</th>
+                            <th>{{ __('Degree') }}</th>
+                            <th>{{ __('Batch / School Year') }}</th>
+                            <th>{{ __('Actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($graduates as $graduate)
+                            <tr class="center aligned">
+                                <td><img class="ui middle aligned tiny circular image" src="{{ $graduate->image() }}"></td>
+                                <td><a href="{{ route('report', ['id' => $graduate->graduate_id]) }}">{{ $graduate->getFullNameAttribute() }}</a></td>
+                                <td>{{ $graduate->degree }}</td>
+                                <td>{{ $graduate->school_year }} / {{ $graduate->batch }}</td>
+                                <td class="center aligned">
+                                    <div class="center">
+                                        <div class="ui compact icon green inverted button edit-graduate" data-value="{{ $graduate->graduate_id }}">
+                                            <i class="pen icon"></i>
+                                        </div>
+                                        <div class="ui compact icon red inverted button mark-graduate" data-value="{{ $graduate->graduate_id }}">
+                                            <i class="trash icon"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {{ $graduates->links('vendor.pagination.semantic-ui') }}
+        @else
+        <div class="row">
+            <div class="column">
+                <div class="ui placeholder segment">
+                    <div class="ui icon header">
+                        <i class="frown outline teal icon"></i>
+                        {{ __('No graduates displayed.') }}
                     </div>
                 </div>
             </div>
-            @endforeach
         </div>
+        @endif
     </div>
-    {{ $graduates->links('vendor.pagination.semantic-ui') }}
-    @else
-    <div class="row">
-        <div class="column">
-            <div class="ui placeholder segment">
-                <div class="ui icon header">
-                    <i class="frown outline teal icon"></i>
-                    {{ __('No graduates displayed.') }}
-                </div>
-            </div>
-        </div>
-    </div>
-    @endif
 </div>
 @endsection
 
@@ -68,7 +74,7 @@
         <i class="ui question circle outline teal icon"></i><span class="title">{{ __('Add Graduate') }}</span>
     </div>
     <div class="scrolling content" role="document">
-        <form action="{{ route('add_graduate') }}" class="ui form" id="graduateForm" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('graduates.store') }}" class="ui form" id="graduateForm" method="POST" role="form" enctype="multipart/form-data">
             @csrf
             <div class="ui grid container">
                 <div class="row">
@@ -93,7 +99,7 @@
                 </div>
                     <div class="ten wide column">
                         <div class="equal width fields">
-                            <div class="required field">
+                            <div class="required field sy">
                                 <label for="sy"><i class="ui calendar check outline teal icon"></i>{{ __('School Year') }}</label>
                                 <select name="sy" id="sy" class="ui fluid dropdown" required>
                                     <option value="" selected>{{ __('-- Select School Year --') }}</option>
@@ -102,13 +108,10 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="required field">
+                            <div class="required field batch">
                                 <label for="batch"><i class="ui calendar check outline teal icon"></i>{{ __('Batch') }}</label>
                                 <select name="batch" id="batch" class="ui fluid dropdown" required>
                                     <option value="" selected>{{ __('-- Select Batch --') }}</option>
-                                    @foreach ($batches as $batch)
-                                        <option value="{{ $batch->name }}">{{ $batch->name }}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -178,7 +181,6 @@
                     </div>
                 </div>
             </div>
-            <input type="hidden" name="temp" id="temp" value="">
         </form>
     </div>
     <div class="actions">
@@ -196,18 +198,22 @@
         <i class="exclamation triangle red icon"></i>{{ __('Remove Graduate') }}
     </div>
     <div class="content" role="document">
-        <h3>{{ __('The following entries will be removed:') }}</h3>
-        <p class="graduate name"></p>
-        <p class="graduate course"></p>
-        <p class="graduate school"></p>
-        <p class="graduate batch"></p>
-        <h3>{{ __('Proceed anyway?') }}</h3>
+        <form action="#" class="ui form" id="deleteForm" method="POST" role="form">
+            @csrf
+            @method('DELETE')
+            <h3>{{ __('The following entries will be removed:') }}</h3>
+            <p class="graduate name"></p>
+            <p class="graduate course"></p>
+            <p class="graduate school"></p>
+            <p class="graduate sy"></p>
+            <h3>{{ __('Proceed anyway?') }}</h3>
+        </form>
     </div>
     <div class="actions">
         <button type="button" class="ui green cancel basic inverted button">
             <i class="close icon"></i>{{ __('Cancel') }}
         </button>
-        <button type="submit" class="ui red submit inverted button delete-graduate">
+        <button type="submit" class="ui red submit inverted button delete-graduate" form="deleteForm">
             <i class="trash icon"></i> {{ __('Delete') }}
         </button>
     </div>

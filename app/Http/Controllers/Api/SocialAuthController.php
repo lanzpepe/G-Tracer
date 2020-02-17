@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
@@ -89,8 +89,7 @@ class SocialAuthController extends Controller
         $company = Company::create([
             'company_id' => Str::random(),
             'name' => $request->companyName,
-            'address' => $request->companyAddress,
-            'contact' => null
+            'address' => $request->companyAddress
         ]);
 
         $company->employments()->create([
