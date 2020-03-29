@@ -1,6 +1,6 @@
 @extends('home')
 
-@section('title', 'Graduate Statistics')
+@section('title', 'Graduate Reports')
 
 @section('header')
 <i class="ui chart bar teal icon"></i> @yield('title')

@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\Graduate;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class GraduatesTableSeeder extends Seeder
@@ -13,7 +13,7 @@ class GraduatesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('graduates')->insert([
+        Graduate::insert([
             [
                 'graduate_id' => Str::random(),
                 'last_name' => "Tayong",

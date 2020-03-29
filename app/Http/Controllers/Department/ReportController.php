@@ -7,6 +7,7 @@ use App\Charts\ResponsesChart;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Graduate;
+use App\Models\Notification;
 
 class ReportController extends Controller
 {
@@ -155,6 +156,11 @@ class ReportController extends Controller
         $datesEmployed = $responses->groupBy('date_employed')->map(function ($values) {
             return $values->count();
         })->sort()->reverse();
+        $read = Notification::where('graduate_id', $graduateId)->first();
+
+        if ($read) {
+            $read->update(['read_at' => date('Y-m-d H:i:s')]);
+        }
 
         $nameChart = new ResponsesChart;
         $nameChart->title('Company Name', 20, '#00B5AD', 'bold', 'Product Sans');

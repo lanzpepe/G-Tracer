@@ -19,10 +19,12 @@ class Administrator
     {
         if (Auth::check()) {
             $requestedAdminId = $request->route()->parameter('admin_id');
-            $role = Admin::find(Auth::user()->admin_id)->roles->first();
+            $admin = Admin::find(Auth::user()->admin_id);
+            $role = $admin->roles->first();
 
-            if ($role->name === config('constants.roles.admin') && Auth::user()->id == $requestedAdminId)
+            if ($role->name == config('constants.roles.admin') && Auth::user()->id === $requestedAdminId) {
                 return $next($request);
+            }
             else
                 return redirect('dept');
             }

@@ -3,7 +3,7 @@
 @section('title', 'Manage Accounts')
 
 @section('header')
-<i class="ui users teal icon"></i> @yield('title')
+<i class="ui users cog teal icon"></i> @yield('title')
 @endsection
 
 @section('button')
@@ -63,83 +63,86 @@
         <i class="ui question circle outline teal icon"></i><span class="title">{{ __('Add New Account') }}</span>
     </div>
     <div class="scrolling content" role="document">
-        <form action="{{ route('accounts.store') }}" class="ui form" id="accountForm" method="POST">
+        <form action="{{ route('accounts.store') }}" class="ui form" id="accountForm" method="POST" role="form">
             @csrf
             <input type="hidden" name="adminId" id="adminId" value="">
-            <div class="required field username">
-                <label for="username"><i class="ui user teal icon"></i>{{ __('Username') }}</label>
-                <input type="text" name="username" id="username" value="{{ old('username') }}" required>
-            </div>
-            <div class="two fields password">
-                <div class="required field">
-                    <label for="password"><i class="ui key teal icon"></i>{{ __('Password') }}</label>
-                    <input type="password" name="password" id="password" value="{{ old('password') }}" required>
-                </div>
-                <div class="required field">
-                    <label for="password-confirm"><i class="ui key teal icon"></i>{{ __('Confirm Password') }}</label>
-                    <input type="password" name="password_confirmation" id="password-confirm" value="{{ old('password-confirm') }}" required>
-                </div>
-            </div>
-            <input type="hidden" name="userId" id="userId" value="">
-            <div class="equal width fields">
-                <div class="seven wide required field">
-                    <label for="lastname"><i class="ui user outline teal icon"></i>{{ __('Last Name') }}</label>
-                    <input type="text" name="lastname" id="lastname" value="{{ old('lastname') }}" required>
-                </div>
-                <div class="seven wide required field">
-                    <label for="firstname"><i class="ui user outline teal icon"></i>{{ __('First Name') }}</label>
-                    <input type="text" name="firstname" id="firstname" value="{{ old('firstname') }}" required>
-                </div>
-                <div class="two wide required field">
-                    <label for="midname"><i class="ui user outline teal icon"></i>{{ __('M.I.') }}</label>
-                    <input type="text" name="midname" id="midname" value="{{ old('midname') }}" required>
-                </div>
-            </div>
-            <div class="two fields">
-                <div class="required field">
-                    <label for="gender"><i class="ui venus mars teal icon"></i>{{ __('Gender') }}</label>
-                    <select name="gender" id="gender" class="ui fluid dropdown" required>
-                        <option value="" selected>{{ __('-- Select Gender --') }}</option>
-                        @foreach ($genders as $gender)
-                            <option value="{{ $gender->name }}">{{ $gender->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="required field">
-                    <label for="dob"><i class="ui calendar alternate teal icon"></i>{{ __('Date of Birth') }}</label>
-                    <div class="ui calendar" id="birthdate">
-                        <div class="ui input">
-                            <input type="text" id="dob" name="dob" value="January 1, 1990" required>
+            <div class="ui equal width centered grid">
+                <div class="column">
+                    <div class="required field">
+                        <label for="lastname"><i class="ui user outline teal icon"></i>{{ __('Last Name') }}</label>
+                        <input type="text" name="lastname" id="lastname" value="{{ old('lastname') }}" required>
+                    </div>
+                    <div class="required field">
+                        <label for="firstname"><i class="ui user outline teal icon"></i>{{ __('First Name') }}</label>
+                        <input type="text" name="firstname" id="firstname" value="{{ old('firstname') }}" required>
+                    </div>
+                    <div class="equal width fields">
+                        <div class="required field">
+                            <label for="midname"><i class="ui user outline teal icon"></i>{{ __('M.I.') }}</label>
+                            <input type="text" name="midname" id="midname" value="{{ old('midname') }}" required>
                         </div>
+                        <div class="required field">
+                            <label for="gender"><i class="ui venus mars teal icon"></i>{{ __('Gender') }}</label>
+                            <select name="gender" id="gender" class="ui fluid dropdown" required>
+                                <option value="" selected>{{ __('-- Select Gender --') }}</option>
+                                @foreach ($genders as $gender)
+                                    <option value="{{ $gender->name }}">{{ $gender->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="required field">
+                        <label for="dob"><i class="ui calendar alternate teal icon"></i>{{ __('Date of Birth') }}</label>
+                        <div class="ui calendar" id="birthdate">
+                            <div class="ui input">
+                                <input type="text" id="dob" name="dob" value="January 1, 1990" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="required field school">
+                        <label for="school"><i class="ui school teal icon"></i>{{ __('School') }}</label>
+                        <select name="school" id="school" class="ui fluid dropdown" required>
+                            <option value="" selected>{{ __('-- Select School --') }}</option>
+                            @foreach ($schools as $school)
+                                <option value="{{ $school->name }}">{{ $school->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="required field department">
+                        <label for="dept"><i class="ui building teal icon"></i>{{ __('Department') }}</label>
+                        <select name="dept" id="dept" class="ui fluid dropdown" required>
+                            <option value="" selected>{{ __('-- Select Department --') }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="required field username">
+                        <label for="username"><i class="ui user teal icon"></i>{{ __('Username') }}</label>
+                        <input type="text" name="username" id="username" value="{{ old('username') }}" required>
+                    </div>
+                    <div class="grouped fields password">
+                        <div class="required field">
+                            <label for="password"><i class="ui key teal icon"></i>{{ __('Password') }}</label>
+                            <input type="password" name="password" id="password" value="{{ old('password') }}" required>
+                        </div>
+                        <div class="required field">
+                            <label for="password-confirm"><i class="ui key teal icon"></i>{{ __('Confirm Password') }}</label>
+                            <input type="password" name="password_confirmation" id="password-confirm" value="{{ old('password-confirm') }}" required>
+                        </div>
+                    </div>
+                    <div class="required field">
+                        <label for="role"><i class="ui user cog teal icon"></i>{{ __('User Permission') }}</label>
+                        <select name="role" id="role" class="ui fluid dropdown" required>
+                            <option value="" selected>{{ __('-- Select Role --') }}</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->name }}">{{ $role->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
-            <div class="two fields">
-                <div class="required field school">
-                    <label for="school"><i class="ui school teal icon"></i>{{ __('School') }}</label>
-                    <select name="school" id="school" class="ui fluid dropdown" required>
-                        <option value="" selected>{{ __('-- Select School --') }}</option>
-                        @foreach ($schools as $school)
-                            <option value="{{ $school->name }}">{{ $school->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="required field department">
-                    <label for="dept"><i class="ui building teal icon"></i>{{ __('Department') }}</label>
-                    <select name="dept" id="dept" class="ui fluid dropdown" required>
-                        <option value="" selected>{{ __('-- Select Department --') }}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="required field">
-                <label for="role"><i class="ui user cog teal icon"></i>{{ __('User Permission') }}</label>
-                <select name="role" id="role" class="ui fluid dropdown" required>
-                    <option value="" selected>{{ __('-- Select Role --') }}</option>
-                    @foreach ($roles as $role)
-                        <option value="{{ $role->name }}">{{ $role->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+            <div class="ui vertical divider"></div>
+            <input type="hidden" name="userId" id="userId" value="">
             <br>
         </form>
     </div>
@@ -147,8 +150,7 @@
         <button type="button" class="ui red cancel inverted button">
             <i class="close icon"></i>{{ __('Cancel') }}
         </button>
-        <button type="submit" class="ui green submit inverted button" form="accountForm" id="btnAccount"
-                name="btnAccount" value="added">
+        <button type="submit" class="ui green submit inverted button" form="accountForm" id="btnAccount" name="btnAccount" value="added">
             <i class="check icon"></i><span class="label">{{ __('Submit') }}</span>
         </button>
     </div>
@@ -158,7 +160,7 @@
         <i class="exclamation triangle red icon"></i>{{ __('Remove Account') }}
     </div>
     <div class="content" role="document">
-        <form action="{{ route('accounts.destroy', $adm->admin_id) }}" class="ui form" id="deleteForm" method="POST">
+        <form action="{{ route('accounts.destroy', $adm->admin_id) }}" class="ui form" id="deleteForm" method="POST" role="form">
             @csrf
             @method('DELETE')
             <h3>{{ __('The following entries will be removed:') }}</h3>

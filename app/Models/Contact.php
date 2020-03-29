@@ -14,4 +14,9 @@ class Contact extends Model
     {
         return $this->belongsTo(User::class, 'contact_id');
     }
+
+    public function graduate()
+    {
+        return $this->belongsTo(Graduate::class, 'contact_id');
+    }
 }

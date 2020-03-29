@@ -19,24 +19,17 @@
             <h1 class="ui teal header">
                 {{$graduate->getFullNameAttribute()}}
                 <div class="sub header">
-                    {{$graduate->degree}}
+                    {{ __("Degree: {$graduate->academic->degree}") }}
                 </div>
                 <div class="sub header">
-                    Batch: {{$graduate->batch}}
-                </div>
-                <div class="sub header">
-                    School Year: {{$graduate->school_year}}
+                    {{ __("Graduated: {$graduate->academic->batch} {$graduate->academic->year}") }}
                 </div>
             </h1>
         </div>
         <div class="two wide column">
             <div class="ui teal statistic">
-              <div class="label">
-                Respondents
-              </div>
-              <div class="value">
-                {{ $responses->count() }}
-              </div>
+                <div class="label">{{ __('Responses') }}</div>
+                <div class="value">{{ $responses->count() }}</div>
             </div>
         </div>
     </div>

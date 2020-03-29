@@ -1,39 +1,73 @@
 <div class="ui container">
-    <div class="ui four doubling cards">
-        <a href="{{ route('accounts.index') }}" class="teal card">
-            <div class="ui placeholder segment">
-                <div class="ui icon header">
-                    <i class="ui users teal icon"></i>{{ __('Accounts') }}
+    <div class="ui middle aligned grid basic segment">
+        <div class="left floated column">
+            <span class="ui big text">{{ __('Quick Links') }}</span>
+        </div>
+    </div>
+</div>
+<div class="ui grid container">
+    <div class="three column row">
+        <div class="column">
+            <a href="{{ route('users.index') }}" class="ui horizontal card">
+                <div class="ui large teal icon message">
+                    <i class="users teal icon"></i>
+                    <div class="content">
+                        <div class="header">
+                            {{ __('Users') }}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </a>
-        <a href="{{ route('schools.index') }}" class="teal card">
-            <div class="ui placeholder segment">
-                <div class="ui icon header">
-                    <i class="ui school teal icon"></i>{{ __('Schools') }}
+            </a>
+        </div>
+        <div class="column">
+            <a href="{{ route('accounts.index') }}" class="ui horizontal card">
+                <div class="ui large teal icon message">
+                    <i class="users cog teal icon"></i>
+                    <div class="content">
+                        <div class="header">
+                            {{ __('Accounts') }}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </a>
-        <a href="{{ route('departments.index') }}" class="teal card">
-            <div class="ui placeholder segment">
-                <div class="ui icon header">
-                    <i class="ui building teal icon"></i>{{ __('Departments') }}
+            </a>
+        </div>
+        <div class="column">
+            <a href="{{ route('file_manager') }}" class="ui horizontal card">
+                <div class="ui large teal icon message">
+                    <i class="folder open teal icon"></i>
+                    <div class="content">
+                        <div class="header">
+                            {{ __('File Manager') }}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </a>
-        {{-- <a href="{{ route('school_years.index') }}" class="teal card">
-            <div class="ui placeholder segment">
-                <div class="ui icon header">
-                    <i class="ui calendar check teal icon"></i>{{ __('School Years') }}
+            </a>
+        </div>
+    </div>
+    <div class="three column row">
+        <div class="column">
+            <a href="{{ route('schools.index') }}" class="ui horizontal card">
+                <div class="ui large teal icon message">
+                    <i class="school teal icon"></i>
+                    <div class="content">
+                        <div class="header">
+                            {{ __('Schools') }}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </a> --}}
-        <a href="#" class="teal card">
-            <div class="ui placeholder segment">
-                <div class="ui icon header">
-                    <i class="ui gifts teal icon"></i>{{ __('Set Rewards') }}
+            </a>
+        </div>
+        <div class="column">
+            <a href="{{ route('departments.index') }}" class="ui horizontal card">
+                <div class="ui large teal icon message">
+                    <i class="building teal icon"></i>
+                    <div class="content">
+                        <div class="header">
+                            {{ __('Departments') }}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </a>
+            </a>
+        </div>
     </div>
 </div>

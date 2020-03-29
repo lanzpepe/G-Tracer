@@ -5,66 +5,75 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Graduate;
-use App\Models\ItemSimilarity;
 use App\Models\Response;
 use App\Models\User;
+use App\Traits\StaticTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class GraduateController extends Controller
 {
+    use StaticTrait;
+
+    /**
+     * Display the list of stored graduates.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function graduates()
     {
-        $graduates = Graduate::all();
+        $graduates = Graduate::with(['academic', 'responses', 'users'])->get();
 
         return response()->json(compact('graduates'));
     }
 
+    /**
+     * Display the specified graduate.
+     *
+     * @param string $graduateId
+     * @return \Illuminate\Http\Response
+     */
     public function graduate($graduateId)
     {
-        $graduate = Graduate::with(['responses', 'users'])->findOrFail($graduateId);
+        $graduate = Graduate::with(['academic', 'responses', 'users'])->find($graduateId);
 
         return response()->json(compact('graduate'));
     }
 
-    public function save(Request $request, $graduateId)
+    /**
+     * Store the newly saved graduate in the database.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function save(Request $request)
     {
-        $user = User::findOrFail($request->respondentId);
+        $user = User::find($request->respondentId);
         $graduates = Graduate::with('responses')->whereDoesntHave('users', function ($query) use ($user) {
             return $query->where('users.user_id', $user->user_id); // remove saved graduates
         })->get();
-        $graduate = Graduate::findOrFail($graduateId);
-        $selectedId = $graduate->graduate_id;
-        $selected = $graduates[0];
+        $graduate = Graduate::find($request->graduateId);
 
-        /* $selectedGraduates = array_filter($graduates, function ($graduate) use ($selectedId) {
-            return $graduate->graduate_id == $selectedId;
-        }); */
-
-        $selectedGraduates = $graduates->filter(function ($value) use ($selectedId) {
-            return $value->graduate_id == $selectedId;
-        });
-
-        if ($selectedGraduates->count()) {
-            $selected = $selectedGraduates[$selectedGraduates->keys()->first()];
+        if ($graduate) {
+            $user->graduates()->attach($graduate->graduate_id);
         }
-
-        $similarity = new ItemSimilarity($graduates);
-        $similarityMatrix = $similarity->calculateSimilarityMatrix();
-
-        dd($similarityMatrix);
-
-        // $user->graduates()->attach($graduateId);
 
         return response()->json([
             'message' => "{$graduate->getFullNameAttribute()} is added to Pending list."
         ]);
     }
 
-    // responses from user
-    public function response(Request $request, $graduateId)
+    /**
+     * Store the user's response of graduate in the database.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function response(Request $request)
     {
-        $user = User::findOrFail($request->respondentId);
+        $user = User::find($request->respondentId);
+        $graduate = Graduate::find($request->graduateId);
+
         $company = Company::firstOrCreate([
             'name' => $request->companyName,
             'address' => $request->companyAddress
@@ -81,8 +90,22 @@ class GraduateController extends Controller
         ]);
 
         $user->graduates()->syncWithoutDetaching([
-            $graduateId => ['response_id' => $response->response_id]
+            $graduate->graduate_id => ['response_id' => $response->response_id]
         ]);
+
+        // notify department of responses made
+        $token = User::whereHas('admin')->get()->pluck('device_token')->toArray();
+        $url = url("http://localhost/reports/{$graduate->graduate_id}");
+
+        $user->notifications()->create([
+            'graduate_id' => $graduate->graduate_id,
+            'title' => "Respond Activity",
+            'body' => "Someone has responded {$graduate->getFullNameAttribute()}.",
+            'icon' => null,
+            'click_action' => $url
+        ]);
+
+        $this->sendNotification($token, "Respond Activity", "Someone has responded {$graduate->getFullNameAttribute()}.", null, $url);
 
         return response()->json(['message' => 'Submitted. Thank you for your time.']);
     }

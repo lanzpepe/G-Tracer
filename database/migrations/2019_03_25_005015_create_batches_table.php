@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAcademicYearsTable extends Migration
+class CreateBatchesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateAcademicYearsTable extends Migration
      */
     public function up()
     {
-        Schema::create('academic_years', function (Blueprint $table) {
+        Schema::create('batches', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('school_year', 16)->unique();
-            $table->string('first_batch', 16);
-            $table->string('second_batch', 16);
+            $table->string('month', 16)->unique();
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ class CreateAcademicYearsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('academic_years');
+        Schema::dropIfExists('batches');
     }
 }

@@ -39,6 +39,11 @@ class Admin extends Authenticatable
         return $this->belongsToMany(School::class, 'admin_school', 'admin_id', 'school_id')->withTimestamps();
     }
 
+    public function pages()
+    {
+        return $this->belongsToMany(Page::class, 'admin_page', 'admin_id', 'page_id')->withTimestamps();
+    }
+
     public function getFullNameAttribute()
     {
         return $this->user->first_name . ' ' . $this->user->middle_name . ' ' . $this->user->last_name;

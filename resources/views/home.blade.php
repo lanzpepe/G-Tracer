@@ -49,13 +49,27 @@
             </div>
         </div>
         @endif
-        {{-- <div class="ui middle aligned segment"> --}}
         @if (Request::is('import'))
         <div class="ui container">
             <div class="ui placeholder segment">
-                <div class="ui icon header">
-                    <i class="file import teal icon"></i>
-                    {{ __('Click the \'Import Data\' button to display it here.') }}
+                <div class="ui two column very relaxed stackable center aligned grid">
+                    <div class="middle aligned row">
+                        <div class="column">
+                            <div class="ui icon header">
+                                <i class="user graduate teal icon"></i>
+                                {{ __('Graduate Data') }}
+                            </div>
+                            <div class="ui teal button import-graduates">{{ __('Import') }}</div>
+                        </div>
+                        <div class="column">
+                            <div class="ui icon header">
+                                <i class="linkedin in teal icon"></i>
+                                {{ __('LinkedIn Data') }}
+                            </div>
+                            <div class="ui teal button import-linkedin">{{ __('Import') }}</div>
+                        </div>
+                        <div class="ui vertical divider">{{ __('OR') }}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -66,9 +80,13 @@
         @else
             @yield('main')
         @endif
-        {{-- </div> --}}
         @yield('modal')
     </div>
 </main>
 @yield('scripts')
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-messaging.js"></script>
+<script src="{{ asset('js/init.js') }}"></script>
+<script src="{{ asset('js/firebase.js') }}"></script>
 @endsection

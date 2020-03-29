@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AcademicYear extends Model
+class Year extends Model
 {
     protected $guarded = [];
-    public $incrementing = false;
 }

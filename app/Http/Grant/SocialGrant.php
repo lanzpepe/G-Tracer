@@ -76,11 +76,13 @@ class SocialGrant extends AbstractGrant
     protected function validateUser(ServerRequestInterface $request)
     {
         $providerName = $this->getRequestParameter('provider_name', $request);
+
         if (is_null($providerName)) {
             throw OAuthServerException::invalidRequest('provider_name');
         }
 
         $providerId = $this->getRequestParameter('provider_id', $request);
+
         if (is_null($providerId)) {
             throw OAuthServerException::invalidRequest('provider_id');
         }
@@ -90,7 +92,7 @@ class SocialGrant extends AbstractGrant
         if ($user instanceof UserEntityInterface === false) {
             $this->getEmitter()->emit(new RequestEvent(RequestEvent::USER_AUTHENTICATION_FAILED, $request));
 
-            throw OAuthServerException::invalidCredentials();
+            throw OAuthServerException::invalidGrant();
         }
 
         return $user;
@@ -100,7 +102,7 @@ class SocialGrant extends AbstractGrant
     {
         $provider = config('auth.guards.api.provider');
 
-        if (is_null(config('auth.providers.'.$provider.'.model'))) {
+        if (is_null(config("auth.providers.{$provider}.model"))) {
             throw new RuntimeException('Unable to determine authentication model from configuration.');
         }
 
@@ -109,7 +111,7 @@ class SocialGrant extends AbstractGrant
 
         if (!$socialAccount) return;
 
-        $user = $socialAccount->user()->first();
+        $user = $socialAccount->user;
 
         if (!$user) return;
 

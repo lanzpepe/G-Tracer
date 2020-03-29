@@ -23,22 +23,23 @@ Route::prefix('v1')->group(function () {
         Route::get('schools', 'Api\RegisterController@schools');
         Route::get('courses/{school}', 'Api\RegisterController@courses');
         Route::get('departments/{course}/{school}', 'Api\RegisterController@department');
-        Route::get('academic_years', 'Api\RegisterController@academicYears');
-        Route::get('batches/{sy}', 'Api\RegisterController@batches');
+        Route::get('school_years', 'Api\RegisterController@schoolYears');
+        Route::get('batches', 'Api\RegisterController@batches');
         Route::get('jobs/{course}', 'Api\RegisterController@jobs');
         Route::get('companies', 'Api\RegisterController@companies');
         Route::post('verify', 'Api\RegisterController@verify');
+        Route::post('linkedin/profile', 'Api\RegisterController@linkedin');
     });
 
     Route::middleware('auth:api')->group(function () {
         Route::get('graduates/{id}', 'Api\GraduateController@graduate');
-        Route::post('graduates/{id}/save', 'Api\GraduateController@save');
-        Route::post('graduates/{id}/response', 'Api\GraduateController@response');
+        Route::post('graduates/save', 'Api\GraduateController@save');
+        Route::post('graduates/response', 'Api\GraduateController@response');
 
         Route::get('users', 'Api\UserController@users');
         Route::get('users/{id}', 'Api\UserController@user');
         Route::get('users/{id}/graduates', 'Api\UserController@graduates');
-        Route::post('users/{id}/update', 'Api\UserController@updateEmployment');
+        Route::post('users/update', 'Api\UserController@updateEmployment');
 
         Route::get('logout', 'Api\SocialAuthController@logout');
     });

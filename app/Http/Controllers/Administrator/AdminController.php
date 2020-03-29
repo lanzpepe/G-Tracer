@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Administrator;
 
+use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\User;
-use App\Http\Controllers\Controller;
 
 class AdminController extends Controller
 {

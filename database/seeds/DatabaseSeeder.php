@@ -14,12 +14,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SchoolsTableSeeder::class,
             DepartmentsTableSeeder::class,
-            AcademicYearsTableSeeder::class,
+            YearsTableSeeder::class,
+            BatchesTableSeeder::class,
             RolesTableSeeder::class,
             AdminsTableSeeder::class,
-            GendersTableSeeder::class
-            /* GraduatesTableSeeder::class,
-            UsersTableSeeder::class, */
+            GendersTableSeeder::class,
+            // GraduatesTableSeeder::class,
+            // UsersTableSeeder::class
         ]);
     }
 }

@@ -43,10 +43,12 @@ class DepartmentController extends Controller
         $schoolName = $this->capitalize($data['school']);
         $school = School::where('name', $schoolName)->first();
         $department = Department::where('name', $deptName)->first();
-        $imagePath = null;
 
-        if ($request->has('logo')) {
-            $imagePath = $request->file('logo')->storeAs('departments/' . $schoolName, $deptName,  'public');
+        if ($request->hasFile('logo')) {
+            $imagePath = $request->file('logo')->storeAs("departments/{$schoolName}", $deptName,  'public');
+        }
+        else {
+            $imagePath = "logos/departments/{$schoolName}/{$deptName}.jpg";
         }
 
         if (!$department) {

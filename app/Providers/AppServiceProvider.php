@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Notification;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Dusk\DuskServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        if ($this->app->environment('local', 'testing')) {
+            $this->app->register(DuskServiceProvider::class);
+        }
+
+        view()->share('unread', Notification::unread());
+        view()->share('count', Notification::count());
     }
 }

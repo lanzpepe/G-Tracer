@@ -13,47 +13,45 @@
 @endsection
 
 @section('main')
-<div class="ui container">
-    <div class="ui centered grid">
-        <div class="row">
-            <div class="column">
-                <table class="ui compact unstackable selectable celled teal table">
-                    <thead>
-                        <tr class="center aligned">
-                            <th>{{ __('Program Code') }}</th>
-                            <th>{{ __('Name') }}</th>
-                            <th>{{ __('Major') }}</th>
-                            <th>{{ __('Actions') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($courses as $course)
-                            @foreach ($course->departments as $dept)
-                                @foreach ($dept->schools as $school)
-                                <tr class="center aligned">
-                                    <td>{{ $course->code }}</td>
-                                    <td>{{ $course->name }}</td>
-                                    <td>{{ $course->major }}</td>
-                                    <td>
-                                        <button type="button" class="ui compact icon green inverted button edit-course"
-                                            data-value="{{ $course->id . '+' . $dept->id . '+' . $school->id }}">
-                                        <i class="pen icon"></i>
-                                        </button>
-                                        <button type="button" class="ui compact icon red inverted button mark-course"
-                                            data-value="{{ $course->id . '+' . $dept->id . '+' . $school->id }}">
-                                        <i class="trash icon"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                @endforeach
+<div class="ui equal width centered grid container">
+    <div class="row">
+        <div class="column">
+            <table class="ui compact unstackable selectable teal table">
+                <thead>
+                    <tr class="center aligned">
+                        <th>{{ __('Course Code') }}</th>
+                        <th>{{ __('Course Name') }}</th>
+                        <th>{{ __('Course Major') }}</th>
+                        <th>{{ __('Actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($courses as $course)
+                        @foreach ($course->departments as $dept)
+                            @foreach ($dept->schools as $school)
+                            <tr class="center aligned">
+                                <td>{{ $course->code }}</td>
+                                <td>{{ $course->name }}</td>
+                                <td>{{ $course->major }}</td>
+                                <td>
+                                    <button type="button" class="ui compact icon green inverted button edit-course"
+                                        data-value="{{ $course->id . '+' . $dept->id . '+' . $school->id }}">
+                                    <i class="pen icon"></i>
+                                    </button>
+                                    <button type="button" class="ui compact icon red inverted button mark-course"
+                                        data-value="{{ $course->id . '+' . $dept->id . '+' . $school->id }}">
+                                    <i class="trash icon"></i>
+                                    </button>
+                                </td>
+                            </tr>
                             @endforeach
                         @endforeach
-                    </tbody>
-                </table>
-            </div>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
-        {{ $courses->links('vendor.pagination.semantic-ui') }}
     </div>
+    {{ $courses->links('vendor.pagination.semantic-ui') }}
 </div>
 @endsection
 

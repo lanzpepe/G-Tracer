@@ -8,6 +8,7 @@
         <div class="ui large secondary inverted menu">
             <a href="{{ route('index') }}" class="header item">
                 <img src="{{ asset('img/logo.png') }}" alt="Brand Logo" class="logo">
+                <span class="ui teal inverted text">{{ env('APP_NAME') }}</span>
             </a>
         </div>
     </div>
@@ -40,6 +41,7 @@
                             <label for="remember" class="">{{ __('Remember Me') }}</label>
                         </div>
                     </div>
+                    <input type="hidden" name="token" id="token">
                     <button class="ui fluid large teal submit button">{{ __('Login') }}</button>
                     @error('username')
                         <div class="ui negative message">

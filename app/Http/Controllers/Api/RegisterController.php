@@ -3,18 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\AcademicYear;
+use App\Models\Batch;
 use App\Models\Company;
 use App\Models\Course;
 use App\Models\Department;
 use App\Models\Gender;
 use App\Models\Graduate;
 use App\Models\Job;
+use App\Models\LinkedInProfile;
 use App\Models\School;
+use App\Models\Year;
+use App\Traits\StaticTrait;
 use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
+    use StaticTrait;
+
     public function genders()
     {
         $genders = Gender::orderByDesc('name')->get();
@@ -29,41 +34,47 @@ class RegisterController extends Controller
         return response()->json(compact('schools'));
     }
 
-    public function courses($schoolName)
+    public function courses($id)
     {
-        $school = School::where('name', rawurldecode($schoolName))->firstOrFail();
-        $courses = Course::whereHas('schools', function ($query) use ($school) {
-            return $query->where('id', $school->id);
+        $courses = Course::whereHas('schools', function ($query) use ($id) {
+            return $query->where('id', $id);
         })->get();
 
         return response()->json(compact('courses'));
     }
 
-    public function department($courseName, $schoolName)
+    public function department($courseId, $schoolId)
     {
-        $course = Course::where('name', rawurldecode($courseName))->firstOrFail();
-        $school = School::where('name', rawurldecode($schoolName))->firstOrFail();
-        $department = Department::whereHas('courses', function ($query) use ($course) {
-            return $query->where('id', $course->id);
-        })->whereHas('schools', function ($query) use ($school) {
-            return $query->where('id', $school->id);
-        })->firstOrFail();
+        $department = Department::whereHas('courses', function ($query) use ($courseId) {
+            return $query->where('id', $courseId);
+        })->whereHas('schools', function ($query) use ($schoolId) {
+            return $query->where('id', $schoolId);
+        })->first();
 
         return response()->json(compact('department'));
     }
 
-    public function academicYears()
+    public function schoolYears()
     {
-        $school_years = AcademicYear::orderByDesc('school_year')->get();
+        $school_years = Year::orderByDesc('year')->get();
 
         return response()->json(compact('school_years'));
     }
 
-    public function batches($sy)
+    public function batches()
     {
-        $batches = AcademicYear::where('school_year', $sy)->firstOrFail();
+        $batches = Batch::all();
 
         return response()->json(compact('batches'));
+    }
+
+    public function linkedin(Request $request)
+    {
+        $profile = LinkedInProfile::where('last_name', $request->lastName)
+                    ->where('first_name', $request->firstName)
+                    ->first();
+
+        return response()->json(compact('profile'));
     }
 
     public function jobs($courseName)
@@ -89,12 +100,14 @@ class RegisterController extends Controller
                     ->where('first_name', $request->firstName)
                     ->where('middle_name', $request->middleName)
                     ->where('gender', $request->gender)
-                    ->where('degree', $request->degree)
-                    ->where('major', $request->major)
-                    ->where('department', $request->department)
-                    ->where('school', $request->school)
-                    ->where('school_year', $request->schoolYear)
-                    ->where('batch', $request->batch)->first();
+                    ->whereHas('academic', function ($query) use ($request) {
+                        return $query->where('degree', $request->degree)
+                                ->where('major', $request->major)
+                                ->where('department', $request->department)
+                                ->where('school', $request->school)
+                                ->where('year', $request->schoolYear)
+                                ->where('batch', $request->batch);
+                    })->first();
 
         if ($graduate) {
             return response()->json([
@@ -104,6 +117,6 @@ class RegisterController extends Controller
 
         return response()->json([
             'message' => 'Verification failed. You are not a graduate from this batch.'
-        ]);
+        ], 404);
     }
 }

@@ -12,12 +12,17 @@ class GendersTableSeeder extends Seeder
      */
     public function run()
     {
-        Gender::create([
-            'name' => 'Male'
-        ]);
-
-        Gender::create([
-            'name' => 'Female'
+        Gender::insert([
+            [
+                'name' => 'Male',
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'name' => 'Female',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
         ]);
     }
 }

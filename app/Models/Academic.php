@@ -12,6 +12,11 @@ class Academic extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'academic_id');
+    }
+
+    public function graduate()
+    {
+        return $this->belongsTo(Graduate::class, 'academic_id');
     }
 }

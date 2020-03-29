@@ -14,9 +14,9 @@ class Graduate extends Model
     public function image()
     {
         $defaultImage = $this->gender == 'Male' ? 'defaults/default_avatar_m.png' : 'defaults/default_avatar_f.png';
-        $imagePath = "storage/{rawurldecode($this->image_uri)}";
+        $imagePath = 'storage/' . rawurldecode($this->image_uri);
 
-        if (File::exists($imagePath)) {
+        if ($this->image_uri != null && File::exists($imagePath)) {
             return $imagePath;
         }
 
@@ -26,6 +26,16 @@ class Graduate extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'graduate_id');
+    }
+
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class, 'graduate_id');
+    }
+
+    public function academic()
+    {
+        return $this->hasOne(Academic::class, 'graduate_id');
     }
 
     public function users()
@@ -41,10 +51,5 @@ class Graduate extends Model
     public function getFullNameAttribute()
     {
         return $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name;
-    }
-
-    public function getBatchYearAttribute()
-    {
-        return $this->batch . ' ' . $this->school_year;
     }
 }

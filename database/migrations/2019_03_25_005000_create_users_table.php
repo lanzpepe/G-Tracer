@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('gender', 8);
             $table->string('birth_date', 32);
             $table->string('image_uri')->nullable();
+            $table->string('device_token')->nullable();
             $table->unique(['last_name', 'first_name', 'middle_name']);
             $table->timestamps();
         });

@@ -10,11 +10,14 @@
 
     <title>@yield('title')</title>
 
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('img/logo.png') }}">
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('semantic/dist/semantic.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/all.css') }}">
     <link rel="stylesheet" href="{{ asset('css/main.css') }}">
 
     <!-- Scripts -->

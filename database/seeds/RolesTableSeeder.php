@@ -12,12 +12,17 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        Role::create([
-            'name' => config('constants.roles.admin')
-        ]);
-
-        Role::create([
-            'name' => config('constants.roles.dept')
+        Role::insert([
+            [
+                'name' => config('constants.roles.admin'),
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'name' => config('constants.roles.dept'),
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
         ]);
     }
 }

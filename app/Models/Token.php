@@ -7,6 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Token extends Model
 {
     protected $guarded = [];
-    protected $primaryKey = 'student_id';
-    // public $incrementing = false;
+    protected $primaryKey = 'user_id';
 }

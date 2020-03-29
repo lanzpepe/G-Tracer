@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\Course;
 use App\Models\Graduate;
 use App\Models\Response;
 use App\Models\SocialAccount;
@@ -13,9 +14,9 @@ use App\Traits\StaticTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Laravel\Passport\Client;
-use Illuminate\Support\Str;
 
 class SocialAuthController extends Controller
 {
@@ -52,6 +53,8 @@ class SocialAuthController extends Controller
 
     private function addUserAccount(Request $request)
     {
+        $course = Course::where('name', $request->degree)->where('major', $request->major)->first();
+
         $user = User::create([
             'user_id' => Str::random(), 'last_name' => $request->lastName,
             'first_name' => $request->firstName, 'middle_name' => $request->middleName,
@@ -60,16 +63,17 @@ class SocialAuthController extends Controller
         ]);
 
         $user->contacts()->create([
-            'contact_id' => Str::random(), 'address_line' => $request->address,
-            'city' => $request->city, 'province' => $request->province,
+            'contact_id' => Str::random(), 'address' => $request->address,
+            'latitude' => $this->getLatLng($request->address)['lat'],
+            'longitude' => $this->getLatLng($request->address)['lng'],
             'contact_number' => $request->contactNumber, 'email' => $request->email
         ]);
 
         $user->academic()->create([
-            'academic_id' => Str::random(), 'degree' => $request->degree,
-            'major' => $request->major, 'department' => $request->department,
-            'school' => $request->school, 'school_year' => $request->schoolYear,
-            'batch' => $request->batch
+            'academic_id' => Str::random(), 'code' => $course->code,
+            'degree' => $request->degree, 'major' => $request->major,
+            'department' => $request->department, 'school' => $request->school,
+            'year' => $request->schoolYear, 'batch' => $request->batch
         ]);
 
         $this->addSocialAccount($request, $user);

@@ -53,12 +53,17 @@ class User extends Authenticatable
 
     public function graduates()
     {
-        return $this->belongsToMany(Graduate::class, 'user_graduate', 'user_id', 'graduate_id')->withPivot('response_id')->withTimestamps();
+        return $this->belongsToMany(Graduate::class, 'user_graduate', 'user_id', 'graduate_id')->withPivot('response_id')->withTimestamps()->latest();
     }
 
     public function responses()
     {
         return $this->belongsToMany(Response::class, 'user_graduate', 'user_id', 'response_id')->withPivot('graduate_id')->withTimestamps();
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id')->latest();
     }
 
     public function getFullNameAttribute()

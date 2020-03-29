@@ -15,14 +15,17 @@ class CreateAcademicsTable extends Migration
     {
         Schema::create('academics', function (Blueprint $table) {
             $table->string('academic_id')->primary();
-            $table->string('degree', 128);
-            $table->string('major', 128)->nullable();
-            $table->string('department', 128);
+            $table->string('code', 16);
+            $table->string('degree', 64);
+            $table->string('major', 64)->nullable();
+            $table->string('department', 64);
             $table->string('school', 128);
-            $table->string('school_year', 32);
-            $table->string('batch', 32);
-            $table->string('user_id');
+            $table->string('year', 4);
+            $table->string('batch', 16);
+            $table->string('user_id')->nullable();
+            $table->string('graduate_id')->nullable();
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+            $table->foreign('graduate_id')->references('graduate_id')->on('graduates')->onDelete('cascade');
             $table->timestamps();
         });
     }

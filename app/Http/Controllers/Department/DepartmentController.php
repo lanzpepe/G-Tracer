@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Department;
 
-use App\Models\Admin;
-use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
+use App\Models\LinkedInProfile;
+use App\Models\User;
 
 class DepartmentController extends Controller
 {
@@ -13,6 +14,14 @@ class DepartmentController extends Controller
         $admin = Admin::authUser();
 
         return view('home', compact('admin'));
+    }
+
+    public function linkedIn()
+    {
+        $admin = Admin::authUser();
+        $profiles = LinkedInProfile::all();
+
+        return view('department.linkedin', compact('admin', 'profiles'));
     }
 
     public function profile()

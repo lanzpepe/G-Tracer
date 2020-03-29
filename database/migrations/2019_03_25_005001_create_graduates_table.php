@@ -19,13 +19,6 @@ class CreateGraduatesTable extends Migration
             $table->string('first_name', 64);
             $table->string('middle_name', 64);
             $table->string('gender', 8);
-            $table->string('code', 16);
-            $table->string('degree', 128);
-            $table->string('major', 128)->nullable();
-            $table->string('department', 128);
-            $table->string('school', 128);
-            $table->string('school_year', 32);
-            $table->string('batch', 32);
             $table->string('image_uri')->nullable();
             $table->string('user_id')->nullable();
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('set null');

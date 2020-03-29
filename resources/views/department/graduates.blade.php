@@ -13,57 +13,50 @@
 @endsection
 
 @section('main')
-<div class="ui container">
-    <div class="ui equal width centered grid">
-        <div class="row">
-            <div class="column">
-                @if (count($graduates) > 0)
-                <table class="ui unstackable selectable compact teal table">
-                    <thead>
+<div class="ui equal width centered grid container">
+    <div class="row">
+        <div class="column">
+            @if (count($graduates) > 0)
+            <table id="graduates" class="ui unstackable selectable compact teal table">
+                <thead>
+                    <tr class="center aligned" role="row">
+                        <th></th>
+                        <th>{{ __('Name of Graduate') }}</th>
+                        <th>{{ __('Degree') }}</th>
+                        <th>{{ __('Graduated') }}</th>
+                        <th>{{ __('Actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($graduates as $graduate)
                         <tr class="center aligned">
-                            <th></th>
-                            <th>{{ __('Name of Graduate') }}</th>
-                            <th>{{ __('Degree') }}</th>
-                            <th>{{ __('Batch / School Year') }}</th>
-                            <th>{{ __('Actions') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($graduates as $graduate)
-                            <tr class="center aligned">
-                                <td><img class="ui middle aligned tiny circular image" src="{{ $graduate->image() }}"></td>
-                                <td><a href="{{ route('report', ['id' => $graduate->graduate_id]) }}">{{ $graduate->getFullNameAttribute() }}</a></td>
-                                <td>{{ $graduate->degree }}</td>
-                                <td>{{ $graduate->school_year }} / {{ $graduate->batch }}</td>
-                                <td class="center aligned">
-                                    <div class="center">
-                                        <div class="ui compact icon green inverted button edit-graduate" data-value="{{ $graduate->graduate_id }}">
-                                            <i class="pen icon"></i>
-                                        </div>
-                                        <div class="ui compact icon red inverted button mark-graduate" data-value="{{ $graduate->graduate_id }}">
-                                            <i class="trash icon"></i>
-                                        </div>
+                            <td><img class="ui middle aligned tiny circular image" src="{{ $graduate->image() }}"></td>
+                            <td><a href="{{ route('report', ['id' => $graduate->graduate_id]) }}">{{ $graduate->getFullNameAttribute() }}</a></td>
+                            <td>{{ $graduate->academic->degree }}</td>
+                            <td>{{ "{$graduate->academic->batch} {$graduate->academic->year}" }}</td>
+                            <td class="center aligned">
+                                <div class="center">
+                                    <div class="ui compact icon green inverted button edit-graduate" data-value="{{ $graduate->graduate_id }}">
+                                        <i class="pen icon"></i>
                                     </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        {{ $graduates->links('vendor.pagination.semantic-ui') }}
-        @else
-        <div class="row">
-            <div class="column">
-                <div class="ui placeholder segment">
-                    <div class="ui icon header">
-                        <i class="frown outline teal icon"></i>
-                        {{ __('No graduates displayed.') }}
-                    </div>
+                                    <div class="ui compact icon red inverted button mark-graduate" data-value="{{ $graduate->graduate_id }}">
+                                        <i class="trash icon"></i>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            @else
+            <div class="ui placeholder segment">
+                <div class="ui icon header">
+                    <i class="frown outline teal icon"></i>
+                    {{ __('No graduates displayed.') }}
                 </div>
             </div>
+            @endif
         </div>
-        @endif
     </div>
 </div>
 @endsection
@@ -76,6 +69,7 @@
     <div class="scrolling content" role="document">
         <form action="{{ route('graduates.store') }}" class="ui form" id="graduateForm" method="POST" role="form" enctype="multipart/form-data">
             @csrf
+            <input type="hidden" id="temp" name="temp" value="">
             <div class="ui grid container">
                 <div class="row">
                 <div class="six wide column">
@@ -99,39 +93,42 @@
                 </div>
                     <div class="ten wide column">
                         <div class="equal width fields">
-                            <div class="required field sy">
+                            <div class="required field">
                                 <label for="sy"><i class="ui calendar check outline teal icon"></i>{{ __('School Year') }}</label>
                                 <select name="sy" id="sy" class="ui fluid dropdown" required>
                                     <option value="" selected>{{ __('-- Select School Year --') }}</option>
-                                    @foreach ($schoolYears as $year)
-                                        <option value="{{ $year->school_year }}">{{ $year->school_year }}</option>
+                                    @foreach ($years as $y)
+                                    <option value="{{ $y->year }}">{{ $y->year }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="required field batch">
+                            <div class="required field">
                                 <label for="batch"><i class="ui calendar check outline teal icon"></i>{{ __('Batch') }}</label>
                                 <select name="batch" id="batch" class="ui fluid dropdown" required>
                                     <option value="" selected>{{ __('-- Select Batch --') }}</option>
+                                    @foreach ($batches as $batch)
+                                    <option value="{{ $batch->month }}">{{ $batch->month }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="equal width fields">
                             <div class="five wide required field">
-                                <label for="lastname"><i class="ui user outline teal icon"></i>Last Name</label>
+                                <label for="lastname"><i class="ui user outline teal icon"></i>{{ __('Last Name') }}</label>
                                 <input type="text" name="lastname" id="lastname" value="" required>
                             </div>
                             <div class="five wide required field">
-                                <label for="firstname"><i class="ui user outline teal icon"></i>First Name</label>
+                                <label for="firstname"><i class="ui user outline teal icon"></i>{{ __('First Name') }}</label>
                                 <input type="text" name="firstname" id="firstname" value="" required>
                             </div>
                             <div class="two wide field">
-                                <label for="midname"><i class="ui user outline teal icon"></i>M.I.</label>
+                                <label for="midname"><i class="ui user outline teal icon"></i>{{ __('M.I.') }}</label>
                                 <input type="text" name="midname" id="midname" value="">
                             </div>
                         </div>
                         <div class="equal width fields">
                             <div class="four wide required field">
-                                <label for="gender"><i class="ui venus mars teal icon"></i>Gender</label>
+                                <label for="gender"><i class="ui venus mars teal icon"></i>{{ __('Gender') }}</label>
                                 <select name="gender" id="gender" class="ui fluid dropdown" required>
                                     <option value="" selected>{{ __('-- Select Gender --') }}</option>
                                     @foreach ($genders as $gender)
@@ -139,6 +136,10 @@
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
+                        <div class="required field">
+                            <label for="address"><i class="ui home teal icon"></i>{{ __('Address') }}</label>
+                            <input type="text" name="address" id="address" value="" required>
                         </div>
                         <div class="equal width fields">
                             <div class="required field">
@@ -164,7 +165,7 @@
                         </div>
                         <div class="equal width fields">
                             <div class="required field">
-                                <label for="school"><i class="ui school teal icon"></i>School</label>
+                                <label for="school"><i class="ui school teal icon"></i>{{ __('School') }}</label>
                                 <select name="school" id="school" class="ui fluid dropdown" required>
                                     <option value="{{ $admin->schools->first()->name }}">{{ $admin->schools->first()->name }}</option>
                                 </select>

@@ -76,6 +76,15 @@ main {
     cursor: pointer;
 }
 
-.ui.link.list .teal.item.active {
-    background-color: #00B5AD !important;
+.ui.floating.label {
+    top: 0;
+    right: 0.85em;
+}
+
+.ui.button.dropdown .menu {
+    min-width: max-content !important;
+}
+
+.ui.menu .item img.logo {
+    margin-right: 1em !important;
 }

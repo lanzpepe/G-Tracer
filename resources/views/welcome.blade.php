@@ -28,6 +28,7 @@
         <div class="ui large secondary inverted menu">
             <div class="header item">
                 <img src="{{ asset('img/logo.png') }}" alt="Brand Logo" class="logo">
+                <span class="ui teal inverted text">{{ env('APP_NAME') }}</span>
             </div>
             <div class="right item">
                 <button class="ui teal inverted button btn-login" data-target="{{ route('login') }}">
@@ -48,7 +49,7 @@
         <h1 class="ui inverted header">
             {{ __('G-TRACER') }}
         </h1>
-        <h2>{{ __('A web and mobile application for Graduate Tracing using Crowdsourcing and Social Media Listening') }}</h2>
+        <h2>{{ __('A Mobile-Web Application for Graduate Tracing using Crowdsourcing and Social Media Listening') }}</h2>
     </div>
 </div>
 @endsection
