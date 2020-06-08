@@ -1,0 +1,90 @@
+.hidden.menu {
+    display: none;
+}
+
+.masthead.segment {
+    min-height: 100%;
+    padding: 1em 0em;
+}
+
+.masthead .logo.item img {
+    margin-right: 1em;
+}
+
+.masthead .ui.menu .ui.button {
+    margin-left: 0.5em;
+}
+
+.masthead h1.ui.header {
+    margin-top: 2em;
+    margin-bottom: 0;
+    font-size: 4em;
+    font-weight: normal;
+}
+
+.masthead h2 {
+    font-size: 1.7em;
+    font-weight: normal;
+}
+
+.ui.vertical.stripe {
+    padding: 8em 0em;
+}
+
+.ui.vertical.stripe h3 {
+    font-size: 2em;
+}
+
+.ui.vertical.stripe .button + h3,
+.ui.vertical.stripe p + h3 {
+    margin-top: 3em;
+}
+
+.ui.vertical.stripe .floated.image {
+    clear: both;
+}
+
+.ui.vertical.stripe p {
+    font-size: 1.33em;
+}
+
+.ui.left.floated.header {
+    margin-left: 1.5em !important;
+}
+
+.ui.right.floated.button {
+    margin-right: 1.5em !important;
+}
+
+.login.container {
+    padding: 3em;
+}
+
+main {
+    padding-top: 3.5rem;
+}
+
+.profile.image {
+    width: 12em;
+}
+
+.ui.button > input {
+    display: none;
+}
+
+.ui.button label {
+    cursor: pointer;
+}
+
+.ui.floating.label {
+    top: 0;
+    right: 0.85em;
+}
+
+.ui.button.dropdown .menu {
+    min-width: max-content !important;
+}
+
+.ui.menu .item img.logo {
+    margin-right: 1em !important;
+}
